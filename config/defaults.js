@@ -4,6 +4,7 @@
  * Default config of any configuration required to setup
  * the application which includes db, etc.
  */
+const url = require('url');
 
 module.exports = {
   appLog: {
@@ -11,7 +12,22 @@ module.exports = {
     streams: [{
       stream: process.stdout,
       level: 'info'
-    }]
+    }],
+    serializers: {
+      req: function (request) {
+        let query = url.parse(request.url, true).query;
+        let params = Object.assign(request.params, request.body, query);
+        return {
+          method: request.method,
+          url: request.url,
+          headers: request.headers,
+          params: params
+        };
+      },
+      res: function (request, response) {
+        return response;
+      }
+    }
   },
   server: {
     port: process.env.PORT || process.env.PEERSVIEW_PORT,
