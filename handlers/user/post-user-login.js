@@ -6,7 +6,7 @@
  */
 
 const md5 = require('MD5');
-const lib = require('../lib');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,

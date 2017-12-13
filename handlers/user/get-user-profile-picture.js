@@ -5,7 +5,7 @@
  * @description Update User Profile Picture
  */
 
-const lib = require('../lib');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -17,15 +17,15 @@ const lib = require('../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let paramsSchema = {
-    userId: {
+  let headerSchema = {
+    token: {
       notEmpty: {
-        errorMessage: 'Missing Resource: User Id'
+        errorMessage: 'Missing Resource: Token'
       }
     }
   };
 
-  req.checkParams(paramsSchema);
+  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -42,7 +42,10 @@ function validateParams (req, res, next) {
 }
 
 /**
- * Get the user profile picture
+ * This would be the fallback if the user
+ * has a valid token
+ * @see {@link lib/isUserTokenExist}
+ * @see isUserTokenExist
  * @param {any} req request object
  * @param {any} res response object
  * @param {any} next next object
@@ -50,17 +53,18 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getUserProfilePicture (req, res, next) {// eslint-disable-line id-length
-  let userId = req.$params.userId;
+  let user = req.$scope.user;
 
   return req.db.user.findOne({
     attributes: ['profilePicture'],
     where: {
       id: {
-        [req.Op.eq]: userId
+        [req.Op.eq]: user.id
       }
     }
   })
   .then(user => {
+    req.$scope.user = user;
     next();
     return user;
   })
@@ -81,10 +85,12 @@ function getUserProfilePicture (req, res, next) {// eslint-disable-line id-lengt
  * @returns {any} body response object
  */
 function response (req, res) {
+  let user = req.$scope.user;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 200
+    http_code: 200,
+    user: user
   };
 
   res.status(200).send(body);
