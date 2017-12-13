@@ -30,6 +30,19 @@ function userApi (apiRouter) {
     handlers.user.getUserTypeId.logic,
     handlers.user.getUserTypeId.response);
 
+  apiRouter.get('/user/profile-picture',
+    lib.params,
+    handlers.user.getUserProfilePicture.validateParams,
+    lib.isTokenExist.user,
+    handlers.user.getUserProfilePicture.logic,
+    handlers.user.getUserProfilePicture.response);
+
+  apiRouter.post('/login',
+    lib.params,
+    handlers.user.postUserLogin.validateParams,
+    handlers.user.postUserLogin.logic,
+    handlers.user.postUserLogin.response);
+
   apiRouter.post('/user/type-details',
     lib.params,
     handlers.user.postUserTypeDetails.validateParams,
