@@ -28,12 +28,6 @@ apiRouter.post('/register',
   handlers.postRegister.logic,
   handlers.postRegister.response);
 
-apiRouter.post('/login',
-  lib.params,
-  handlers.postLogin.validateParams,
-  handlers.postLogin.logic,
-  handlers.postLogin.response);
-
 apiRouter.post('/social-login',
   lib.params,
   handlers.postSocialLogin.validateParams,
@@ -79,12 +73,6 @@ apiRouter.post('/verification/:userId',
 // end basic routes
 
 // user route
-apiRouter.get('/user-profile-picture',
-  lib.params,
-  handlers.getUserProfilePicture.validateParams,
-  handlers.getUserProfilePicture.logic,
-  handlers.getUserProfilePicture.response);
-
 apiRouter.post('/user',
   lib.params,
   handlers.postUser.validateParams,
