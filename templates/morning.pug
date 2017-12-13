@@ -1,0 +1,53 @@
+
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      color:#000000;
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Dear !
+        p Title 1: Post Headline:-  .
+        a(href='#') View More Posts >>
+        p Title 2: News Headline:-
+        a(href='#') View More News >>
+        if typeof(liker_name) !== 'undefined'
+          p Title 3: #{liker_name}Liked Your post
+          p #{liker_name} liked your post or question #{name}
+          a(href="#")
+          | Click to See Who Else Liked IT>>
+
+        else
+          p Title 3: No Post Likes Found
+
+
+
+p Title 4: Top Stories:-
+a(href='#') View More Stories >>
+p The Peersview Team
+p Unsubscribe from this email
+     footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#') info@peersview.com
+        |  We are always here to help.

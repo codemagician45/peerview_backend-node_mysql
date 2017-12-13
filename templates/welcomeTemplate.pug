@@ -1,0 +1,47 @@
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      color:#000000;
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Hello #{name}!
+        p
+          | Welcome to Peersview! Thanks so much for joining us. You would find out it is the best place to discover and interact with your peers. You’re on your way to discovering and partaking in exciting super-productive discussions!
+        p
+          b Here is a tip or two on how to get started!
+          |  Our number one tip to get the most out of Peersview is to:
+        p Invite your friends
+        p Invite your friend to join you on Peersview. Let’s invite them now.
+        a(href='#', style='text-aligin:center') Invite your Friend
+        p Check the Forum
+        p
+          | Now that you are part of Peersview, Join and create discussions with peers who share academic interests with you. Take a look at the latest and trending discussions.
+        a(href='#') Join Forum
+        p The Peersview Team
+        p Unsubscribe from this email
+      footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#') info@peersview.com
+        |  We are always here to help.

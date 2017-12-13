@@ -1,0 +1,42 @@
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      color:#000000;
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Dear #{username}!
+        p
+          | You have an invitation to join a group peers in  
+          a(href='#') #{groupname}
+          | .
+        p
+          | You might want to accept their invitation and become a member so you can keep up to date with our events and social activities.
+        p Accept the Campus  Invitation
+        p The Peersview Team
+        p Unsubscribe from this email
+      footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#') info@peersview.com
+        |  We are always here to help.

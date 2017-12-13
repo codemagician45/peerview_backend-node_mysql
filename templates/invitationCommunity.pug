@@ -1,0 +1,47 @@
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      color:#000000;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Dear #{username}!
+        p(style='color:#000000;') This is an invitation from the #{sender_clg} to join their Online Campus on Peersview.
+        p(style='color:#000000;') If you would like to accept this invitation, then click.
+        a(href='#') Join the Online Campus
+        p(style='color:#000000;')
+          | Peersview is very easy to use, you can also check the Help Center
+          a(href='#') [peersview.com/support]
+          | , the most common problems and questions of first time users are addressed and answered.
+        p(style='color:#000000;') If you do not wish to join this community then you can ignore this email.
+        p(style='color:#000000;')
+          | If you think you have been sent this invitation in error or wish to discuss this in detail, please contact
+          a(href='#') admin@peersview.com.
+        p(style='color:#000000;') The Peersview Team
+        p(style='color:#000000;')
+          | Unsubscribe from this email
+      footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#') info@peersview.com
+        |  We are always here to help.

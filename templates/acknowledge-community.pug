@@ -1,0 +1,47 @@
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      color:#000000;
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Dear #{name}!
+        p
+          | Welcome to #{institutionsName} campus. Thanks so much for joining. You will find out it’s the best place to discover and interact with your peers and classmates. You’re on your way to discovering and participating in exciting super-productive discussions!
+        p
+          b Here is a tip or two on how to get started!
+          |  Our number one tip to get the most out of Peersview is to:
+        p Join Your Classes
+        p Join your classmates in Classes you are taking. Join them now.
+        a(href='#', style='text-aligin:center') Join your Classes
+        p Check the Clubs & Societies
+        p
+          | Now that you are part of #{institutionsName} campus , Join and create Clubs and Societies in your school.
+        a(href='#') Join Club & Socities
+        p The Peersview Team
+        p Unsubscribe from this email
+      footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#') info@peersview.com
+        |  We are always here to help.
