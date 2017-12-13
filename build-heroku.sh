@@ -1,5 +1,6 @@
 #!/bin/sh
 export NODE_ENV='production'
+export SINGLE_PROCESS='true'
 export PEERSVIEW_DB_ADAPTER='mysql'
 export PEERSVIEW_DB_HOST='us-cdbr-iron-east-05.cleardb.net'
 export PEERSVIEW_DB_USER='b8a1e7c2573e8c'
