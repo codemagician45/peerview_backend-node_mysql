@@ -9,8 +9,5 @@ const url = require('url');
 const sprintf = require('util').format;
 const defaults = require('./defaults');
 const openFile = require('fs').createWriteStream;
-const sqlLog = openFile(path.resolve(__dirname, '..', 'log', 'sql.log'), {
-  defaultEncoding: 'utf8', flags: 'a'
-});
 
 module.exports = Object.assign({}, defaults, {});
