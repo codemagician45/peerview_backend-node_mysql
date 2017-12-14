@@ -37,11 +37,26 @@ function userApi (apiRouter) {
     handlers.user.getUserProfilePicture.logic,
     handlers.user.getUserProfilePicture.response);
 
-  apiRouter.post('/login',
+  apiRouter.post('/user/login',
     lib.params,
     handlers.user.postUserLogin.validateParams,
     handlers.user.postUserLogin.logic,
     handlers.user.postUserLogin.response);
+
+  apiRouter.post('/user/social-login',
+    lib.params,
+    handlers.user.postUserSocialLogin.validateParams,
+    handlers.user.postUserSocialLogin.findUser,
+    handlers.user.postUserSocialLogin.saveOrUpdateUser,
+    handlers.user.postUserSocialLogin.response);
+
+  apiRouter.post('/user/register',
+    lib.params,
+    handlers.user.postUserRegister.validateParams,
+    handlers.user.postUserRegister.validatePasswordAndConfirmPassword,
+    handlers.user.postUserRegister.checkifEmailIsExisted,
+    handlers.user.postUserRegister.logic,
+    handlers.user.postUserRegister.response);
 
   apiRouter.post('/user/type-details',
     lib.params,
@@ -56,6 +71,14 @@ function userApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.user.postUserInterests.logic,
     handlers.user.postUserInterests.response);
+
+  apiRouter.post('/user/forgot-password',
+    lib.params,
+    handlers.user.postUserForgotPassword.validateParams,
+    handlers.user.postUserForgotPassword.findUser,
+    handlers.user.postUserForgotPassword.logic,
+    handlers.user.postUserForgotPassword.sendEmail,
+    handlers.user.postUserForgotPassword.response);
 
   apiRouter.put('/user/gender',
     lib.params,
