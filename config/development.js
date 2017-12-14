@@ -55,5 +55,8 @@ module.exports = Object.assign({}, defaults, {
     cloud_name: 'peersview-com',
     api_key: '384785884926317',
     api_secret: '6dCjA-9qZaQWOO9DTjOJrtx4ZC0'
+  },
+  sendGrid: {
+    apiKey: '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'
   }
 });

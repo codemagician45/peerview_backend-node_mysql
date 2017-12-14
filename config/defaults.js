@@ -48,5 +48,8 @@ module.exports = {
     //   evict: ~~process.env.PEERSVIEW_DB_EVICT_STALE || 60 * 1000
     // },
     logging: false
+  },
+  sendGrid: {
+    apiKey: process.env.SENDGRID_API_KEY
   }
 };
