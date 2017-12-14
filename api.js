@@ -17,31 +17,9 @@ const routesApi = require('./routes-api');
 apiRouter.use(validator({
   customValidators: lib.customValidators
 }));
-app.use('/api', apiRouter);
+app.use('/api/v1', apiRouter);
 
 // basic routes
-apiRouter.post('/register',
-  lib.params,
-  handlers.postRegister.validateParams,
-  handlers.postRegister.validatePasswordAndConfirmPassword,
-  handlers.postRegister.checkifEmailIsExisted,
-  handlers.postRegister.logic,
-  handlers.postRegister.response);
-
-apiRouter.post('/social-login',
-  lib.params,
-  handlers.postSocialLogin.validateParams,
-  handlers.postSocialLogin.findUser,
-  handlers.postSocialLogin.saveOrUpdateUser,
-  handlers.postSocialLogin.response);
-
-apiRouter.post('/forgot-password',
-  lib.params,
-  handlers.postForgotPassword.validateParams,
-  handlers.postForgotPassword.findUser,
-  handlers.postForgotPassword.updateUser,
-  handlers.postForgotPassword.response);
-
 apiRouter.post('/send-reset-link',
   lib.params,
   handlers.postSendResetLink.validateParams,
