@@ -1,5 +1,6 @@
 'use strict';
 
+const path = require('path');
 const ls = require('fs').readdirSync;
 let files = ls(__dirname).filter(function (fd) {
   let parts = fd.split('.');
@@ -9,7 +10,7 @@ let files = ls(__dirname).filter(function (fd) {
       || fd === 'index.js') {
     return false;
   } if (parts.length > 1
-        && parts[parts.length - 1].substr(0, 2) !== 'js') {
+        && parts[parts.length - 1].substr(0, 3) !== 'pug') {
     return false;
   } else {
     return true;
@@ -29,5 +30,5 @@ files.forEach(function (file) {
     name += _cur;
   }
 
-  module.exports[name] = require('./' + file);
+  module.exports[name] = path.join(__dirname, file);
 });
