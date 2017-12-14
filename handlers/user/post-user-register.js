@@ -7,7 +7,7 @@
 
 const randomstring = require('randomstring');
 const md5 = require('MD5');
-const lib = require('../lib');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -33,6 +33,9 @@ function validateParams (req, res, next) {
     email: {
       notEmpty: {
         errorMessage: 'Missing Resource: Email'
+      },
+      isEmail: {
+        errorMessage: 'Invalid Resource: Email'
       }
     },
     password: {
@@ -90,7 +93,7 @@ function validatePasswordAndConfirmPassword (req, res, next) {// eslint-disable-
     return res.status(400).send({
       status: 'ERROR',
       status_code: 102,
-      status_message: 'confirm_password and password doesn\'t match',
+      status_message: 'Password and Confirm Password Doesn\' Match',
       http_code: 400
     });
   }
@@ -124,7 +127,7 @@ function checkifEmailIsExisted (req, res, next) {// eslint-disable-line id-lengt
       return res.status(400).send({
         status: 'ERROR',
         status_code: 103,
-        status_message: 'Email already exists!',
+        status_message: 'Email Already Exist',
         http_code: 400
       });
     }
@@ -138,7 +141,7 @@ function checkifEmailIsExisted (req, res, next) {// eslint-disable-line id-lengt
 
     req.log.error({
       err: error
-    }, 'user.findOne Error - post-register');
+    }, 'user.findOne Error - post-user-register');
   });
 }
 
@@ -150,7 +153,7 @@ function checkifEmailIsExisted (req, res, next) {// eslint-disable-line id-lengt
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function postRegister (req, res, next) {
+function postUserRegister (req, res, next) {
   let firstName = req.$params.firstName;
   let lastName = req.$params.lastName;
   let email = req.$params.email;
@@ -190,14 +193,14 @@ function response (req, res) {
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201
+    http_code: 200
   };
 
-  res.status(201).send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
 module.exports.validatePasswordAndConfirmPassword = validatePasswordAndConfirmPassword;
 module.exports.checkifEmailIsExisted = checkifEmailIsExisted;
-module.exports.logic = postRegister;
+module.exports.logic = postUserRegister;
 module.exports.response = response;

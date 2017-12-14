@@ -7,7 +7,8 @@
 
 const randomstring = require('randomstring');
 const moment = require('moment');
-const rpc = require('../lib/rpc');
+const lib = require('../../lib');
+const templates = require('../../templates');
 
 /**
  * Validation of req.body, req, param,
@@ -35,14 +36,14 @@ function validateParams (req, res, next) {
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
       return res.status(400)
-      .send(new rpc.ValidationError(validationErrors.array()));
+      .send(new lib.rpc.ValidationError(validationErrors.array()));
     }
 
     return next();
   })
   .catch(error => {
     res.status(500)
-    .send(new rpc.InternalError(error));
+    .send(new lib.rpc.InternalError(error));
   });
 }
 
@@ -59,8 +60,11 @@ function findUser (req, res, next) {
 
   return req.db.user.findOne({
     where: {
-      email: {
-        [req.Op.eq]: email
+      [req.Op.and]: {
+        email: email,
+        password: {
+          [req.Op.ne]: null
+        }
       }
     }
   })
@@ -69,7 +73,7 @@ function findUser (req, res, next) {
       return res.status(400).send({
         status: 'ERROR',
         status_code: 102,
-        status_message: 'Email is not registered with us.',
+        status_message: 'Email is not registered with us. Or email has been used for social login',
         http_code: 400
       });
     }
@@ -80,11 +84,11 @@ function findUser (req, res, next) {
   })
   .catch(error => {
     res.status(500)
-    .send(new rpc.InternalError(error));
+    .send(new lib.rpc.InternalError(error));
 
     req.log.error({
       err: error
-    }, 'user.findOne Error - post-forgot-password');
+    }, 'user.findOne Error - post-user-forgot-password');
   });
 }
 
@@ -99,14 +103,14 @@ function findUser (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function updateUser (req, res, next) {
+function postUserForgotPassword (req, res, next) {
   let user = req.$scope.user;
   let token = randomstring.generate();
   req.$scope.token = token;
 
   return req.db.user.update({
     passwordResetToken: token,
-    tokenActiveDate: moment(new Date()).add(1, 'hour')
+    tokenActiveDate: moment(new Date()).add(24, 'hour')
   }, {
     where: {
       id: user.id
@@ -118,11 +122,45 @@ function updateUser (req, res, next) {
   })
   .catch(error => {
     res.status(500)
-    .send(new rpc.InternalError(error));
+    .send(new lib.rpc.InternalError(error));
 
     req.log.error({
       err: error
-    }, 'user.update Error - post-forgot-password');
+    }, 'user.update Error - post-user-forgot-password');
+  });
+}
+
+/**
+ * Send an Email
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function sendEmail (req, res, next) {
+  let token = req.$scope.token;
+  let email = req.$params.email;
+  let file = templates.forgotPassword;
+  let values = {
+    resetPasswordUrl: `http://localhost:3000/reset-password/${token}`
+  };
+
+  lib.pug.convert(file, values)
+  .then(content => {
+    return lib.email.send(`Forgot Password`, email, content);
+  })
+  .then(pug => {
+    next();
+    return pug;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'pug.convert Error - post-user-forgot-password');
   });
 }
 
@@ -133,30 +171,17 @@ function updateUser (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  /* eslint-disable max-len */
-  let token = req.$scope.token;
-  let message = 'We heard that you lost your Peersview password. Sorry about that!';
-  message += '<p>But don’t worry! You can use the following link within the next day to reset your password:</p>';
-  message += '<p>http://localhost:3000/api/reset_password/' + token + '</p>';
-  message += '<p>If you don’t use this link within 24 hours, it will expire. To get a new password reset link, visit http://localhost:3000/password_reset</p>';
-  message += '<p>Thanks,<br />';
-  message += 'Admin at Peersview</p>';
-
-  /**
-   * @TODO email send
-   */
-
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200
   };
 
-  res.status(200)
-  .send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
 module.exports.findUser = findUser;
-module.exports.updateUser = updateUser;
+module.exports.logic = postUserForgotPassword;
+module.exports.sendEmail = sendEmail;
 module.exports.response = response;

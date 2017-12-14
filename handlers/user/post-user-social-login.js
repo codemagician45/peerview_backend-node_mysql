@@ -6,7 +6,7 @@
  */
 
 const randomstring = require('randomstring');
-const rpc = require('../lib/rpc');
+const lib = require('../../lib');
 
 function validateParams (req, res, next) {
   let bodySchema = {
@@ -42,14 +42,14 @@ function validateParams (req, res, next) {
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
       return res.status(400)
-      .send(new rpc.ValidationError(validationErrors.array()));
+      .send(new lib.rpc.ValidationError(validationErrors.array()));
     }
 
     return next();
   })
   .catch(error => {
     res.status(500)
-    .send(new rpc.InternalError(error));
+    .send(new lib.rpc.InternalError(error));
   });
 }
 
@@ -95,11 +95,11 @@ function findUser (req, res, next) {
   })
   .catch(error => {
     res.status(500)
-    .send(new rpc.InternalError(error));
+    .send(new lib.rpc.InternalError(error));
 
     req.log.error({
       err: error
-    }, 'user.findOne Error - post-social-login');
+    }, 'user.findOne Error - post-user-social-login');
   });
 }
 
@@ -120,14 +120,12 @@ function saveOrUpdateUser (req, res, next) {
   let lastName = req.$params.lastName;
   let email = req.$params.email;
   let token = randomstring.generate();
-  let type = req.$scope.type;
 
   let create = {
     firstName: firstName,
     lastName: lastName,
     email: email,
-    token: token,
-    type: type
+    token: token
   };
 
   /**
@@ -145,16 +143,15 @@ function saveOrUpdateUser (req, res, next) {
     })
     .catch(error => {
       res.status(500)
-      .send(new rpc.InternalError(error));
+      .send(new lib.rpc.InternalError(error));
 
       req.log.error({
         err: error
-      }, 'user.create Error - post-social-login');
+      }, 'user.create Error - post-user-social-login');
     });
   } else {
     let update = {};
     update[req.$scope.social] = req.$params.socialId;
-    update.type = type;
     return req.db.user.update(update, {
       where: {
         email: email
@@ -167,7 +164,7 @@ function saveOrUpdateUser (req, res, next) {
     })
     .catch(error => {
       res.status(500)
-      .send(new rpc.InternalError(error));
+      .send(new lib.rpc.InternalError(error));
 
       req.log.error({
         err: error
