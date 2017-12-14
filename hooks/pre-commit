@@ -16,7 +16,7 @@ PASS=true
 
 printf "\nValidating Javascript\n"
 
-cd api && $(npm bin)/eslint .
+$(npm bin)/eslint .
 RESULT=$?
 if [[ $RESULT != 0 ]]; then
   PASS=false
