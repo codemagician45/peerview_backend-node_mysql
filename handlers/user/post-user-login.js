@@ -65,7 +65,7 @@ function validateParams (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function postLogin (req, res, next) {
+function postUserLogin (req, res, next) {
   let email = req.$params.email;
   let password = md5(req.$params.password);
 
@@ -82,7 +82,7 @@ function postLogin (req, res, next) {
       return res.status(400).send({
         status: 'ERROR',
         status_code: 102,
-        status_message: 'Invalid email or password',
+        status_message: 'Invalid Email or Password',
         http_code: 400
       });
     }
@@ -97,7 +97,7 @@ function postLogin (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'user.findOne Error - post-login');
+    }, 'user.findOne Error - post-user-login');
   });
 }
 
@@ -120,5 +120,5 @@ function response (req, res) {
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = postLogin;
+module.exports.logic = postUserLogin;
 module.exports.response = response;
