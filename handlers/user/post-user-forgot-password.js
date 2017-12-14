@@ -73,7 +73,7 @@ function findUser (req, res, next) {
       return res.status(400).send({
         status: 'ERROR',
         status_code: 102,
-        status_message: 'Email is not registered with us. Or email has been used for social login',
+        status_message: 'Email is not registered with us. Or email has been used for social login', // eslint-disable-line max-len
         http_code: 400
       });
     }
@@ -103,7 +103,7 @@ function findUser (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function postUserForgotPassword (req, res, next) {
+function postUserForgotPassword (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
   let token = randomstring.generate();
   req.$scope.token = token;
