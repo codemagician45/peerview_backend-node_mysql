@@ -34,12 +34,6 @@ module.exports = function (sequelize, dataTypes) {
     token: {
       type: dataTypes.STRING
     },
-    isVerified: {
-      type: dataTypes.BOOLEAN
-    },
-    isActive: {
-      type: dataTypes.BOOLEAN
-    },
     isSuspended: {
       type: dataTypes.BOOLEAN
     },
@@ -61,9 +55,6 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.STRING
     },
     googleId: {
-      type: dataTypes.STRING
-    },
-    passwordResetToken: {
       type: dataTypes.STRING
     },
     tokenActiveDate: {
