@@ -20,13 +20,6 @@ apiRouter.use(validator({
 app.use('/api/v1', apiRouter);
 
 // basic routes
-apiRouter.post('/send-reset-link',
-  lib.params,
-  handlers.postSendResetLink.validateParams,
-  handlers.postSendResetLink.findUser,
-  handlers.postSendResetLink.updateUser,
-  handlers.postSendResetLink.response);
-
 apiRouter.post('/check-token-expiry',
   lib.params,
   handlers.postTokenExpiry.validateParams,
