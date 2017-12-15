@@ -39,6 +39,9 @@ module.exports = Object.assign({}, defaults, {
   server: {
     port: 3000,
   },
+  frontEnd: {
+    baseUrl: 'http://localhost:3000'
+  },
   db: {
     adapter: 'mysql',
     database: 'peersview',

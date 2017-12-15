@@ -32,6 +32,9 @@ module.exports = {
   server: {
     port: process.env.PORT || process.env.PEERSVIEW_PORT,
   },
+  frontEnd: {
+    baseUrl: process.env.PEERSVIEW_BASEURL
+  },
   db: {
     adapter: process.env.PEERSVIEW_DB_ADAPTER,
     host: process.env.PEERSVIEW_DB_HOST,
