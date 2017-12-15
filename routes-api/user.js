@@ -56,7 +56,23 @@ function userApi (apiRouter) {
     handlers.user.postUserRegister.validatePasswordAndConfirmPassword,
     handlers.user.postUserRegister.checkifEmailIsExisted,
     handlers.user.postUserRegister.logic,
+    handlers.user.postUserRegister.sendEmail,
     handlers.user.postUserRegister.response);
+
+  apiRouter.post('/user/forgot-password',
+    lib.params,
+    handlers.user.postUserForgotPassword.validateParams,
+    handlers.user.postUserForgotPassword.findUser,
+    handlers.user.postUserForgotPassword.logic,
+    handlers.user.postUserForgotPassword.sendEmail,
+    handlers.user.postUserForgotPassword.response);
+
+  apiRouter.post('/user/verify-email/:jotToken',
+    lib.params,
+    handlers.user.postUserVerifyEmail.validateParams,
+    handlers.user.postUserVerifyEmail.findUser,
+    handlers.user.postUserVerifyEmail.logic,
+    handlers.user.postUserVerifyEmail.response);
 
   apiRouter.post('/user/type-details',
     lib.params,
@@ -71,14 +87,6 @@ function userApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.user.postUserInterests.logic,
     handlers.user.postUserInterests.response);
-
-  apiRouter.post('/user/forgot-password',
-    lib.params,
-    handlers.user.postUserForgotPassword.validateParams,
-    handlers.user.postUserForgotPassword.findUser,
-    handlers.user.postUserForgotPassword.logic,
-    handlers.user.postUserForgotPassword.sendEmail,
-    handlers.user.postUserForgotPassword.response);
 
   apiRouter.put('/user/gender',
     lib.params,
@@ -96,10 +104,10 @@ function userApi (apiRouter) {
     handlers.user.updateUserNewPassword.logic,
     handlers.user.updateUserNewPassword.response);
 
-  apiRouter.put('/user/password',
+  apiRouter.put('/user/password/:jotToken', // use as a setter after the post-user-forgot-password
     lib.params,
     handlers.user.updateUserPassword.validateParams,
-    lib.isTokenExist.user,
+    handlers.user.updateUserPassword.validatePasswordAndConfirmPassword,
     handlers.user.updateUserPassword.logic,
     handlers.user.updateUserPassword.response);
 
