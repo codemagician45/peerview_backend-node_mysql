@@ -3,12 +3,14 @@
 /**
  * @author Jo-Ries Canino
  * @description User forgot password
+ * This is connected to update-user-password route
  */
 
 const randomstring = require('randomstring');
 const moment = require('moment');
 const lib = require('../../lib');
 const templates = require('../../templates');
+const config = require('../../config');
 
 /**
  * Validation of req.body, req, param,
@@ -109,7 +111,7 @@ function postUserForgotPassword (req, res, next) {// eslint-disable-line id-leng
   req.$scope.token = token;
 
   return req.db.user.update({
-    passwordResetToken: token,
+    token: token,
     tokenActiveDate: moment(new Date()).add(24, 'hour')
   }, {
     where: {
@@ -142,8 +144,14 @@ function sendEmail (req, res, next) {
   let token = req.$scope.token;
   let email = req.$params.email;
   let file = templates.forgotPassword;
+
+  let jotToken = lib.jwt.encode({
+    email: email
+  }, token);
+
   let values = {
-    resetPasswordUrl: `http://localhost:3000/reset-password/${token}`
+    resetPasswordUrl: `${config.frontEnd.baseUrl}/reset-password/${jotToken}?token=${token}`,
+    forgotPasswordUrl: `${config.frontEnd.baseUrl}/forgot-password`
   };
 
   lib.pug.convert(file, values)
