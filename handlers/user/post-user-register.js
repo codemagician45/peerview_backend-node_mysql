@@ -8,6 +8,8 @@
 const randomstring = require('randomstring');
 const md5 = require('MD5');
 const lib = require('../../lib');
+const templates = require('../../templates');
+const config = require('../../config');
 
 /**
  * Validation of req.body, req, param,
@@ -93,7 +95,7 @@ function validatePasswordAndConfirmPassword (req, res, next) {// eslint-disable-
     return res.status(400).send({
       status: 'ERROR',
       status_code: 102,
-      status_message: 'Password and Confirm Password Doesn\' Match',
+      status_message: `Password and Confirm Password Doesn't Match`,
       http_code: 400
     });
   }
@@ -164,12 +166,16 @@ function postUserRegister (req, res, next) {
     firstName: firstName,
     lastName: lastName,
     email: email,
-    password: password,
-    token: token
+    password: password
+    // token: token
+    // dont save the token so that we don't have a token for user verification yet
+    // until the user verify its email
   };
 
   return req.db.user.create(create)
   .then(user => {
+    req.$scope.user = user;
+    req.$scope.token = token;
     next();
     return user;
   })
@@ -180,6 +186,48 @@ function postUserRegister (req, res, next) {
     req.log.error({
       err: error
     }, 'user.create Error');
+  });
+}
+
+/**
+ * Send an Email
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function sendEmail (req, res, next) {
+  let user = req.$scope.user;
+  let token = req.$scope.token;
+  let email = req.$params.email;
+  let name = `${req.$params.firstName} ${req.$params.lastName}`;
+  let file = templates.emailVerification;
+
+  let jotToken = lib.jwt.encode({
+    userId: user.id
+  }, token);
+
+  let values = {
+    name: name,
+    verifyEmailUrl: `${config.frontEnd.baseUrl}/verify-email/${jotToken}?token=${token}`
+  };
+
+  lib.pug.convert(file, values)
+  .then(content => {
+    return lib.email.send(`Thanks for joining Peersview`, email, content);
+  })
+  .then(pug => {
+    next();
+    return pug;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'pug.convert Error - post-user-register');
   });
 }
 
@@ -203,4 +251,5 @@ module.exports.validateParams = validateParams;
 module.exports.validatePasswordAndConfirmPassword = validatePasswordAndConfirmPassword;
 module.exports.checkifEmailIsExisted = checkifEmailIsExisted;
 module.exports.logic = postUserRegister;
+module.exports.sendEmail = sendEmail;
 module.exports.response = response;
