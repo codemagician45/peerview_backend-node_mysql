@@ -73,7 +73,10 @@ function postUserLogin (req, res, next) {
     where: {
       [req.Op.and]: {
         email: email,
-        password: password
+        password: password,
+        token: {
+          [req.Op.ne]: null // this is possible because token will be given a value in the post-user-verify-email route
+        }
       }
     }
   })
