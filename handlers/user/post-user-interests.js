@@ -5,6 +5,7 @@
  * @description Post User Interest
  */
 const lib = require('../../lib');
+const templates = require('../../templates');
 
 /**
  * Validation of req.body, req, param,
@@ -24,6 +25,11 @@ function validateParams (req, res, next) {
       isArray: {
         errorMessage: 'Invalid Resource: Interest Ids Should be Array Type'
       },
+    },
+    userTypeId: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: User Type Id'
+      }
     }
   };
 
@@ -64,8 +70,8 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function postUserInterests (req, res, next) {
-  let user = req.$scoper.user;
-  let interestIds = req.$params.interestIds;
+  let user = req.$scope.user;
+  let interestIds = JSON.parse(req.$params.interestIds);
   let userInterest = [];
 
   interestIds.forEach(interestId => {
@@ -86,10 +92,73 @@ function postUserInterests (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'userInterest.bulkCreate Error - post-user-interest');
+    }, 'userInterest.bulkCreate Error - post-user-interests');
   });
 }
 
+function checkUserType (req, res, next) {
+  return req.db.userType.findOne({
+    where: {
+      id: req.$params.userTypeId
+    }
+  })
+  .then(userType => {
+    req.$scope.userType = userType;
+    next();
+    return userType;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'userType.findOne Error - post-user-interests');
+  });
+}
+
+/**
+ * Send an Email for welcoming the user
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function sendEmail (req, res, next) {
+  let user = req.$scope.user;
+  let userType = req.$scope.userType;
+  let file = templates.welcomeStudent;
+  let name = `${user.firstName} ${user.lastName}`;
+
+  if (userType.code === 'professionals') {
+    file = templates.welcomeProfessionals;
+  } else if (userType.code === 'organizationInstitution') {
+    file = templates.welcomeOrganizationInstitution;
+    name = user.institutionName;
+  }
+
+  let values = {
+    name: name
+  };
+
+  lib.pug.convert(file, values)
+  .then(content => {
+    return lib.email.send(`Welcome to Peersview`, user.email, content);
+  })
+  .then(pug => {
+    next();
+    return pug;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'pug.convert Error - post-user-register');
+  });
+}
 
 /**
  * Response data to client
@@ -109,4 +178,6 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postUserInterests;
+module.exports.checkUserType = checkUserType;
+module.exports.sendEmail = sendEmail;
 module.exports.response = response;
