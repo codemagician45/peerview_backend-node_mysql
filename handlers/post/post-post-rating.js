@@ -26,6 +26,9 @@ function validateParams (req, res, next) {
     rating: {
       notEmpty: {
         errorMessage: 'Missing Resource: Rating'
+      },
+      isFloat: {
+        errorMessage: 'Invalid Resource: Rating'
       }
     }
   };
@@ -77,7 +80,6 @@ function postPostRating (req, res, next) {
     rating: rating
   })
   .then(postRating => {
-    req.$scope.postRating = postRating;
     next();
     return postRating;
   })
@@ -98,12 +100,10 @@ function postPostRating (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let postRating = req.$scope.postRating;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201,
-    postRating: postRating
+    http_code: 201
   };
 
   res.status(201).send(body);
