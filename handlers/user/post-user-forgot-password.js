@@ -150,7 +150,7 @@ function sendEmail (req, res, next) {
   }, token);
 
   let values = {
-    resetPasswordUrl: `${config.frontEnd.baseUrl}/reset-password/${jotToken}?token=${token}`,
+    resetPasswordUrl: `${config.frontEnd.baseUrl}/reset-password/${jotToken}?secret=${token}`,
     forgotPasswordUrl: `${config.frontEnd.baseUrl}/forgot-password`
   };
 
