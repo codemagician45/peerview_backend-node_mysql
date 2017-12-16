@@ -18,9 +18,9 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let paramsSchema = {
-    typeName: {
+    typeCode: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Type Name'
+        errorMessage: 'Missing Resource: Type Code'
       }
     }
   };
@@ -62,12 +62,12 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getUserTypeId (req, res, next) {
-  let typeName = req.$params.typeName;
+  let typeCode = req.$params.typeCode;
 
   return req.db.userType.findOne({
     where: {
-      name: {
-        [req.Op.eq]: typeName.toLowerCase()
+      code: {
+        [req.Op.eq]: typeCode.toLowerCase()
       }
     }
   })
