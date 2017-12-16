@@ -15,6 +15,10 @@ module.exports = function (sequelize, dataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
+    code: {
+      type: dataTypes.STRING,
+      unique: true
+    },
     name: {
       type: dataTypes.STRING
     }
