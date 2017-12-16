@@ -39,6 +39,13 @@ function postApi (apiRouter) {
     handlers.post.postPostLike.logic,
     handlers.post.postPostLike.response);
 
+  apiRouter.post('/post/pageview',
+    lib.params,
+    handlers.post.postPostPageview.validateParams,
+    lib.isTokenExist.user,
+    handlers.post.postPostPageview.logic,
+    handlers.post.postPostPageview.response);
+
   apiRouter.post('/post/share/:sharePostId',
     lib.params,
     handlers.post.postSharePost.validateParams,
