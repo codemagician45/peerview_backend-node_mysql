@@ -76,12 +76,6 @@ apiRouter.get('/user/followers/:followerId',
   handlers.getUserFollowersFollower.response);
 // end user follow route
 
-apiRouter.get('/courses',
-  // lib.params,
-  handlers.getCourses.getCourses,
-  // handlers.getCourses.getInterestCategory,
-  handlers.getCourses.response);
-
 apiRouter.post('/search-invite/:query',
   lib.params,
   handlers.getInviteUsers.validateParams,
@@ -317,6 +311,9 @@ routesApi.poll(apiRouter);
 
 // community route
 routesApi.community(apiRouter);
+
+// course route
+routesApi.course(apiRouter);
 
 apiRouter.post('/community/course', // this route logic is not yet finish with the previous developer
   lib.params,
