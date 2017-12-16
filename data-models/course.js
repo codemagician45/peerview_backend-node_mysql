@@ -28,11 +28,5 @@ module.exports = function (sequelize, dataTypes) {
     indexes: []
   });
 
-  Course.associate = function (models) {
-    this.hasMany(models.courseClass);
-    this.belongsTo(models.courseType);
-    this.belongsTo(models.campus);
-  };
-
   return Course;
 };
