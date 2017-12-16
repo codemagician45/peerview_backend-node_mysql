@@ -19,12 +19,6 @@ module.exports = function (sequelize, dataTypes) {
     email: {
       type: dataTypes.STRING
     },
-    birthDate: {
-      type: dataTypes.DATE
-    },
-    gender: {
-      type: dataTypes.STRING
-    },
     language: {
       type: dataTypes.STRING
     },
@@ -33,6 +27,9 @@ module.exports = function (sequelize, dataTypes) {
     },
     token: {
       type: dataTypes.STRING
+    },
+    tokenActiveDate: {
+      type: dataTypes.DATE
     },
     isSuspended: {
       type: dataTypes.BOOLEAN
@@ -57,8 +54,32 @@ module.exports = function (sequelize, dataTypes) {
     googleId: {
       type: dataTypes.STRING
     },
-    tokenActiveDate: {
+    schoolName: {
+      type: dataTypes.STRING
+    },
+    birthDate: {
       type: dataTypes.DATE
+    },
+    city: {
+      type: dataTypes.STRING
+    },
+    gender: {
+      type: dataTypes.STRING
+    },
+    role: {// start of ex-student which includes birthDate and city
+      type: dataTypes.STRING
+    },
+    company: {
+      type: dataTypes.STRING
+    },
+    institutionName: {// start of institution or organization which includes city
+      type: dataTypes.STRING
+    },
+    yearOfIncorporation: {
+      type: dataTypes.DATE
+    },
+    website: {
+      type: dataTypes.STRING
     }
   }, {
     tableName: 'user',
@@ -68,16 +89,18 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   User.associate = function (models) {
-    this.belongsTo(models.userTypeDetails);
+    this.belongsTo(models.userStudyLevel);
+    this.belongsTo(models.userType);
     this.belongsTo(models.userPrivacy);// who can view my profile
-    this.belongsTo(models.campus);
-    this.hasMany(models.group);
-    this.hasMany(models.event);
-    this.hasMany(models.bookEvent);
-    this.hasMany(models.bookTransaction);
-    this.hasMany(models.commentLike);
-    this.hasMany(models.inbox);
-    this.hasMany(models.societyClubFollow);
+    // this.belongsTo(models.userTypeDetails);
+    // this.belongsTo(models.campus);
+    // this.hasMany(models.group);
+    // this.hasMany(models.event);
+    // this.hasMany(models.bookEvent);
+    // this.hasMany(models.bookTransaction);
+    // this.hasMany(models.commentLike);
+    // this.hasMany(models.inbox);
+    // this.hasMany(models.societyClubFollow);
   };
 
   return User;
