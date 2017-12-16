@@ -85,7 +85,7 @@ function postUserLogin (req, res, next) {
       return res.status(400).send({
         status: 'ERROR',
         status_code: 102,
-        status_message: 'Invalid Email or Password',
+        status_message: 'Invalid Email/Password or User is not yet Validated.',
         http_code: 400
       });
     }
