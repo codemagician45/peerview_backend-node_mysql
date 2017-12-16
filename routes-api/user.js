@@ -9,21 +9,21 @@ function userApi (apiRouter) {
     handlers.user.getUsers.logic,
     handlers.user.getUsers.response);
 
-  apiRouter.get('/user/:userId',
-    lib.params,
-    handlers.user.getUser.validateParams,
-    lib.isTokenExist.user,
-    handlers.user.getUser.logic,
-    handlers.user.getUser.response);
+  // apiRouter.get('/user/:userId', this must be /user only
+  //   lib.params,
+  //   handlers.user.getUser.validateParams,
+  //   lib.isTokenExist.user,
+  //   handlers.user.getUser.logic,
+  //   handlers.user.getUser.response);
 
-  apiRouter.get('/user-study-levels',
+  apiRouter.get('/user/study-levels',
     lib.params,
     handlers.user.getUserStudyLevels.validateParams,
     lib.isTokenExist.user,
     handlers.user.getUserStudyLevels.logic,
     handlers.user.getUserStudyLevels.response);
 
-  apiRouter.get('/user/type/:typeName',
+  apiRouter.get('/user/type/:typeCode',
     lib.params,
     handlers.user.getUserTypeId.validateParams,
     lib.isTokenExist.user,
@@ -74,19 +74,21 @@ function userApi (apiRouter) {
     handlers.user.postUserVerifyEmail.logic,
     handlers.user.postUserVerifyEmail.response);
 
-  apiRouter.post('/user/type-details',
-    lib.params,
-    handlers.user.postUserTypeDetails.validateParams,
-    lib.isTokenExist.user,
-    handlers.user.postUserTypeDetails.logic,
-    handlers.user.postUserTypeDetails.response);
-
   apiRouter.post('/user/interests',
     lib.params,
     handlers.user.postUserInterests.validateParams,
     lib.isTokenExist.user,
     handlers.user.postUserInterests.logic,
+    handlers.user.postUserInterests.checkUserType,
+    handlers.user.postUserInterests.sendEmail,
     handlers.user.postUserInterests.response);
+
+  apiRouter.post('/user/onboarding/details',
+    lib.params,
+    handlers.user.postUserOnboardingDetails.checkUserType,
+    handlers.user.postUserOnboardingDetails.validateParams,
+    handlers.user.postUserOnboardingDetails.logic,
+    handlers.user.postUserOnboardingDetails.response);
 
   apiRouter.put('/user/gender',
     lib.params,
@@ -95,21 +97,21 @@ function userApi (apiRouter) {
     handlers.user.updateUserGender.logic,
     handlers.user.updateUserGender.response);
 
-  apiRouter.put('/user/new-password',
-    lib.params,
-    handlers.user.updateUserNewPassword.validateParams,
-    handlers.user.updateUserNewPassword.validatePasswordAndConfirmPassword,
-    handlers.user.updateUserNewPassword.checkUserCurrentPassword,
-    lib.isTokenExist.user,
-    handlers.user.updateUserNewPassword.logic,
-    handlers.user.updateUserNewPassword.response);
-
-  apiRouter.put('/user/password/:jotToken', // use as a setter after the post-user-forgot-password
+  apiRouter.put('/user/password',
     lib.params,
     handlers.user.updateUserPassword.validateParams,
     handlers.user.updateUserPassword.validatePasswordAndConfirmPassword,
+    handlers.user.updateUserPassword.checkUserCurrentPassword,
+    lib.isTokenExist.user,
     handlers.user.updateUserPassword.logic,
     handlers.user.updateUserPassword.response);
+
+  apiRouter.put('/user/password-reset/:jotToken', // use as a setter after the post-user-forgot-password
+    lib.params,
+    handlers.user.updateUserPasswordReset.validateParams,
+    handlers.user.updateUserPasswordReset.validatePasswordAndConfirmPassword,
+    handlers.user.updateUserPasswordReset.logic,
+    handlers.user.updateUserPasswordReset.response);
 
   apiRouter.put('/user/profile-picture',
     lib.params,
