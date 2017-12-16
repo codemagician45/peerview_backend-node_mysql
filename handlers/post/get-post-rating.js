@@ -5,7 +5,7 @@
  * @description Get Post Rating
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -62,16 +62,26 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getPostRating (req, res, next) {
-  const sequelize = req.db.post.sequelize;
-  return req.db.post.findAll({
+  let postId = req.$params.postId;
+  const sequelize = req.db.postRating.sequelize;
+  const colRating = sequelize.col('rating');
+  const colAVG = sequelize.fn('AVG', colRating);
+
+  return req.db.postRating.findOne({
     attributes: [
       [sequelize.fn('COUNT', sequelize.col('userId')), 'ratingCount'],
-      [sequelize.fn('ROUND', sequelize.fn('AVG', sequelize.col('rating')), 2)]
-    ]
+      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating']
+    ],
+    where: {
+      postId: {
+        [req.Op.eq]: postId
+      }
+    }
   })
-  .then(post => {
+  .then(postRating => {
+    req.$scope.postRating = postRating;
     next();
-    return post;
+    return postRating;
   })
   .catch(error => {
     res.status(500)
@@ -79,7 +89,7 @@ function getPostRating (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'post.findAll Error - get-post-rating');
+    }, 'postRating.findAll Error - get-post-rating');
   });
 }
 
@@ -90,13 +100,15 @@ function getPostRating (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
+  let postRating = req.$scope.postRating;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201
+    http_code: 200,
+    postRating: postRating
   };
 
-  res.status(201).send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
