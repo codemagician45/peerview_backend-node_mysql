@@ -17,12 +17,5 @@ module.exports = function (sequelize, dataTypes) {
     indexes: []
   });
 
-  CourseClass.associate = function (models) {
-    this.belongsTo(models.community, {
-      foreignKey: 'universityId'
-    });
-    this.hasMany(models.userClass);
-  };
-
   return CourseClass;
 };
