@@ -2,12 +2,9 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Update User Password
- * This will be used after the post-user-forgot-password route
+ * @description Update User New Password
  */
-
 const md5 = require('MD5');
-const moment = require('moment');
 const lib = require('../../lib');
 
 /**
@@ -21,6 +18,11 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let bodySchema = {
+    currentPassword: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Current Password'
+      }
+    },
     password: {
       notEmpty: {
         errorMessage: 'Missing Resource: Password'
@@ -41,6 +43,9 @@ function validateParams (req, res, next) {
         errorMessage: 'Missing Resource: Confirm Password'
       }
     },
+  };
+
+  let headerSchema = {
     token: {
       notEmpty: {
         errorMessage: 'Missing Resource: Token'
@@ -48,16 +53,8 @@ function validateParams (req, res, next) {
     }
   };
 
-  let paramsSchema = {
-    jotToken: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Jot Token'
-      }
-    }
-  };
-
   req.checkBody(bodySchema);
-  req.checkParams(paramsSchema);
+  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -98,21 +95,27 @@ function validatePasswordAndConfirmPassword (req, res, next) {// eslint-disable-
   return next();
 }
 
-function updateUserPassword (req, res, next) {
-  let token = req.$params.token;
-  let jotToken = req.$params.jotToken;
-  let decoded = lib.jwt.decode(jotToken, token);
-  let password = md5(req.$params.password);
-
-  return req.db.user.update({
-    password: password
-  }, {
+/**
+ * This would be the fallback if the password
+ * and confirm_password are the same
+ * Then check the current_password if it is
+ * the same as the pass parameter
+ * @see {@link validatePasswordAndConfirmPassword}
+ * @see validatePasswordAndConfirmPassword
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function checkUserCurrentPassword (req, res, next) {// eslint-disable-line id-length
+  let token = req.headers.token;
+  let password = md5(req.$params.currentPassword);
+  return req.db.user.findOne({
     where: {
       [req.Op.and]: {
-        email: decoded.email,
-        tokenActiveDate: {
-          [req.Op.gte]: moment(new Date())
-        }
+        token: token,
+        password: password
       }
     }
   })
@@ -121,11 +124,46 @@ function updateUserPassword (req, res, next) {
       return res.status(400).send({
         status: 'ERROR',
         status_code: 102,
-        status_message: `Invalid Resource: Token is Expired`,
+        status_message: 'Invalid Current Password',
         http_code: 400
       });
     }
+    next();
+    return user;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
 
+    req.log.error({
+      err: error
+    }, 'user.findOne Error - update-user-password');
+  });
+}
+
+/**
+ * This would be the fallback if the token exist
+ * @see {@link lib/isUserTokenExist}
+ * @see isUserTokenExist
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function updateUserPassword (req, res, next) {// eslint-disable-line id-length
+  let user = req.$scope.user;
+  let password = md5(req.$params.password);
+  return req.db.user.update({
+    password: password
+  }, {
+    where: {
+      id: {
+        [req.Op.eq]: user.id
+      }
+    }
+  })
+  .then(user => {
     next();
     return user;
   })
@@ -145,7 +183,7 @@ function updateUserPassword (req, res, next) {
  * @param {any} res response object
  * @returns {any} body response object
  */
-function response (req, res) { // this will redirect the user in the login page(frond-end will do it)
+function response (req, res) {
   let body = {
     status: 'SUCCESS',
     status_code: 0,
@@ -157,5 +195,6 @@ function response (req, res) { // this will redirect the user in the login page(
 
 module.exports.validateParams = validateParams;
 module.exports.validatePasswordAndConfirmPassword = validatePasswordAndConfirmPassword;
+module.exports.checkUserCurrentPassword = checkUserCurrentPassword;
 module.exports.logic = updateUserPassword;
 module.exports.response = response;
