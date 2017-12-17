@@ -5,7 +5,7 @@
  * @description Community Post
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -18,13 +18,10 @@ const lib = require('../../lib/rpc');
  */
 function validateParams (req, res, next) {
   let bodySchema = {
-    userTypeId: {
+    courseId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: User Type Id'
+        errorMessage: 'Missing Resource: Course Id'// not empty because we need to get the user in which course he/she belongs
       }
-    },
-    courseId: {// this thing will be used for post in which courseId or general section
-      optional: true
     },
     message: {
       notEmpty: {
@@ -49,7 +46,7 @@ function validateParams (req, res, next) {
   };
 
   req.checkBody(bodySchema);
-  req.headerSchema(headerSchema);
+  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -78,16 +75,17 @@ function validateParams (req, res, next) {
  */
 function postCommunityPost (req, res, next) {
   let user = req.$scoper.user;
-  let userTypeId = req.$params.userTypeId;
   let courseId = req.$params.courseId;
+  let message = req.$params.message;
 
   return req.db.communityPost.create({
     userId: user.id,
-    userTypeId: userTypeId,
-    courseId: courseId
+    userTypeId: user.userTypeId,
+    userStudyLevelId: user.userStudyLevelId,
+    courseId: courseId,
+    message: message
   })
   .then(communityPost => {
-    req.$scope.communityPost = communityPost;
     next();
     return communityPost;
   })
@@ -108,12 +106,10 @@ function postCommunityPost (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let communityPost = req.$scope.communityPost;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201,
-    communityPost: communityPost
+    http_code: 201
   };
 
   res.status(201).send(body);
