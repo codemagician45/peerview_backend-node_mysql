@@ -20,13 +20,22 @@ module.exports = function (sequelize, dataTypes) {
   Post.associate = function (models) {
     this.belongsTo(models.user);
     this.belongsTo(models.post, {
-      foreignkey: 'sharePostId'
+      foreignKey: 'sharePostId'
     });
-    this.belongsTo(models.postCategory);
-    this.hasMany(models.postComplaint);
-    this.hasMany(models.postLike);
-    this.hasMany(models.postRating);
-    this.hasMany(models.postReply);
+    // this.belongsTo(models.postCategory);
+    // this.hasMany(models.postComplaint);
+    this.hasMany(models.postLike, {
+      as: 'postLike'
+    });
+    this.hasMany(models.postRating, {
+      as: 'postRating'
+    });
+    this.hasMany(models.postReply, {
+      as: 'postReply'
+    });
+    this.hasMany(models.postPageview, {
+      as: 'postPageview'
+    });
   };
 
   return Post;
