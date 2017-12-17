@@ -21,6 +21,9 @@ function validateParams (req, res, next) {
     postCategoryId: {
       notEmpty: {
         errorMessage: 'Missing Resource: Post Category Id'
+      },
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Category Id'
       }
     },
     message: {
@@ -84,7 +87,6 @@ function postPost (req, res, next) {
     message: message
   })
   .then(post => {
-    req.$scope.post = post;
     next();
     return post;
   })
@@ -105,12 +107,10 @@ function postPost (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let post = req.$scope.post;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201,
-    post: post
+    http_code: 201
   };
 
   res.status(201).send(body);
