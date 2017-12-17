@@ -4,6 +4,18 @@ const handlers = require('../handlers');
 const lib = require('../lib');
 
 function postApi (apiRouter) {
+  apiRouter.get('/posts',
+    lib.params,
+    handlers.post.getPosts.validateParams,
+    handlers.post.getPosts.logic,
+    handlers.post.getPosts.response);
+
+  apiRouter.get('/post/:postId',
+    lib.params,
+    handlers.post.getPost.validateParams,
+    handlers.post.getPost.logic,
+    handlers.post.getPost.response);
+
   apiRouter.get('/post/rating/:postId',
     lib.params,
     handlers.post.getPostRating.validateParams,
