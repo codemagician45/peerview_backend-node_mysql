@@ -4,6 +4,20 @@ const handlers = require('../handlers');
 const lib = require('../lib');
 
 function communityApi (apiRouter) {
+  apiRouter.get('/community/posts',
+    lib.params,
+    handlers.community.getCommunityPosts.validateParams,
+    lib.isTokenExist.user,
+    handlers.community.getCommunityPosts.logic,
+    handlers.community.getCommunityPosts.response);
+
+  apiRouter.get('/community/post/:communityPostId',
+    lib.params,
+    handlers.community.getCommunityPost.validateParams,
+    lib.isTokenExist.user,
+    handlers.community.getCommunityPost.logic,
+    handlers.community.getCommunityPost.response);
+
   apiRouter.post('/community/post',
     lib.params,
     handlers.community.postCommunityPost.validateParams,
