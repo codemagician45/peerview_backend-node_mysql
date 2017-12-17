@@ -18,12 +18,12 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   Post.associate = function (models) {
+    // this.hasMany(models.postComplaint);
     this.belongsTo(models.user);
     this.belongsTo(models.post, {
       foreignKey: 'sharePostId'
     });
-    // this.belongsTo(models.postCategory);
-    // this.hasMany(models.postComplaint);
+    this.belongsTo(models.postCategory);
     this.hasMany(models.postLike, {
       as: 'postLike'
     });
