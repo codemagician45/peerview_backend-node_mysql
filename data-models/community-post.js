@@ -20,10 +20,20 @@ module.exports = function (sequelize, dataTypes) {
   CommunityPost.associate = function (models) {
     this.belongsTo(models.user);
     this.belongsTo(models.userType);
+    this.belongsTo(models.userStudyLevel);
     this.belongsTo(models.course);
-    this.hasMany(models.communityPostLike);
-    this.hasMany(models.communityPostRating);
-    this.hasMany(models.communityPostReply);
+    this.hasMany(models.communityPostLike, {
+      as: 'communityPostLike'
+    });
+    this.hasMany(models.communityPostRating, {
+      as: 'communityPostRating'
+    });
+    this.hasMany(models.communityPostReply, {
+      as: 'communityPostReply'
+    });
+    this.hasMany(models.communityPostPageview, {
+      as: 'communityPostPageview'
+    });
   };
 
   return CommunityPost;
