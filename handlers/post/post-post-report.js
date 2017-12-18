@@ -39,7 +39,7 @@ function validateParams (req, res, next) {
   };
 
   req.checkBody(bodySchema);
-  req.headerSchema(headerSchema);
+  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -67,7 +67,7 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function postPostReport (req, res, next) {
-  let user = req.$scoper.user;
+  let user = req.$scope.user;
   let reason = req.$params.reason;
   let postId = req.$params.postId;
 
