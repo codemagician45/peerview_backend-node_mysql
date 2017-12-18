@@ -9,6 +9,9 @@ module.exports = function (sequelize, dataTypes) {
     },
     message: {
       type: dataTypes.STRING
+    },
+    title: {
+      type: dataTypes.STRING
     }
   }, {
     tableName: 'post',
@@ -20,8 +23,9 @@ module.exports = function (sequelize, dataTypes) {
   Post.associate = function (models) {
     // this.hasMany(models.postComplaint);
     this.belongsTo(models.user);
-    this.belongsTo(models.post, {
-      foreignKey: 'sharePostId'
+    this.hasMany(models.post, {
+      foreignKey: 'sharePostId',
+      as: 'postShare'
     });
     this.belongsTo(models.postCategory);
     this.hasMany(models.postLike, {
