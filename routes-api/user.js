@@ -87,6 +87,7 @@ function userApi (apiRouter) {
     lib.params,
     handlers.user.postUserOnboardingDetails.checkUserType,
     handlers.user.postUserOnboardingDetails.validateParams,
+    lib.isTokenExist.user,
     handlers.user.postUserOnboardingDetails.logic,
     handlers.user.postUserOnboardingDetails.response);
 
