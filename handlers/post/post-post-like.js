@@ -5,7 +5,7 @@
  * @description Post Post Like
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -17,10 +17,10 @@ const lib = require('../../lib/rpc');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
+  let paramsSchema = {
     postId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Post Id'
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Id'
       }
     }
   };
@@ -33,7 +33,7 @@ function validateParams (req, res, next) {
     }
   };
 
-  req.checkBody(bodySchema);
+  req.checkParams(paramsSchema);
   req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {

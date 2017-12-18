@@ -17,10 +17,10 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
+  let paramsSchema = {
     postId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Post Id'
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Id'
       }
     }
   };
@@ -33,7 +33,7 @@ function validateParams (req, res, next) {
     }
   };
 
-  req.checkBody(bodySchema);
+  req.checkParams(paramsSchema);
   req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {

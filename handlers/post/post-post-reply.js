@@ -5,7 +5,7 @@
  * @description Post Post Reply
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -17,12 +17,23 @@ const lib = require('../../lib/rpc');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
-    postId: {
+  let headerSchema = {
+    token: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Post Id'
+        errorMessage: 'Missing Resource: Token'
       }
-    },
+    }
+  };
+
+  let paramsSchema = {
+    postId: {
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Id'
+      }
+    }
+  };
+
+  let bodySchema = {
     comment: {
       notEmpty: {
         errorMessage: 'Missing Resource: Comment'
@@ -37,16 +48,9 @@ function validateParams (req, res, next) {
     }
   };
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
-  req.checkBody(bodySchema);
   req.checkHeaders(headerSchema);
+  req.checkParams(paramsSchema);
+  req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -84,7 +88,6 @@ function postPostReply (req, res, next) {
     comment: comment
   })
   .then(postReply => {
-    req.$scope.postReply = postReply;
     next();
     return postReply;
   })
@@ -105,12 +108,10 @@ function postPostReply (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let postReply = req.$scope.postReply;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201,
-    postReply: postReply
+    http_code: 201
   };
 
   res.status(201).send(body);
