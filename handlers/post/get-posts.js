@@ -49,6 +49,8 @@ function getPosts (req, res, next) {
   return req.db.post.findAll({
     attributes: [
       'message',
+      'title',
+      'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
         sequelize.col(['postRating', 'userId'].join('.'))), 'ratingCount'],
@@ -56,8 +58,13 @@ function getPosts (req, res, next) {
         sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
       [sequelize.fn('COUNT',
         sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
+      [sequelize.fn('COUNT',
+        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount']
     ],
     include: [{
+      model: req.db.user,
+      attributes: ['id', 'firstName', 'lastName', 'email']
+    }, {
       model: req.db.postRating,
       as: 'postRating',
       attributes: []
@@ -68,7 +75,7 @@ function getPosts (req, res, next) {
     }, {
       model: req.db.postReply,
       as: 'postReply',
-      attributes: ['comment'],
+      attributes: ['comment', 'createdAt'],
       include: [{
         model: req.db.user,
         attributes: ['id', 'firstName', 'lastName', 'email']
@@ -76,6 +83,11 @@ function getPosts (req, res, next) {
     }, {
       model: req.db.postPageview,
       as: 'postPageview',
+      attributes: []
+    }, {
+      model: req.db.post,
+      foreignKey: 'sharePostId',
+      as: 'postShare',
       attributes: []
     }],
     group: ['post.id']
@@ -94,7 +106,6 @@ function getPosts (req, res, next) {
     }, 'post.findAll Error - get-posts');
   });
 }
-
 
 /**
  * Response data to client
