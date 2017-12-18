@@ -5,7 +5,7 @@
  * @description Post Share Post
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
