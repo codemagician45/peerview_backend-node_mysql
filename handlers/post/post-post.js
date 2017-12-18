@@ -5,7 +5,32 @@
  * @description Post Post
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
+
+function checkPostCategory (req, res, next) {
+  let postCategoryId = req.$params.postCategoryId;
+
+  return req.db.postCategory.findOne({
+    where: {
+      id: {
+        [req.Op.eq]: postCategoryId
+      }
+    }
+  })
+  .then(postCategory => {
+    req.$scope.postCategory = postCategory;
+    next();
+    return postCategory;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'postCategory.findOne Error - post-post');
+  });
+}
 
 /**
  * Validation of req.body, req, param,
@@ -17,6 +42,7 @@ const lib = require('../../lib/rpc');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
+  let postCategory = req.$scope.postCategory;
   let bodySchema = {
     postCategoryId: {
       notEmpty: {
@@ -40,6 +66,14 @@ function validateParams (req, res, next) {
     }
   };
 
+  if (postCategory && postCategory.code === 'story') {
+    bodySchema.title = {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Title'
+      }
+    };
+  }
+
   let headerSchema = {
     token: {
       notEmpty: {
@@ -49,7 +83,7 @@ function validateParams (req, res, next) {
   };
 
   req.checkBody(bodySchema);
-  req.headerSchema(headerSchema);
+  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -77,14 +111,16 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function postPost (req, res, next) {
-  let user = req.$scoper.user;
+  let user = req.$scope.user;
   let postCategoryId = req.$params.postCategoryId;
   let message = req.$params.message;
+  let title = req.$params.title;
 
   return req.db.post.create({
     userId: user.id,
     postCategoryId: postCategoryId,
-    message: message
+    message: message,
+    title: title
   })
   .then(post => {
     next();
@@ -116,6 +152,7 @@ function response (req, res) {
   res.status(201).send(body);
 }
 
+module.exports.checkPostCategory = checkPostCategory;
 module.exports.validateParams = validateParams;
 module.exports.logic = postPost;
 module.exports.response = response;
