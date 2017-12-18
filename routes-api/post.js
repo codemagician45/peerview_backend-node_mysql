@@ -22,7 +22,7 @@ function postApi (apiRouter) {
     handlers.post.getPostCategoryId.logic,
     handlers.post.getPostCategoryId.response);
 
-  apiRouter.get('/post/rating/:postId',
+  apiRouter.get('/post/:postId/rating',
     lib.params,
     handlers.post.getPostRating.validateParams,
     lib.isTokenExist.user,
@@ -37,28 +37,28 @@ function postApi (apiRouter) {
     handlers.post.postPost.logic,
     handlers.post.postPost.response);
 
-  apiRouter.post('/post/reply',
+  apiRouter.post('/post/:postId/reply',
     lib.params,
     handlers.post.postPostReply.validateParams,
     lib.isTokenExist.user,
     handlers.post.postPostReply.logic,
     handlers.post.postPostReply.response);
 
-  apiRouter.post('/post/rating',
+  apiRouter.post('/post/:postId/rating',
     lib.params,
     handlers.post.postPostRating.validateParams,
     lib.isTokenExist.user,
     handlers.post.postPostRating.logic,
     handlers.post.postPostRating.response);
 
-  apiRouter.post('/post/like',
+  apiRouter.post('/post/:postId/like',
     lib.params,
     handlers.post.postPostLike.validateParams,
     lib.isTokenExist.user,
     handlers.post.postPostLike.logic,
     handlers.post.postPostLike.response);
 
-  apiRouter.post('/post/pageview',
+  apiRouter.post('/post/:postId/pageview',
     lib.params,
     handlers.post.postPostPageview.validateParams,
     lib.isTokenExist.user,
@@ -71,6 +71,12 @@ function postApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.post.postSharePost.logic,
     handlers.post.postSharePost.response);
+
+  apiRouter.post('/post/:postId/report',
+    lib.params,
+    handlers.post.postPostReport.validateParams,
+    handlers.post.postPostReport.logic,
+    handlers.post.postPostReport.response);
 
   apiRouter.post('/story',
     lib.params,
