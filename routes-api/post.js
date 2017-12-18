@@ -16,6 +16,12 @@ function postApi (apiRouter) {
     handlers.post.getPost.logic,
     handlers.post.getPost.response);
 
+  apiRouter.get('/post/category/:categoryCode',
+    lib.params,
+    handlers.post.getPostCategoryId.validateParams,
+    handlers.post.getPostCategoryId.logic,
+    handlers.post.getPostCategoryId.response);
+
   apiRouter.get('/post/rating/:postId',
     lib.params,
     handlers.post.getPostRating.validateParams,
@@ -25,6 +31,7 @@ function postApi (apiRouter) {
 
   apiRouter.post('/post',
     lib.params,
+    handlers.post.postPost.checkPostCategory,
     handlers.post.postPost.validateParams,
     lib.isTokenExist.user,
     handlers.post.postPost.logic,
