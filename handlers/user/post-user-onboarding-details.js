@@ -50,10 +50,21 @@ function checkUserType (req, res, next) {
  */
 function validateParams (req, res, next) {
   let userType = req.$scope.userType;
-  let bodySchema = {
-    courseId: {
+  let headerSchema = {
+    token: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Course Id'
+        errorMessage: 'Missing Resource: Token'
+      }
+    }
+  };
+
+  let bodySchema = {
+    courseIds: {// this is used for professionals who have many courses finishes
+      isArrayNotEmpty: {
+        errorMessage: 'Missing Resource: Course Ids'
+      },
+      isArray: {
+        errorMessage: 'Invalid Resource: Course Ids'
       }
     },
     userStudyLevelId: {
@@ -85,9 +96,12 @@ function validateParams (req, res, next) {
 
   if (userType.code === 'professionals') {
     bodySchema = {
-      courseId: {
-        notEmpty: {
-          errorMessage: 'Missing Resource: Course Id'
+      courseIds: {
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Course Ids'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Course Ids'
         }
       },
       userTypeId: {
@@ -146,16 +160,8 @@ function validateParams (req, res, next) {
     };
   }
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
-  req.checkBody(bodySchema);
   req.checkHeaders(headerSchema);
+  req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -184,7 +190,7 @@ function validateParams (req, res, next) {
  */
 function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
-  let courseId = req.$params.courseId;
+  let courseIds = req.$params.courseIds;
   let userStudyLevelId = req.$params.userStudyLevelId;
   let userTypeId = req.$params.userTypeId;
   let schoolName = req.$params.schoolName;
@@ -216,11 +222,20 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
       }
     }
   })
-  .then(() => {
-    return req.db.userCourse.create({
-      userId: user.id,
-      courseId: courseId
+  .then(user => {
+    courseIds = !courseIds ? []/* this is the value when the userType is institution */
+      : JSON.parse(courseIds);
+    let courses = [];
+    courseIds.forEach(courseId => {
+      courses.push({
+        userId: user.id,
+        courseId: courseId
+      });
     });
+
+    if (courses.length === 0) {return;}
+
+    return req.db.userCourse.bulkCreate(courses);
   })
   .then(userCourse => {
     next();
