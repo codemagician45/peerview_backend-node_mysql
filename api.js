@@ -33,14 +33,6 @@ apiRouter.post('/set-new-password',
   handlers.postSetNewPassword.findUser,
   handlers.postSetNewPassword.updateUser,
   handlers.postSetNewPassword.response);
-
-apiRouter.post('/verification/:userId',
-  lib.params,
-  handlers.postVerifyUser.validateParams,
-  handlers.postVerifyUser.findUser,
-  handlers.postVerifyUser.verifyUser,
-  handlers.postVerifyUser.updateUser,
-  handlers.postVerifyUser.response);
 // end basic routes
 
 // user route
@@ -314,6 +306,14 @@ routesApi.community(apiRouter);
 
 // course route
 routesApi.course(apiRouter);
+
+apiRouter.get('/peers-list',
+  lib.params,
+  handlers.getPeerslist.validateParams,
+  lib.isTokenExist.user,
+  handlers.getPeerslist.getUserCourse,
+  handlers.getPeerslist.logic,
+  handlers.getPeerslist.response);
 
 apiRouter.post('/community/course', // this route logic is not yet finish with the previous developer
   lib.params,
