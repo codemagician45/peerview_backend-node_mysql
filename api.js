@@ -315,6 +315,29 @@ apiRouter.get('/peers-list',
   handlers.getPeerslist.logic,
   handlers.getPeerslist.response);
 
+apiRouter.get('/search', // combination of advance-search/user and advance-search/post
+  lib.params,
+  handlers.getSearch.validateParams,
+  lib.isTokenExist.user,
+  handlers.getSearch.getSearchUser,
+  handlers.getSearch.getSearchPost,
+  handlers.getSearch.logic,
+  handlers.getSearch.response);
+
+apiRouter.get('/advance-search/user',
+  lib.params,
+  handlers.getAdvanceSearchUser.validateParams,
+  lib.isTokenExist.user,
+  handlers.getAdvanceSearchUser.logic,
+  handlers.getAdvanceSearchUser.response);
+
+apiRouter.get('/advance-search/post',
+  lib.params,
+  handlers.getAdvanceSearchPost.validateParams,
+  lib.isTokenExist.user,
+  handlers.getAdvanceSearchPost.logic,
+  handlers.getAdvanceSearchPost.response);
+
 apiRouter.post('/community/course', // this route logic is not yet finish with the previous developer
   lib.params,
   handlers.postCommunityCourse.validateParams,
