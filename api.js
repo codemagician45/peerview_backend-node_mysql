@@ -20,19 +20,10 @@ apiRouter.use(validator({
 app.use('/api/v1', apiRouter);
 
 // basic routes
-apiRouter.post('/check-token-expiry',
+apiRouter.post('/token/verify',// user for checking token afte the user click reset-password
   lib.params,
-  handlers.postTokenExpiry.validateParams,
-  handlers.postTokenExpiry.logic,
-  handlers.postTokenExpiry.response);
-
-apiRouter.post('/set-new-password',
-  lib.params,
-  handlers.postSetNewPassword.validateParams,
-  handlers.postSetNewPassword.validatePasswordAndConfirmPassword,
-  handlers.postSetNewPassword.findUser,
-  handlers.postSetNewPassword.updateUser,
-  handlers.postSetNewPassword.response);
+  handlers.postTokenVerify.logic,
+  handlers.postTokenVerify.response);
 // end basic routes
 
 // user route
