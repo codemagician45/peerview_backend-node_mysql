@@ -20,7 +20,7 @@ apiRouter.use(validator({
 app.use('/api/v1', apiRouter);
 
 // basic routes
-apiRouter.post('/token/verify',// user for checking token afte the user click reset-password
+apiRouter.post('/token/verify', // user for checking token afte the user click reset-password
   lib.params,
   handlers.postTokenVerify.logic,
   handlers.postTokenVerify.response);
