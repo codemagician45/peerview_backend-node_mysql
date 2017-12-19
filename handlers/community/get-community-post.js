@@ -25,16 +25,7 @@ function validateParams (req, res, next) {
     }
   };
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
   req.checkParams(paramsSchema);
-  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -59,6 +50,7 @@ function getCommunityPost (req, res, next) {
   return req.db.communityPost.findAll({
     attributes: [
       'message',
+      'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
         sequelize.col(['communityPostRating', 'userId'].join('.'))), 'ratingCount'],
@@ -68,6 +60,9 @@ function getCommunityPost (req, res, next) {
         sequelize.col(['communityPostPageview', 'userId'].join('.'))), 'pageviewCount'],
     ],
     include: [{
+      model: req.db.user,
+      attributes: ['id', 'firstName', 'lastName', 'email']
+    }, {
       model: req.db.communityPostRating,
       as: 'communityPostRating',
       attributes: []
@@ -82,7 +77,7 @@ function getCommunityPost (req, res, next) {
     }, {
       model: req.db.communityPostReply,
       as: 'communityPostReply',
-      attributes: ['comment'],
+      attributes: ['comment', 'createdAt'],
       include: [{
         model: req.db.user,
         attributes: ['id', 'firstName', 'lastName', 'email']
