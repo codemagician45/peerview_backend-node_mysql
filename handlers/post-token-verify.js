@@ -62,8 +62,7 @@ function response (req, res) {
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 200,
-    status_message: 'Token is Valid'
+    http_code: 200
   };
 
   res.status(200).send(body);
