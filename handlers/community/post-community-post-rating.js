@@ -5,7 +5,7 @@
  * @description Post Post Rating
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -17,29 +17,27 @@ const lib = require('../../lib/rpc');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
+  let paramsSchema = {
     communityPostId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Community Post Id'
+      isInt: {
+        errorMessage: 'Invalid Resource: Community Post Id'
       }
-    },
+    }
+  };
+
+  let bodySchema = {
     rating: {
       notEmpty: {
         errorMessage: 'Missing Resource: Rating'
+      },
+      isFloat: {
+        errorMessage: 'Invalid Resource: Rating'
       }
     }
   };
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
+  req.checkParams(paramsSchema);
   req.checkBody(bodySchema);
-  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -77,7 +75,6 @@ function postCommunityPostRating (req, res, next) {// eslint-disable-line id-len
     rating: rating
   })
   .then(communityPostRating => {
-    req.$scope.communityPostRating = communityPostRating;
     next();
     return communityPostRating;
   })
@@ -98,12 +95,10 @@ function postCommunityPostRating (req, res, next) {// eslint-disable-line id-len
  * @returns {any} body response object
  */
 function response (req, res) {
-  let communityPostRating = req.$scope.communityPostRating;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201,
-    communityPostRating: communityPostRating
+    http_code: 201
   };
 
   res.status(201).send(body);
