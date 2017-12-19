@@ -5,7 +5,7 @@
  * @description Community Post Like
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -17,24 +17,15 @@ const lib = require('../../lib/rpc');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
+  let paramsSchema = {
     communityPostId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Community Post Id'
+      isInt: {
+        errorMessage: 'Invalid Resource: Community Post Id'
       }
     }
   };
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
-  req.checkBody(bodySchema);
-  req.checkHeaders(headerSchema);
+  req.checkParams(paramsSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
