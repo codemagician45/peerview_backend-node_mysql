@@ -92,10 +92,11 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.userStudyLevel);
     this.belongsTo(models.userType);
     this.belongsTo(models.userPrivacy);// who can view my profile
-    this.hasMany(models.userCourse);
     this.belongsTo(models.campus, {
       as: 'campus'
     });
+    this.hasMany(models.userCourse);
+    this.hasMany(models.communityUsers);
     // this.hasMany(models.group);
     // this.hasMany(models.event);
     // this.hasMany(models.bookEvent);
