@@ -18,6 +18,7 @@ const lib = require('../lib');
 function getInterestCategory (req, res, next) {
   return req.db.interestCategory.findAll({})
   .then(interestCategory => {
+    req.$scope.interestCategory = interestCategory;
     next();
     return interestCategory;
   })
@@ -27,7 +28,7 @@ function getInterestCategory (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'interestCategory.findAll Error - get-interest0-category');
+    }, 'interestCategory.findAll Error - get-interest-category');
   });
 }
 
@@ -38,14 +39,15 @@ function getInterestCategory (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
+  let interestCategory = req.$scope.interestCategory;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 200
+    http_code: 200,
+    interestCategory: interestCategory
   };
 
-  res.status(200)
-  .send(body);
+  res.status(200).send(body);
 }
 
 module.exports.logic = getInterestCategory;
