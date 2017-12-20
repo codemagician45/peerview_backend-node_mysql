@@ -77,6 +77,14 @@ function communityApi (apiRouter) {
     handlers.community.postCommunityBrainstormingPost.logic,
     handlers.community.postCommunityBrainstormingPost.response);
 
+  apiRouter.post('/community/:communityId/poll',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.postCommunityPoll.validateParams,
+    handlers.community.postCommunityPoll.logic,
+    handlers.community.postCommunityPoll.saveCommunityPollOption,
+    handlers.community.postCommunityPoll.response);
+
   apiRouter.put('/community/brainstorming/:brainstormingId/post',
     lib.params,
     lib.isTokenExist.user,
