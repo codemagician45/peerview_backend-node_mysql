@@ -5,85 +5,95 @@ const lib = require('../lib');
 
 function postApi (apiRouter) {
   apiRouter.get('/posts',
-    lib.params,
-    handlers.post.getPosts.validateParams,
+    lib.isTokenExist.user,
     handlers.post.getPosts.logic,
     handlers.post.getPosts.response);
 
   apiRouter.get('/post/:postId',
     lib.params,
+    lib.isTokenExist.user,
     handlers.post.getPost.validateParams,
     handlers.post.getPost.logic,
     handlers.post.getPost.response);
 
   apiRouter.get('/post/category/:categoryCode',
     lib.params,
+    lib.isTokenExist.user,
     handlers.post.getPostCategoryId.validateParams,
     handlers.post.getPostCategoryId.logic,
     handlers.post.getPostCategoryId.response);
 
   apiRouter.get('/post/:postId/rating',
     lib.params,
-    handlers.post.getPostRating.validateParams,
     lib.isTokenExist.user,
+    handlers.post.getPostRating.validateParams,
     handlers.post.getPostRating.logic,
     handlers.post.getPostRating.response);
 
   apiRouter.post('/post',
     lib.params,
+    lib.isTokenExist.user,
     handlers.post.postPost.checkPostCategory,
     handlers.post.postPost.validateParams,
-    lib.isTokenExist.user,
     handlers.post.postPost.logic,
     handlers.post.postPost.response);
 
   apiRouter.post('/post/:postId/reply',
     lib.params,
-    handlers.post.postPostReply.validateParams,
     lib.isTokenExist.user,
+    handlers.post.postPostReply.validateParams,
     handlers.post.postPostReply.logic,
     handlers.post.postPostReply.response);
 
   apiRouter.post('/post/:postId/rating',
     lib.params,
-    handlers.post.postPostRating.validateParams,
     lib.isTokenExist.user,
+    handlers.post.postPostRating.validateParams,
     handlers.post.postPostRating.logic,
     handlers.post.postPostRating.response);
 
   apiRouter.post('/post/:postId/like',
     lib.params,
-    handlers.post.postPostLike.validateParams,
     lib.isTokenExist.user,
+    handlers.post.postPostLike.validateParams,
     handlers.post.postPostLike.logic,
     handlers.post.postPostLike.response);
 
   apiRouter.post('/post/:postId/pageview',
     lib.params,
-    handlers.post.postPostPageview.validateParams,
     lib.isTokenExist.user,
+    handlers.post.postPostPageview.validateParams,
     handlers.post.postPostPageview.logic,
     handlers.post.postPostPageview.response);
 
   apiRouter.post('/post/share/:sharePostId',
     lib.params,
-    handlers.post.postSharePost.validateParams,
     lib.isTokenExist.user,
+    handlers.post.postSharePost.validateParams,
     handlers.post.postSharePost.logic,
     handlers.post.postSharePost.response);
 
   apiRouter.post('/post/:postId/report',
     lib.params,
+    lib.isTokenExist.user,
     handlers.post.postPostReport.validateParams,
     handlers.post.postPostReport.logic,
     handlers.post.postPostReport.response);
 
-  apiRouter.post('/story',
+  apiRouter.post('/post/story',
     lib.params,
-    handlers.post.postStory.validateParams,
     lib.isTokenExist.user,
-    handlers.post.postStory.logic,
-    handlers.post.postStory.response);
+    handlers.post.postPostStory.validateParams,
+    handlers.post.postPostStory.logic,
+    handlers.post.postPostStory.response);
+
+  apiRouter.post('/post/poll',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.post.postPostPoll.validateParams,
+    handlers.post.postPostPoll.logic,
+    handlers.post.postPostPoll.savePollOption,
+    handlers.post.postPostPoll.response);
 }
 
 module.exports = postApi;
