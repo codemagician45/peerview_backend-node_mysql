@@ -77,13 +77,13 @@ function communityApi (apiRouter) {
     handlers.community.postCommunityBrainstormingPost.logic,
     handlers.community.postCommunityBrainstormingPost.response);
 
-  apiRouter.post('/community/:communityId/poll',
+  apiRouter.post('/community/:communityId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.community.postCommunityPoll.validateParams,
-    handlers.community.postCommunityPoll.logic,
-    handlers.community.postCommunityPoll.saveCommunityPollOption,
-    handlers.community.postCommunityPoll.response);
+    handlers.community.postCommunityPostPoll.validateParams,
+    handlers.community.postCommunityPostPoll.logic,
+    handlers.community.postCommunityPostPoll.saveCommunityPollOption,
+    handlers.community.postCommunityPostPoll.response);
 
   apiRouter.put('/community/brainstorming/:brainstormingId/post',
     lib.params,
