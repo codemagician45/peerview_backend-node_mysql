@@ -19,7 +19,6 @@ module.exports = function (sequelize, dataTypes) {
 
   Interest.associate = function (models) {
     this.belongsTo(models.interestCategory);
-    this.belongsTo(models.user);
   };
 
   return Interest;
