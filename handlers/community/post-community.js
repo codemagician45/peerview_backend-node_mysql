@@ -3,6 +3,7 @@
 /**
  * @author Jo-Ries Canino
  * @description Create private community
+ * It includes adding of users in the pending status
  */
 
 const lib = require('../../lib');
