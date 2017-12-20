@@ -20,15 +20,15 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let headerSchema = {
-    token: {
+  let paramsSchema = {
+    categoryCode: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Token'
+        errorMessage: 'Missing Resource: Category Code'
       }
     }
   };
 
-  req.checkHeaders(headerSchema);
+  req.checkParams(paramsSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {

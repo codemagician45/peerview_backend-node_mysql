@@ -2,7 +2,7 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Get Post Rating
+ * @description Post Story
  */
 
 const lib = require('../../lib');
@@ -17,15 +17,36 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let paramsSchema = {
-    postId: {
+  let bodySchema = {
+    postCategoryId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Post Id Params'
+        errorMessage: 'Missing Resource: Post Category Id'
+      },
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Category Id'
+      }
+    },
+    title: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Title'
+      }
+    },
+    message: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Message'
+      },
+      isLength: {
+        options: [{
+          min: 1,
+          max: 280
+        }],
+        errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
       }
     }
   };
 
-  req.checkParams(paramsSchema);
+
+  req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -52,27 +73,21 @@ function validateParams (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function getPostRating (req, res, next) {
-  let postId = req.$params.postId;
-  const sequelize = req.db.postRating.sequelize;
-  const colRating = sequelize.col('rating');
-  const colAVG = sequelize.fn('AVG', colRating);
+function postStory (req, res, next) {
+  let user = req.$scope.user;
+  let postCategoryId = req.$params.postCategoryId;
+  let title = req.$params.title;
+  let message = req.$params.message;
 
-  return req.db.postRating.findOne({
-    attributes: [
-      [sequelize.fn('COUNT', sequelize.col('userId')), 'ratingCount'],
-      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating']
-    ],
-    where: {
-      postId: {
-        [req.Op.eq]: postId
-      }
-    }
+  return req.db.post.create({
+    userId: user.id,
+    postCategoryId: postCategoryId,
+    title: title,
+    message: message
   })
-  .then(postRating => {
-    req.$scope.postRating = postRating;
+  .then(post => {
     next();
-    return postRating;
+    return post;
   })
   .catch(error => {
     res.status(500)
@@ -80,7 +95,7 @@ function getPostRating (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'postRating.findAll Error - get-post-rating');
+    }, 'post.create Error - post-post');
   });
 }
 
@@ -91,17 +106,15 @@ function getPostRating (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let postRating = req.$scope.postRating;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 200,
-    postRating: postRating
+    http_code: 201
   };
 
-  res.status(200).send(body);
+  res.status(201).send(body);
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = getPostRating;
+module.exports.logic = postStory;
 module.exports.response = response;

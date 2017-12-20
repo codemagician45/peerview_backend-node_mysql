@@ -2,7 +2,7 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Post Share Post
+ * @description Post Poll
  */
 
 const lib = require('../../lib');
@@ -17,38 +17,30 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let paramsSchema = {
-    sharePostId: {
-      isInt: {
-        errorMessage: 'Invalid Resource: Share Post Id'
-      }
-    }
-  };
-
   let bodySchema = {
-    postCategoryId: {
+    question: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Post Category Id'
-      },
-      isInt: {
-        errorMessage: 'Invalid Resource: Post Category Id'
+        errorMessage: 'Missing Resource: Question'
       }
     },
-    message: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Message'
+    options: {
+      isArrayNotEmpty: {
+        errorMessage: 'Missing Resource: Options'
       },
-      isLength: {
-        options: [{
-          min: 1,
-          max: 280
-        }],
-        errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
+      isArray: {
+        errorMessage: 'Invalid Resource: Options'
+      }
+    },
+    duration: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Duration'
+      },
+      isInt: {
+        errorMessage: 'Invalid Resource: Duration'
       }
     }
   };
 
-  req.checkParams(paramsSchema);
   req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
@@ -76,21 +68,20 @@ function validateParams (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function postSharePost (req, res, next) {
+function postPoll (req, res, next) {
   let user = req.$scope.user;
-  let postCategoryId = req.$params.postCategoryId;
-  let sharePostId = req.$params.sharePostId;
-  let message = req.$params.message;
+  let question = req.$params.question;
+  let duration = req.$params.duration;
 
-  return req.db.post.create({
-    userId: user.id,
-    postCategoryId: postCategoryId,
-    sharePostId: sharePostId,
-    message: message
+  return req.db.poll.create({
+    question: question,
+    duration: duration,
+    userId: user.id
   })
-  .then(post => {
+  .then(poll => {
+    req.$scope.poll = poll;
     next();
-    return post;
+    return poll;
   })
   .catch(error => {
     res.status(500)
@@ -98,7 +89,42 @@ function postSharePost (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'post.create Error - post-post');
+    }, 'poll.create Error - post-poll');
+  });
+}
+
+/**
+ * Save the options in the pollOption table
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function savePollOption (req, res, next) {
+  let pollId = req.$scope.poll.id;
+  let options = JSON.parse(req.$params.options);
+  let pollOption = [];
+
+  options.forEach(option => {
+    pollOption.push({
+      name: option,
+      pollId: pollId
+    });
+  });
+
+  return req.db.pollOption.bulkCreate(pollOption)
+  .then(pollOption => {
+    next();
+    return pollOption;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'pollOption.create Error - post-poll');
   });
 }
 
@@ -112,12 +138,13 @@ function response (req, res) {
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201
+    http_code: 200
   };
 
-  res.status(201).send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = postSharePost;
+module.exports.logic = postPoll;
+module.exports.savePollOption = savePollOption;
 module.exports.response = response;
