@@ -5,7 +5,7 @@
  * @description Community Post Report
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -17,12 +17,15 @@ const lib = require('../../lib/rpc');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
+  let paramsSchema = {
     communityPostId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Community Post Id'
+      isInt: {
+        errorMessage: 'Invalid Resource: Community Post Id'
       }
-    },
+    }
+  };
+
+  let bodySchema = {
     reason: {
       notEmpty: {
         errorMessage: 'Missing Resource: Reason'
@@ -30,16 +33,8 @@ function validateParams (req, res, next) {
     }
   };
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
+  req.checkParams(paramsSchema);
   req.checkBody(bodySchema);
-  req.headerSchema(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -67,7 +62,7 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function postCommunityReport (req, res, next) {
-  let user = req.$scoper.user;
+  let user = req.$scope.user;
   let reason = req.$params.reason;
   let communityPostId = req.$params.communityPostId;
 
@@ -77,7 +72,6 @@ function postCommunityReport (req, res, next) {
     reason: reason
   })
   .then(communityPostReport => {
-    req.$scope.postReport = communityPostReport;
     next();
     return communityPostReport;
   })
@@ -98,12 +92,10 @@ function postCommunityReport (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let communityPostReport = req.$scope.communityPostReport;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201,
-    communityPostReport: communityPostReport
+    http_code: 201
   };
 
   res.status(201).send(body);
