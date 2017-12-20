@@ -3,6 +3,18 @@
 /**
  * @author Jo-Ries Canino
  * @description Community Post
+ * Basically same userType
+ * and same userStudyLevel for student
+ *
+ * If the user is a professional he/she can browse
+ * any userStudyLevel
+ *
+ * It is also tied in our private community
+ * So reused the communityPost table
+ * and just add the communityId
+ * which include the ffg:
+ * communityId
+ * message
  */
 
 const lib = require('../../lib');
@@ -19,9 +31,10 @@ const lib = require('../../lib');
 function validateParams (req, res, next) {
   let bodySchema = {
     courseId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Course Id'// not empty because we need to get the user in which course he/she belongs
-      }
+      optional: true // because to reuse the general tab and when the user browse in the courses(student); professionals can browse all
+    },
+    communityId: {// for private post here
+      optional: true
     },
     message: {
       notEmpty: {
@@ -37,16 +50,7 @@ function validateParams (req, res, next) {
     }
   };
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
   req.checkBody(bodySchema);
-  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -74,8 +78,9 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function postCommunityPost (req, res, next) {
-  let user = req.$scoper.user;
+  let user = req.$scope.user;
   let courseId = req.$params.courseId;
+  let communityId = req.$params.communityId;
   let message = req.$params.message;
 
   return req.db.communityPost.create({
@@ -83,6 +88,7 @@ function postCommunityPost (req, res, next) {
     userTypeId: user.userTypeId,
     userStudyLevelId: user.userStudyLevelId,
     courseId: courseId,
+    communityId: communityId,
     message: message
   })
   .then(communityPost => {
