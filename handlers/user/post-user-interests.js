@@ -24,25 +24,11 @@ function validateParams (req, res, next) {
       },
       isArray: {
         errorMessage: 'Invalid Resource: Interest Ids Should be Array Type'
-      },
-    },
-    userTypeId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: User Type Id'
-      }
-    }
-  };
-
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
       }
     }
   };
 
   req.checkBody(bodySchema);
-  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -97,9 +83,10 @@ function postUserInterests (req, res, next) {
 }
 
 function checkUserType (req, res, next) {
+  let user = req.$scope.user;
   return req.db.userType.findOne({
     where: {
-      id: req.$params.userTypeId
+      id: user.userTypeId
     }
   })
   .then(userType => {
@@ -156,7 +143,7 @@ function sendEmail (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'pug.convert Error - post-user-register');
+    }, 'pug.convert Error - post-user-interests');
   });
 }
 
