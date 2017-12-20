@@ -289,9 +289,6 @@ routesApi.interest(apiRouter);
 // post route
 routesApi.post(apiRouter);
 
-// poll route
-routesApi.poll(apiRouter);
-
 // community route
 routesApi.community(apiRouter);
 
