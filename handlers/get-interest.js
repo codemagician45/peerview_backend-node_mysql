@@ -19,8 +19,8 @@ const lib = require('../lib');
 function validateParams (req, res, next) {
   let paramsSchema = {
     interestCategoryId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Interest Category Id'
+      isInt: {
+        errorMessage: 'Invalid Resource: Interest Category Id'
       }
     }
   };
@@ -60,9 +60,10 @@ function getInterest (req, res, next) {
       }
     }
   })
-  .then(interest => {
+  .then(interests => {
+    req.$scope.interests = interests;
     next();
-    return interest;
+    return interests;
   })
   .catch(error => {
     res.status(500)
@@ -81,14 +82,15 @@ function getInterest (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
+  let interests = req.$scope.interest;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 200
+    http_code: 200,
+    interests: interests
   };
 
-  res.status(200)
-  .send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
