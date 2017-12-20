@@ -76,8 +76,8 @@ function userApi (apiRouter) {
 
   apiRouter.post('/user/interests',
     lib.params,
-    handlers.user.postUserInterests.validateParams,
     lib.isTokenExist.user,
+    handlers.user.postUserInterests.validateParams,
     handlers.user.postUserInterests.logic,
     handlers.user.postUserInterests.checkUserType,
     handlers.user.postUserInterests.sendEmail,
