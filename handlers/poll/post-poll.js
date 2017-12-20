@@ -5,7 +5,7 @@
  * @description Post Poll
  */
 
-const lib = require('../../lib/rpc');
+const lib = require('../../lib');
 
 /**
  * Validation of req.body, req, param,
@@ -110,7 +110,7 @@ function savePollOption (req, res, next) {
     });
   });
 
-  return req.db.pollOption.create(pollOption)
+  return req.db.pollOption.bulkCreate(pollOption)
   .then(pollOption => {
     next();
     return pollOption;
