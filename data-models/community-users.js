@@ -1,7 +1,9 @@
 'use strict';
 
 /**
- * This would be creation of private community
+ * This is the adding of users when we create
+ * a private community; so basically we are integrating
+ * the community created with the list of users in it.
  */
 
 module.exports = function (sequelize, dataTypes) {
