@@ -19,12 +19,6 @@ apiRouter.use(validator({
 }));
 app.use('/api/v1', apiRouter);
 
-apiRouter.post('/sample',
-  lib.upload.events,
-  function (req, res, next) {
-    res.status(200).send('ok');
-  });
-
 // basic routes
 apiRouter.post('/token/verify', // user for checking token afte the user click reset-password
   lib.params,
@@ -306,7 +300,6 @@ routesApi.leisure(apiRouter);
 
 apiRouter.get('/peers-list',
   lib.params,
-  handlers.getPeerslist.validateParams,
   lib.isTokenExist.user,
   handlers.getPeerslist.getUserCourse,
   handlers.getPeerslist.logic,
@@ -314,24 +307,31 @@ apiRouter.get('/peers-list',
 
 apiRouter.get('/search', // combination of advance-search/user and advance-search/post
   lib.params,
-  handlers.getSearch.validateParams,
   lib.isTokenExist.user,
+  handlers.getSearch.validateParams,
   handlers.getSearch.getSearchUser,
   handlers.getSearch.getSearchPost,
   handlers.getSearch.logic,
   handlers.getSearch.response);
 
+apiRouter.get('/cities/:countryCode',
+  lib.params,
+  lib.isTokenExist.user,
+  handlers.getCities.validateParams,
+  handlers.getCities.logic,
+  handlers.getCities.response);
+
 apiRouter.get('/advance-search/user',
   lib.params,
-  handlers.getAdvanceSearchUser.validateParams,
   lib.isTokenExist.user,
+  handlers.getAdvanceSearchUser.validateParams,
   handlers.getAdvanceSearchUser.logic,
   handlers.getAdvanceSearchUser.response);
 
 apiRouter.get('/advance-search/post',
   lib.params,
-  handlers.getAdvanceSearchPost.validateParams,
   lib.isTokenExist.user,
+  handlers.getAdvanceSearchPost.validateParams,
   handlers.getAdvanceSearchPost.logic,
   handlers.getAdvanceSearchPost.response);
 
