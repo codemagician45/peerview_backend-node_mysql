@@ -50,7 +50,7 @@ function validateParams (req, res, next) {
   });
 }
 
-function getMyEvents (req, res, next) {
+function getEventMyEvents (req, res, next) {
   let user = req.$scope.user;
   let limit = req.$params.limit;
   let offset = req.$params.offset;
@@ -88,7 +88,7 @@ function getMyEvents (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'event.findAll Error - get-my-events');
+    }, 'event.findAll Error - get-event-my-events');
   });
 }
 
@@ -111,5 +111,5 @@ function response (req, res) {
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = getMyEvents;
+module.exports.logic = getEventMyEvents;
 module.exports.response = response;
