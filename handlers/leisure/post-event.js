@@ -68,14 +68,20 @@ function validateParams (req, res, next) {
     institutionName: {
       optional: true
     },
-    eventDressCodeName: {
+    eventDressCodeId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Event Dress Code'
+        errorMessage: 'Missing Resource: Event Dress Code Id'
+      },
+      isInt: {
+        errorMessage: 'Invalid Resource: Event Dress Code Id'
       }
     },
-    eventTypeCode: {
+    eventTypeId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Event Type Code'
+        errorMessage: 'Missing Resource: Event Type Id'
+      },
+      isInt: {
+        errorMessage: 'Invalid Resource: Event Type Id'
       }
     },
     organizerBankAccount: {
