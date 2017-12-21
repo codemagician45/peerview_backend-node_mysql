@@ -8,9 +8,10 @@
 
 module.exports = function (sequelize, dataTypes) {
   const EventType = sequelize.define('eventType', {
-    code: {
-      type: dataTypes.STRING,
-      primaryKey: true
+    id: {
+      type: dataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true
     },
     name: {
       type: dataTypes.STRING
