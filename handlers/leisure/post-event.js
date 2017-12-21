@@ -18,6 +18,11 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let bodySchema = {
+    title: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Title'
+      }
+    },
     description: {
       notEmpty: {
         errorMessage: 'Missing Resource: Description'
@@ -93,7 +98,16 @@ function validateParams (req, res, next) {
       notEmpty: {
         errorMessage: 'Missing Resource: Organizer Contact Details'
       }
-    }
+    },
+    images: {
+      optional: true
+    },
+    posters: {
+      optional: true
+    },
+    videos: {
+      optional: true
+    },
   };
 
   req.checkBody(bodySchema);
@@ -112,6 +126,169 @@ function validateParams (req, res, next) {
   });
 }
 
+function postEvent (req, res, next) {
+  let user = req.$scope.user;
+  let title = req.$params.title;
+  let description = req.$params.description;
+  let startDate = req.$params.startDate;
+  let endDate = req.$params.endDate;
+  let ticketSalesEndDate = req.$params.ticketSalesEndDate;
+  let venueAddress = req.$params.venueAddress;
+  let cityId = req.$params.cityId;
+  let ticketPrice = req.$params.ticketPrice;
+  let institutionName = req.$params.institutionName;
+  let eventDressCodeId = req.$params.eventDressCodeId;
+  let eventTypeId = req.$params.eventTypeId;
+  let organizerBankAccount = req.$params.organizerBankAccount;
+  let organizerContactDetails = req.$params.organizerContactDetails;// eslint-disable-line id-length
+
+  return req.db.event.create({
+    title: title,
+    description: description,
+    startDate: startDate,
+    endDate: endDate,
+    ticketSalesEndDate: ticketSalesEndDate,
+    venueAddress: venueAddress,
+    cityId: cityId,
+    ticketPrice: ticketPrice,
+    institutionName: institutionName,
+    eventDressCodeId: eventDressCodeId,
+    eventTypeId: eventTypeId,
+    organizerBankAccount: organizerBankAccount,
+    organizerContactDetails: organizerContactDetails
+  })
+  .then(event => {
+    req.$scope.event = event;
+
+    // auto subscribe the user in the
+    // guest list
+    return req.db.eventGuestList.create({
+      eventId: event.id,
+      userId: user.id,
+      isCreator: true
+    });
+  })
+  .then(eventGuestList => {
+    next();
+    return eventGuestList;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'event.create Error - post-event');
+  });
+}
+
+/**
+ * Basically save any data in their corresponding
+ * table for req.$scope.cloudinaryPublicIds
+ * which type would be images, posters, and
+ * videos
+ */
+function saveImages (req, res, next) {
+  let event = req.$scope.event;
+  let cloudinaryPublicIds = req.$scope.cloudinaryPublicIds;
+  let images = cloudinaryPublicIds
+    ? cloudinaryPublicIds.filter(filter => filter.type === 'images')
+    : [];
+
+  if (images.length === 0) {
+    return next();
+  }
+
+  let eventImages = [];
+  images.forEach(image => {
+    eventImages.push({
+      eventId: event.id,
+      cloudinaryPublicId: image.id
+    });
+  });
+
+  req.db.eventImage.bulkCreate(eventImages)
+  .then(eventImages => {
+    next();
+    return eventImages;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'eventImage.bulkCreate Error - post-event');
+  });
+}
+
+function savePosters (req, res, next) {
+  let event = req.$scope.event;
+  let cloudinaryPublicIds = req.$scope.cloudinaryPublicIds;
+  let posters = cloudinaryPublicIds
+    ? cloudinaryPublicIds.filter(filter => filter.type === 'posters')
+    : [];
+
+  if (posters.length === 0) {
+    return next();
+  }
+
+  let eventPosters = [];
+  posters.forEach(poster => {
+    eventPosters.push({
+      eventId: event.id,
+      cloudinaryPublicId: poster.id
+    });
+  });
+
+  req.db.eventPoster.bulkCreate(eventPosters)
+  .then(eventPosters => {
+    next();
+    return eventPosters;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'eventPoster.bulkCreate Error - post-event');
+  });
+}
+
+function saveVideos (req, res, next) {
+  let event = req.$scope.event;
+  let cloudinaryPublicIds = req.$scope.cloudinaryPublicIds;
+  let videos = cloudinaryPublicIds
+    ? cloudinaryPublicIds.filter(filter => filter.type === 'videos')
+    : [];
+
+  if (videos.length === 0) {
+    return next();
+  }
+
+  let eventVideos = [];
+  videos.forEach(video => {
+    eventVideos.push({
+      eventId: event.id,
+      cloudinaryPublicId: video.id
+    });
+  });
+
+  req.db.eventVideo.bulkCreate(eventVideos)
+  .then(eventVideos => {
+    next();
+    return eventVideos;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error
+    }, 'eventVideo.bulkCreate Error - post-event');
+  });
+}
 
 /**
  * Response data to client
@@ -130,4 +307,8 @@ function response (req, res) {
 }
 
 module.exports.validateParams = validateParams;
+module.exports.logic = postEvent;
+module.exports.saveImages = saveImages;
+module.exports.savePosters = savePosters;
+module.exports.saveVideos = saveVideos;
 module.exports.response = response;
