@@ -24,10 +24,16 @@ function validateParams (req, res, next) {
       }
     },
     limit: {
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Offset'
+      }
     },
     offset: {
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Limit'
+      }
     }
   };
 
@@ -64,8 +70,8 @@ function getAdvanceSearchPost (req, res, next) {
       }]
     },
     order: [['createdAt', 'ASC']],
-    offset: !offset ? 0 : offset,
-    limit: !limit ? 10 : limit
+    offset: !offset ? 0 : parseInt(offset),
+    limit: !limit ? 10 : parseInt(limit)
   })
   .then(searchResults => {
     req.$scope.searchResults = searchResults;

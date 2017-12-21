@@ -25,10 +25,16 @@ function validateParams (req, res, next) {
       }
     },
     limit: {
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Limit'
+      }
     },
     offset: {
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Offset'
+      }
     }
   };
 
@@ -70,8 +76,8 @@ function getSearchUser (req, res, next) {
       }]
     },
     order: [['updatedAt', 'DESC']],
-    offset: !offset ? 0 : offset,
-    limit: !limit ? 10 : limit
+    offset: !offset ? 0 : parseInt(offset),
+    limit: !limit ? 10 : parseInt(limit)
   })
   .then(userSearchResults => {
     req.$scope.userSearchResults = userSearchResults;
