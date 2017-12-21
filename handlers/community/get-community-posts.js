@@ -31,19 +31,34 @@ const lib = require('../../lib');
 function validateParams (req, res, next) {
   let paramsSchema = {
     courseId: {
-      optional: true // because to reuse the general tab and when the user browse in the courses(student); professionals can browse all
+      optional: true, // because to reuse the general tab and when the user browse in the courses(student); professionals can browse all
+      isInt: {
+        errorMessage: 'Invalid Resource: Course Id'
+      }
     },
     userStudyLevelId: {// when the professionals browse it so we need it as an optional params
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: User Study Level Id'
+      }
     },
     communityId: {// use for private communities
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Community Id'
+      }
     },
     offset: {
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Offset'
+      }
     },
     limit: {
-      optional: true
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Limit'
+      }
     }
   };
 
@@ -202,8 +217,8 @@ function getCommunityPosts (req, res, next) {
     group: ['communityPost.id'],
     where: where,
     subQuery: false,
-    offset: !offset ? 0 : offset,
-    limit: !limit ? 10 : limit
+    offset: !offset ? 0 : parseInt(offset),
+    limit: !limit ? 10 : parseInt(limit)
   })
   .then(communityPosts => {
     req.$scope.communityPosts = communityPosts;
