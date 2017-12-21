@@ -73,15 +73,15 @@ function postPoll (req, res, next) {
   let question = req.$params.question;
   let duration = req.$params.duration;
 
-  return req.db.poll.create({
+  return req.db.postPoll.create({
     question: question,
     duration: duration,
     userId: user.id
   })
-  .then(poll => {
-    req.$scope.poll = poll;
+  .then(postPoll => {
+    req.$scope.postPoll = postPoll;
     next();
-    return poll;
+    return postPoll;
   })
   .catch(error => {
     res.status(500)
@@ -102,7 +102,7 @@ function postPoll (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function savePollOption (req, res, next) {
-  let pollId = req.$scope.poll.id;
+  let pollId = req.$scope.postPoll.id;
   let options = JSON.parse(req.$params.options);
   let pollOption = [];
 
@@ -113,10 +113,10 @@ function savePollOption (req, res, next) {
     });
   });
 
-  return req.db.pollOption.bulkCreate(pollOption)
-  .then(pollOption => {
+  return req.db.postPollOption.bulkCreate(pollOption)
+  .then(postPollOption => {
     next();
-    return pollOption;
+    return postPollOption;
   })
   .catch(error => {
     res.status(500)
