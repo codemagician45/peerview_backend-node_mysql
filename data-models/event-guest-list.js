@@ -6,6 +6,10 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true
+    },
+    isCreator: {
+      type: dataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     tableName: 'event_guest_list',
