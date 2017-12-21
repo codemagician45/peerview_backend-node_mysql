@@ -16,6 +16,13 @@ function leisureApi (apiRouter) {
     handlers.leisure.getEventTypes.logic,
     handlers.leisure.getEventTypes.response);
 
+  apiRouter.get('/event/my-events',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.getMyEvents.validateParams,
+    handlers.leisure.getMyEvents.logic,
+    handlers.leisure.getMyEvents.response);
+
   /**
    * This one is a special case in which the upload.events
    * precedes the lib.params
