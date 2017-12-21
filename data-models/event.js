@@ -52,9 +52,7 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   Event.associate = function (models) {
-    this.belongsTo(models.city, {
-      foreignKey: 'venueCity'
-    });
+    this.belongsTo(models.city);
     this.belongsTo(models.eventDressCode);
     this.belongsTo(models.eventType);
     this.hasMany(models.eventGuestList);
