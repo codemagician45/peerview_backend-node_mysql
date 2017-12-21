@@ -143,6 +143,7 @@ function postEvent (req, res, next) {
   let organizerContactDetails = req.$params.organizerContactDetails;// eslint-disable-line id-length
 
   return req.db.event.create({
+    userId: user.id,
     title: title,
     description: description,
     startDate: startDate,
