@@ -79,9 +79,15 @@ function postCommunity (req, res, next) {
 }
 
 function inviteUsers (req, res, next) {
+  let userId = req.$scope.user.id;
   let users = JSON.parse(req.$params.users);
   let community = req.$scope.community;
-  let usersData = [];
+  let usersData = [{// auto register the user created it
+    userId: userId,
+    communityId: community.id,
+    status: 'approved',
+    isCreator: true
+  }];
 
   users.forEach(user => {
     usersData.push({
