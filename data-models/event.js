@@ -7,26 +7,42 @@ module.exports = function (sequelize, dataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    name: {
+    title: {
       type: dataTypes.STRING
     },
     description: {
       type: dataTypes.STRING
     },
-    address: {
+    startDate: {
+      type: dataTypes.DATE
+    },
+    endDate: {
+      type: dataTypes.DATE
+    },
+    salesCloseDate: {
+      type: dataTypes.DATE
+    },
+    ticketSalesEndDate: {
+      type: dataTypes.DATE
+    },
+    venueAddress: {
       type: dataTypes.STRING
     },
-    price: {
-      type: dataTypes.DECIMAL
+    ticketPrice: {
+      type: dataTypes.FLOAT
     },
-    startTime: {
-      type: dataTypes.DATE
+    institutionName: {
+      type: dataTypes.STRING
     },
-    endTime: {
-      type: dataTypes.DATE
+    organizerBankAccount: {
+      type: dataTypes.STRING
     },
-    salesCloseTime: {
-      type: dataTypes.DATE
+    organizerContactDetails: {
+      type: dataTypes.STRING
+    },
+    isCreator: {
+      type: dataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     tableName: 'event',
@@ -36,11 +52,15 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   Event.associate = function (models) {
-    this.belongsTo(models.institution);
-    this.belongsTo(models.city);
-    this.hasMany(models.eventMedia);
-    this.hasMany(models.guestList);
-    this.hasMany(models.bookEvent);
+    this.belongsTo(models.city, {
+      foreignKey: 'venueCity'
+    });
+    this.belongsTo(models.eventDressCode);
+    this.belongsTo(models.eventType);
+    this.hasMany(models.eventGuestList);
+    this.hasMany(models.eventPoster);
+    this.hasMany(models.eventImage);
+    this.hasMany(models.eventVideo);
   };
 
   return Event;
