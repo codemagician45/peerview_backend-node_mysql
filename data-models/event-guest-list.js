@@ -6,15 +6,6 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true
-    },
-    name: {
-      type: dataTypes.STRING
-    },
-    location: {
-      type: dataTypes.STRING
-    },
-    guestType: {
-      type: dataTypes.INTEGER
     }
   }, {
     tableName: 'event_guest_list',
