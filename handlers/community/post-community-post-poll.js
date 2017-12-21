@@ -77,7 +77,7 @@ function validateParams (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function postCommunityPostPoll (req, res, next) {
+function postCommunityPostPoll (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
   let question = req.$params.question;
   let duration = req.$params.duration;
