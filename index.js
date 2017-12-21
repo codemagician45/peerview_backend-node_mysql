@@ -21,6 +21,16 @@ if (cluster.isMaster && !process.env.SINGLE_PROCESS) {
   });
 } else {
   let api = require(__dirname + '/api');
+
+  api.use(function (err, req, res, next) {
+    res.status(err.status || 500).send({
+      message: err.message,
+      status: err.status || 500
+    });
+
+    next();
+  });
+
   process.nextTick(function () {
     api.listen(config.server.port, function () {
       log.info(sprintf('Server accepting requests on port %d',
