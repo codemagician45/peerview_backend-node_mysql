@@ -17,6 +17,10 @@ module.exports = function (sequelize, dataTypes) {
     },
     institutionName: {
       type: dataTypes.STRING
+    },
+    isCreator: {
+      type: dataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     tableName: 'community_users',
