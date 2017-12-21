@@ -17,14 +17,6 @@ const lib = require('../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
   let paramsSchema = {
     lastName: {
       optional: true
@@ -40,7 +32,6 @@ function validateParams (req, res, next) {
     }
   };
 
-  req.checkHeaders(headerSchema);
   req.checkParams(paramsSchema);
   return req.getValidationResult()
   .then(validationErrors => {
