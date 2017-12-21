@@ -39,10 +39,6 @@ module.exports = function (sequelize, dataTypes) {
     },
     organizerContactDetails: {
       type: dataTypes.STRING
-    },
-    isCreator: {
-      type: dataTypes.BOOLEAN,
-      defaultValue: false
     }
   }, {
     tableName: 'event',
