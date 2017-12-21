@@ -22,10 +22,12 @@ if (cluster.isMaster && !process.env.SINGLE_PROCESS) {
 } else {
   let api = require(__dirname + '/api');
 
-  api.use(function (err, req, res, next) {
-    res.status(err.status || 500).send({
-      message: err.message,
-      status: err.status || 500
+  api.use(function (error, req, res, next) {
+    res.status(500).send({
+      status: 'ERROR',
+      status_code: 100,
+      status_message: error.message,
+      http_code: 500
     });
 
     next();
