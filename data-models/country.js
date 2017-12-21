@@ -2,13 +2,9 @@
 
 module.exports = function (sequelize, dataTypes) {
   const Country = sequelize.define('country', {
-    id: {
-      type: dataTypes.INTEGER.UNSIGNED,
-      primaryKey: true,
-      autoIncrement: true
-    },
     name: {
-      type: dataTypes.STRING
+      type: dataTypes.STRING,
+      primaryKey: true
     }
   }, {
     tableName: 'country',
