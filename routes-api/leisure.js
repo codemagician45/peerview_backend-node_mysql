@@ -19,9 +19,9 @@ function leisureApi (apiRouter) {
   apiRouter.get('/event/my-events',
     lib.params,
     lib.isTokenExist.user,
-    handlers.leisure.getMyEvents.validateParams,
-    handlers.leisure.getMyEvents.logic,
-    handlers.leisure.getMyEvents.response);
+    handlers.leisure.getEventMyEvents.validateParams,
+    handlers.leisure.getEventMyEvents.logic,
+    handlers.leisure.getEventMyEvents.response);
 
   /**
    * This one is a special case in which the upload.events
