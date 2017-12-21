@@ -2,9 +2,12 @@
 
 module.exports = function (sequelize, dataTypes) {
   const Country = sequelize.define('country', {
-    name: {
+    code: {
       type: dataTypes.STRING,
       primaryKey: true
+    },
+    name: {
+      type: dataTypes.STRING,
     }
   }, {
     tableName: 'country',
