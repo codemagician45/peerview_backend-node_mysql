@@ -295,6 +295,9 @@ routesApi.community(apiRouter);
 // course route
 routesApi.course(apiRouter);
 
+// leisure route
+routesApi.leisure(apiRouter);
+
 apiRouter.get('/peers-list',
   lib.params,
   handlers.getPeerslist.validateParams,
