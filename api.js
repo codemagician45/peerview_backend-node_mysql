@@ -19,6 +19,12 @@ apiRouter.use(validator({
 }));
 app.use('/api/v1', apiRouter);
 
+apiRouter.post('/sample',
+  lib.upload.events,
+  function (req, res, next) {
+    res.status(200).send('ok');
+  });
+
 // basic routes
 apiRouter.post('/token/verify', // user for checking token afte the user click reset-password
   lib.params,
