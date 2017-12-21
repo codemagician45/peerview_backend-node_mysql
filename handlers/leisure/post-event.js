@@ -52,9 +52,9 @@ function validateParams (req, res, next) {
         errorMessage: 'Missing Resource: Address'
       }
     },
-    venueCity: {
+    cityId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: City'
+        errorMessage: 'Missing Resource: City Id'
       }
     },
     ticketPrice: {
