@@ -222,7 +222,7 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
       }
     }
   })
-  .then(user => {
+  .then(() => {
     let courses = [];
     courseIds.forEach(courseId => {
       courses.push({
