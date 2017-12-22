@@ -40,15 +40,55 @@ function leisureApi (apiRouter) {
    * req.body and merge them in lib.params
    */
   apiRouter.post('/event',
-    lib.isTokenExist.user,
-    lib.upload.events,
     lib.params,
+    lib.isTokenExist.user,
     handlers.leisure.postEvent.validateParams,
     handlers.leisure.postEvent.logic,
-    handlers.leisure.postEvent.saveImages,
-    handlers.leisure.postEvent.savePosters,
-    handlers.leisure.postEvent.saveVideos,
+    handlers.leisure.postEvent.saveAttachments,
     handlers.leisure.postEvent.response);
+
+  apiRouter.post('/event/post',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventPost.validateParams,
+    handlers.leisure.postEventPost.logic,
+    handlers.leisure.postEventPost.saveAttachments,
+    handlers.leisure.postEventPost.response);
+
+  apiRouter.post('/event/post/:eventPostId/like',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventPostLike.validateParams,
+    handlers.leisure.postEventPostLike.logic,
+    handlers.leisure.postEventPostLike.response);
+
+  apiRouter.post('/event/post/:eventPostId/pageview',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventPostPageview.validateParams,
+    handlers.leisure.postEventPostPageview.logic,
+    handlers.leisure.postEventPostPageview.response);
+
+  apiRouter.post('/event/post/:eventPostId/rating',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventPostRating.validateParams,
+    handlers.leisure.postEventPostRating.logic,
+    handlers.leisure.postEventPostRating.response);
+
+  apiRouter.post('/event/post/:eventPostId/reply',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventPostReply.validateParams,
+    handlers.leisure.postEventPostReply.logic,
+    handlers.leisure.postEventPostReply.response);
+
+  apiRouter.post('/event/post/:eventPostId/report',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventPostReport.validateParams,
+    handlers.leisure.postEventPostReport.logic,
+    handlers.leisure.postEventPostReport.response);
 }
 
 module.exports = leisureApi;
