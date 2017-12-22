@@ -41,7 +41,7 @@ function validateParams (req, res, next) {
   });
 }
 
-function postEventPostPageview (req, res, next) {
+function postEventPostPageview (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
   let eventPostId = req.$scope.eventPostId;
 
