@@ -17,15 +17,15 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let headerSchema = {
-    token: {
+  let bodySchema = {
+    cloudinaryProfilePictureId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Token'
+        errorMessage: 'Missing Resource: Cloudinary Profile Picture Id'
       }
     }
   };
 
-  req.checkHeaders(headerSchema);
+  req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -54,7 +54,7 @@ function validateParams (req, res, next) {
  */
 function updateUserProfilePicture (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
-  let profilePicture = req.file ? req.file.filename : null;
+  let profilePicture = req.$params.cloudinaryProfilePictureId;
 
   return req.db.user.update({
     profilePicture: profilePicture
