@@ -116,9 +116,8 @@ function userApi (apiRouter) {
 
   apiRouter.put('/user/profile-picture',
     lib.params,
-    handlers.user.updateUserProfilePicture.validateParams,
     lib.isTokenExist.user,
-    lib.upload.single,
+    handlers.user.updateUserProfilePicture.validateParams,
     handlers.user.updateUserProfilePicture.logic,
     handlers.user.updateUserProfilePicture.response);
 
