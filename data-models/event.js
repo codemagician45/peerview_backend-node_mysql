@@ -52,9 +52,7 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.eventDressCode);
     this.belongsTo(models.eventType);
     this.hasMany(models.eventGuestList);
-    this.hasMany(models.eventPoster);
-    this.hasMany(models.eventImage);
-    this.hasMany(models.eventVideo);
+    this.hasMany(models.eventAttachment);
   };
 
   return Event;
