@@ -51,6 +51,7 @@ function getPost (req, res, next) {
     attributes: [
       'message',
       'title',
+      'schoolName',
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
