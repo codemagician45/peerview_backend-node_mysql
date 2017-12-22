@@ -45,7 +45,7 @@ function leisureApi (apiRouter) {
     handlers.leisure.postEvent.saveAttachments,
     handlers.leisure.postEvent.response);
 
-  apiRouter.post('/event/post',
+  apiRouter.post('/event/:eventId/post',
     lib.params,
     lib.isTokenExist.user,
     handlers.leisure.postEventPost.validateParams,
@@ -53,14 +53,14 @@ function leisureApi (apiRouter) {
     handlers.leisure.postEventPost.saveAttachments,
     handlers.leisure.postEventPost.response);
 
-  apiRouter.post('/event/guest-list',
+  apiRouter.post('/event/:eventId/guest-list',
     lib.params,
     lib.isTokenExist.user,
     handlers.leisure.postEventGuestList.validateParams,
     handlers.leisure.postEventGuestList.logic,
     handlers.leisure.postEventGuestList.response);
 
-  apiRouter.post('/event/vip',
+  apiRouter.post('/event/:eventId/vip',
     lib.params,
     lib.isTokenExist.user,
     handlers.leisure.postEventVip.validateParams,
