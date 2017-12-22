@@ -59,7 +59,7 @@ function validateParams (req, res, next) {
   };
 
   let bodySchema = {
-    courseIds: {// this is used for professionals who have many courses finishes
+    courseIds: {// same with the professionals so that we have one logic for saving the course of the student
       isArrayNotEmpty: {
         errorMessage: 'Missing Resource: Course Ids'
       },
