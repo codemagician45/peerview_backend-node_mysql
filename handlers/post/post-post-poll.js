@@ -103,7 +103,7 @@ function postPoll (req, res, next) {
  */
 function savePollOption (req, res, next) {
   let pollId = req.$scope.postPoll.id;
-  let options = JSON.parse(req.$params.options);
+  let options = req.$params.options;
   let pollOption = [];
 
   options.forEach(option => {
