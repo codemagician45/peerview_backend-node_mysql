@@ -11,6 +11,13 @@ function leisureApi (apiRouter) {
     handlers.leisure.getEvents.logic,
     handlers.leisure.getEvents.response);
 
+  apiRouter.get('/event/:eventId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.getEvent.validateParams,
+    handlers.leisure.getEvent.logic,
+    handlers.leisure.getEvent.response);
+
   apiRouter.get('/event/dress-codes',
     lib.params,
     lib.isTokenExist.user,
@@ -30,15 +37,6 @@ function leisureApi (apiRouter) {
     handlers.leisure.getEventMyEvents.logic,
     handlers.leisure.getEventMyEvents.response);
 
-  /**
-   * This one is a special case in which the upload.events
-   * precedes the lib.params
-   * This is because the content-type: multipart/form-data
-   * In which body parser don't handle that kind of content-type.
-   * That is we are using upload.events as a mediator and as well
-   * to use the capability of the multer to assemble our
-   * req.body and merge them in lib.params
-   */
   apiRouter.post('/event',
     lib.params,
     lib.isTokenExist.user,
@@ -54,6 +52,20 @@ function leisureApi (apiRouter) {
     handlers.leisure.postEventPost.logic,
     handlers.leisure.postEventPost.saveAttachments,
     handlers.leisure.postEventPost.response);
+
+  apiRouter.post('/event/guest-list',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventGuestList.validateParams,
+    handlers.leisure.postEventGuestList.logic,
+    handlers.leisure.postEventGuestList.response);
+
+  apiRouter.post('/event/vip',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventVip.validateParams,
+    handlers.leisure.postEventVip.logic,
+    handlers.leisure.postEventVip.response);
 
   apiRouter.post('/event/post/:eventPostId/like',
     lib.params,
@@ -89,6 +101,14 @@ function leisureApi (apiRouter) {
     handlers.leisure.postEventPostReport.validateParams,
     handlers.leisure.postEventPostReport.logic,
     handlers.leisure.postEventPostReport.response);
+
+  apiRouter.post('/event/:eventId/post/poll',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.postEventPostPoll.validateParams,
+    handlers.leisure.postEventPostPoll.logic,
+    handlers.leisure.postEventPostPoll.saveEventPollOption,
+    handlers.leisure.postEventPostPoll.response);
 }
 
 module.exports = leisureApi;
