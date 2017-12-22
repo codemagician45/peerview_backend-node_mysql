@@ -25,16 +25,7 @@ function validateParams (req, res, next) {
     }
   };
 
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
-
   req.checkParams(paramsSchema);
-  req.checkHeaders(headerSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {

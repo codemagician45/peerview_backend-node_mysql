@@ -50,13 +50,6 @@ function checkUserType (req, res, next) {
  */
 function validateParams (req, res, next) {
   let userType = req.$scope.userType;
-  let headerSchema = {
-    token: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Token'
-      }
-    }
-  };
 
   let bodySchema = {
     courseIds: {// same with the professionals so that we have one logic for saving the course of the student
@@ -160,7 +153,6 @@ function validateParams (req, res, next) {
     };
   }
 
-  req.checkHeaders(headerSchema);
   req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
