@@ -223,8 +223,6 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
     }
   })
   .then(user => {
-    courseIds = !courseIds ? []/* this is the value when the userType is institution */
-      : JSON.parse(courseIds);
     let courses = [];
     courseIds.forEach(courseId => {
       courses.push({
