@@ -57,7 +57,7 @@ function validateParams (req, res, next) {
  */
 function postUserInterests (req, res, next) {
   let user = req.$scope.user;
-  let interestIds = JSON.parse(req.$params.interestIds);
+  let interestIds = req.$params.interestIds;
   let userInterest = [];
 
   interestIds.forEach(interestId => {
