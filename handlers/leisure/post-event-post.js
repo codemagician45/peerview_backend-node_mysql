@@ -90,7 +90,7 @@ function postEventPost (req, res, next) {
 function saveAttachments (req, res, next) {
   let eventPost = req.$scope.eventPost;
   let cloudinary = req.$params.attachments
-    ? JSON.parse(req.$params.attachments) : [];
+    ? req.$params.attachments : [];
   let attachments = [];
 
   if (cloudinary.length === 0) {
