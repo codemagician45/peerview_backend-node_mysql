@@ -17,8 +17,6 @@ function userApi (apiRouter) {
   //   handlers.user.getUser.response);
 
   apiRouter.get('/user/study-levels',
-    lib.params,
-    handlers.user.getUserStudyLevels.validateParams,
     lib.isTokenExist.user,
     handlers.user.getUserStudyLevels.logic,
     handlers.user.getUserStudyLevels.response);
@@ -29,13 +27,6 @@ function userApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.user.getUserTypeId.logic,
     handlers.user.getUserTypeId.response);
-
-  apiRouter.get('/user/profile-picture',
-    lib.params,
-    handlers.user.getUserProfilePicture.validateParams,
-    lib.isTokenExist.user,
-    handlers.user.getUserProfilePicture.logic,
-    handlers.user.getUserProfilePicture.response);
 
   apiRouter.post('/user/login',
     lib.params,
@@ -85,25 +76,18 @@ function userApi (apiRouter) {
 
   apiRouter.post('/user/onboarding/details',
     lib.params,
+    lib.isTokenExist.user,
     handlers.user.postUserOnboardingDetails.checkUserType,
     handlers.user.postUserOnboardingDetails.validateParams,
-    lib.isTokenExist.user,
     handlers.user.postUserOnboardingDetails.logic,
     handlers.user.postUserOnboardingDetails.response);
 
-  apiRouter.put('/user/gender',
-    lib.params,
-    handlers.user.updateUserGender.validateParams,
-    lib.isTokenExist.user,
-    handlers.user.updateUserGender.logic,
-    handlers.user.updateUserGender.response);
-
   apiRouter.put('/user/password',
     lib.params,
+    lib.isTokenExist.user,
     handlers.user.updateUserPassword.validateParams,
     handlers.user.updateUserPassword.validatePasswordAndConfirmPassword,
     handlers.user.updateUserPassword.checkUserCurrentPassword,
-    lib.isTokenExist.user,
     handlers.user.updateUserPassword.logic,
     handlers.user.updateUserPassword.response);
 
@@ -123,15 +107,15 @@ function userApi (apiRouter) {
 
   apiRouter.put('/user/:userId/security',
     lib.params,
-    handlers.user.updateUserSecurity.validateParams,
     lib.isTokenExist.user,
+    handlers.user.updateUserSecurity.validateParams,
     handlers.user.updateUserSecurity.logic,
     handlers.user.updateUserSecurity.response);
 
   apiRouter.delete('/user/interest/:userInterestId',
     lib.params,
-    handlers.user.removeUserInterest.validateParams,
     lib.isTokenExist.user,
+    handlers.user.removeUserInterest.validateParams,
     handlers.user.removeUserInterest.logic,
     handlers.user.removeUserInterest.response);
 }
