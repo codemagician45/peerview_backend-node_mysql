@@ -19,8 +19,8 @@ const lib = require('../../lib');
 function validateParams (req, res, next) {
   let bodySchema = {
     eventId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: eventId'
+      isInt: {
+        errorMessage: 'Invalid Resource: eventId'
       }
     }
   };
