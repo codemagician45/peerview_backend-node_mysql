@@ -80,7 +80,7 @@ function postCommunity (req, res, next) {
 
 function inviteUsers (req, res, next) {
   let userId = req.$scope.user.id;
-  let users = JSON.parse(req.$params.users);
+  let users = req.$params.users;
   let community = req.$scope.community;
   let usersData = [{// auto register the user created it
     userId: userId,

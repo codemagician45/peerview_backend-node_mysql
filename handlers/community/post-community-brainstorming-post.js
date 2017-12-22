@@ -55,7 +55,7 @@ function validateParams (req, res, next) {
 
 function postCommunityBrainstormingPost (req, res, next) {// eslint-disable-line id-length
   let communityId = req.$params.communityId;
-  let jsonData = JSON.parse(req.$params.jsonData);
+  let jsonData = req.$params.jsonData;
 
   return req.db.communityBrainstorming.create({
     communityId: communityId,

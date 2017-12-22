@@ -112,7 +112,7 @@ function postCommunityPostPoll (req, res, next) {// eslint-disable-line id-lengt
  */
 function saveCommunityPollOption (req, res, next) {// eslint-disable-line id-length
   let communityPoll = req.$scope.communityPoll;
-  let options = JSON.parse(req.$params.options);
+  let options = req.$params.options;
   let communityPollOption = [];
 
   options.forEach(option => {
