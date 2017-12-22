@@ -130,16 +130,21 @@ function postCampusMarketplace (req, res, next) {// eslint-disable-line id-lengt
 
 function saveCampusMarketplacePhotos (req, res, next) {// eslint-disable-line id-length
   let campus = req.$scope.campus;
-  let cloudinaryPublicIds = req.$scope.cloudinaryPublicIds;
-  let photos = [];
+  let cloudinaryPublicIds = req.$params.cloudinaryPublicIds
+    ? req.$params.cloudinaryPublicIds : [];
+  let campusMarketplacePhotos = [];// eslint-disable-line id-length
+
+  if (cloudinaryPublicIds.length === 0) {
+    return next();
+  }
 
   cloudinaryPublicIds.forEach(cloudinaryPublicId => {
-    photos.push({
+    campusMarketplacePhotos.push({
       campusId: campus.id,
       cloudinaryPublicId: cloudinaryPublicId
     });
   });
-  return req.db.campusMarketplacePhotos.bulkCreate(photos)
+  return req.db.campusMarketplacePhotos.bulkCreate(campusMarketplacePhotos)
   .then(campusMarketplacePhotos => {// eslint-disable-line id-length
     next();
     return campusMarketplacePhotos;
