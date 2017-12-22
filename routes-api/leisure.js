@@ -4,6 +4,13 @@ const handlers = require('../handlers');
 const lib = require('../lib');
 
 function leisureApi (apiRouter) {
+  apiRouter.get('/events',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.getEvents.validateParams,
+    handlers.leisure.getEvents.logic,
+    handlers.leisure.getEvents.response);
+
   apiRouter.get('/event/dress-codes',
     lib.params,
     lib.isTokenExist.user,
