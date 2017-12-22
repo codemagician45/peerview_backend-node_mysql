@@ -99,15 +99,15 @@ function validateParams (req, res, next) {
         errorMessage: 'Missing Resource: Organizer Contact Details'
       }
     },
-    images: {
-      optional: true
-    },
-    posters: {
-      optional: true
-    },
-    videos: {
-      optional: true
-    },
+    attachments: {
+      optional: true,
+      isArrayNotEmpty: {
+        errorMessage: 'Missing Resource: Cloudinary'
+      },
+      isArray: {
+        errorMessage: 'Invalid Resource: Cloudinary'
+      }
+    }
   };
 
   req.checkBody(bodySchema);
@@ -185,33 +185,32 @@ function postEvent (req, res, next) {
 
 /**
  * Basically save any data in their corresponding
- * table for req.$scope.cloudinaryPublicIds
+ * table for req.$params.cloudinaryPublicIds
  * which type would be images, posters, and
  * videos
  */
-function saveImages (req, res, next) {
+function saveAttachments (req, res, next) {
   let event = req.$scope.event;
-  let cloudinaryPublicIds = req.$scope.cloudinaryPublicIds;
-  let images = cloudinaryPublicIds
-    ? cloudinaryPublicIds.filter(filter => filter.type === 'images')
-    : [];
+  let cloudinary = req.$params.attachments
+    ? req.$params.attachments : [];
 
-  if (images.length === 0) {
+  if (cloudinary.length === 0) {
     return next();
   }
 
-  let eventImages = [];
-  images.forEach(image => {
-    eventImages.push({
+  let eventAttachment = [];
+  cloudinary.forEach(item => {
+    eventAttachment.push({
       eventId: event.id,
-      cloudinaryPublicId: image.id
+      cloudinaryPublicId: item.id,
+      usage: item.usage
     });
   });
 
-  req.db.eventImage.bulkCreate(eventImages)
-  .then(eventImages => {
+  req.db.eventAttachment.bulkCreate(eventAttachment)
+  .then(eventAttachment => {
     next();
-    return eventImages;
+    return eventAttachment;
   })
   .catch(error => {
     res.status(500)
@@ -219,75 +218,7 @@ function saveImages (req, res, next) {
 
     req.log.error({
       err: error
-    }, 'eventImage.bulkCreate Error - post-event');
-  });
-}
-
-function savePosters (req, res, next) {
-  let event = req.$scope.event;
-  let cloudinaryPublicIds = req.$scope.cloudinaryPublicIds;
-  let posters = cloudinaryPublicIds
-    ? cloudinaryPublicIds.filter(filter => filter.type === 'posters')
-    : [];
-
-  if (posters.length === 0) {
-    return next();
-  }
-
-  let eventPosters = [];
-  posters.forEach(poster => {
-    eventPosters.push({
-      eventId: event.id,
-      cloudinaryPublicId: poster.id
-    });
-  });
-
-  req.db.eventPoster.bulkCreate(eventPosters)
-  .then(eventPosters => {
-    next();
-    return eventPosters;
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-
-    req.log.error({
-      err: error
-    }, 'eventPoster.bulkCreate Error - post-event');
-  });
-}
-
-function saveVideos (req, res, next) {
-  let event = req.$scope.event;
-  let cloudinaryPublicIds = req.$scope.cloudinaryPublicIds;
-  let videos = cloudinaryPublicIds
-    ? cloudinaryPublicIds.filter(filter => filter.type === 'videos')
-    : [];
-
-  if (videos.length === 0) {
-    return next();
-  }
-
-  let eventVideos = [];
-  videos.forEach(video => {
-    eventVideos.push({
-      eventId: event.id,
-      cloudinaryPublicId: video.id
-    });
-  });
-
-  req.db.eventVideo.bulkCreate(eventVideos)
-  .then(eventVideos => {
-    next();
-    return eventVideos;
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-
-    req.log.error({
-      err: error
-    }, 'eventVideo.bulkCreate Error - post-event');
+    }, 'eventAttachment.bulkCreate Error - post-event');
   });
 }
 
@@ -309,7 +240,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postEvent;
-module.exports.saveImages = saveImages;
-module.exports.savePosters = savePosters;
-module.exports.saveVideos = saveVideos;
+module.exports.saveAttachments = saveAttachments;
 module.exports.response = response;
