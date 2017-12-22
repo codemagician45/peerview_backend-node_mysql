@@ -17,14 +17,28 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
+  let paramsSchema = {
     eventId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: eventId'
+      isInt: {
+        errorMessage: 'Invalid Resource: eventId'
       }
     }
   };
 
+  let bodySchema = {
+    name: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Name'
+      }
+    },
+    phoneNumberOrEmail: {
+      notEmpty: {
+        errorMessage: 'Missing Resource: Phone Number/Email'
+      }
+    }
+  };
+
+  req.checkParams(paramsSchema);
   req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
@@ -44,10 +58,14 @@ function validateParams (req, res, next) {
 function postEventVIP (req, res, next) {
   let user = req.$scope.user;
   let eventId = req.$scope.id;
+  let name = req.$params.name;
+  let phoneNumberOrEmail = req.$params.phoneNumberOrEmail;
 
   return req.db.eventVIP.create({
     eventId: eventId,
-    senderId: user.id
+    senderId: user.id,
+    name: name,
+    phoneNumberOrEmail: phoneNumberOrEmail
   })
   .then(eventVIP => {
     next();

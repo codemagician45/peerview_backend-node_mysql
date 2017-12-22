@@ -17,12 +17,15 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
+  let paramsSchema = {
     eventId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: eventId'
+      isInt: {
+        errorMessage: 'Invalid Resource: Event Id'
       }
-    },
+    }
+  };
+
+  let bodySchema = {
     message: {
       notEmpty: {
         errorMessage: 'Missing Resource: Message'
@@ -38,14 +41,15 @@ function validateParams (req, res, next) {
     attachments: {
       optional: true,
       isArrayNotEmpty: {
-        errorMessage: 'Missing Resource: Cloudinary'
+        errorMessage: 'Missing Resource: Attachments'
       },
       isArray: {
-        errorMessage: 'Invalid Resource: Cloudinary'
+        errorMessage: 'Invalid Resource: Attachments'
       }
     }
   };
 
+  req.checkParams(paramsSchema);
   req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
