@@ -6,6 +6,9 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true
+    },
+    name: {
+      type: dataTypes.STRING
     }
   }, {
     tableName: 'campus_course_class',
@@ -15,7 +18,6 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   CampusCourseClass.associate = function (models) {
-    this.belongsTo(models.courseClass);
     this.belongsTo(models.campusCourse);
   };
 
