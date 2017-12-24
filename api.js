@@ -298,6 +298,9 @@ routesApi.course(apiRouter);
 // leisure route
 routesApi.leisure(apiRouter);
 
+// campus route
+routesApi.campus(apiRouter);
+
 apiRouter.get('/peers-list',
   lib.params,
   lib.isTokenExist.user,
