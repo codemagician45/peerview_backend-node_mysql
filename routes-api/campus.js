@@ -11,7 +11,7 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusFreshersFeed.logic,
     handlers.campus.getCampusFreshersFeed.response);
 
-  apiRouter.post('/campus/user/classes', // adding of classes of a user
+  apiRouter.post('/campus/user/course/classes', // adding of classes of a user
     lib.params,
     lib.isTokenExist.user,
     handlers.campus.postCampusUserCourseClasses.validateParams,
