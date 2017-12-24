@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (sequelize, dataTypes) {
-  const CampusPostPageview = sequelize.define('campustPostPageview', {
+  const CampusPostPageview = sequelize.define('campusPostPageview', {
     id: {
       type: dataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
