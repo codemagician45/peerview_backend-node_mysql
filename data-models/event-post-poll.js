@@ -22,6 +22,7 @@ module.exports = function (sequelize, dataTypes) {
 
   EventPostPoll.associate = function (models) {
     this.belongsTo(models.user);
+    this.belongsTo(models.event);
     this.hasMany(models.eventPostPollOption);
   };
 
