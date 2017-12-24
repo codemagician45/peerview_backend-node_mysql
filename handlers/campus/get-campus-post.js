@@ -91,7 +91,7 @@ function getCampusPost (req, res, next) {
     }
   })
   .then(campusPost => {
-    req.$scope.campusPost = campusPost;
+    req.$scope.campusPost = campusPost[0];
     next();
     return campusPost;
   })
