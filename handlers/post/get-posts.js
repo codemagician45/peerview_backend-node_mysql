@@ -16,7 +16,6 @@ function getPosts (req, res, next) {
     attributes: [
       'message',
       'title',
-      'schoolName',
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
@@ -30,7 +29,7 @@ function getPosts (req, res, next) {
     ],
     include: [{
       model: req.db.user,
-      attributes: ['id', 'firstName', 'lastName', 'email']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName']
     }, {
       model: req.db.postRating,
       as: 'postRating',
