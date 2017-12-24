@@ -32,7 +32,7 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusPosts.logic,
     handlers.campus.getCampusPosts.response);
 
-  apiRouter.get('/campus/:campusId/freshers-feed/:freshersFeedId/post/:postId', // the the list of post in freshers-feed
+  apiRouter.get('/campus/:campusId/freshers-feed/:freshersFeedId/posts', // the the list of post in freshers-feed
     lib.params,
     lib.isTokenExist.user,
     handlers.campus.getCampusPost.validateParams,
