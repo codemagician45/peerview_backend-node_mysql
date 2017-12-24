@@ -11,6 +11,62 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusFreshersFeed.logic,
     handlers.campus.getCampusFreshersFeed.response);
 
+  apiRouter.get('/campus/:campusId/posts', // the the list of post in all students
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPosts.validateParams,
+    handlers.campus.getCampusPosts.logic,
+    handlers.campus.getCampusPosts.response);
+
+  apiRouter.get('/campus/:campusId/course/:courseId/posts', // the the list of post in course feed
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPosts.validateParams,
+    handlers.campus.getCampusPosts.logic,
+    handlers.campus.getCampusPosts.response);
+
+  apiRouter.get('/campus/:campusId/course/class/:classId/posts', // the the list of post in course class feed
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPosts.validateParams,
+    handlers.campus.getCampusPosts.logic,
+    handlers.campus.getCampusPosts.response);
+
+  apiRouter.get('/campus/:campusId/freshers-feed/:freshersFeedId/post/:postId', // the the list of post in freshers-feed
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPost.validateParams,
+    handlers.campus.getCampusPost.logic,
+    handlers.campus.getCampusPost.response);
+
+  apiRouter.get('/campus/post/:postId', // get a post to all students
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPost.validateParams,
+    handlers.campus.getCampusPost.logic,
+    handlers.campus.getCampusPost.response);
+
+  apiRouter.get('/campus/course/post/:postId', // get a post to course feed
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPost.validateParams,
+    handlers.campus.getCampusPost.logic,
+    handlers.campus.getCampusPost.response);
+
+  apiRouter.get('/campus/course/class/post/:postId', // get a post to course class feed
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPost.validateParams,
+    handlers.campus.getCampusPost.logic,
+    handlers.campus.getCampusPost.response);
+
+  apiRouter.get('/campus/freshers-feed/post/:postId', // get a post to freshers-feed
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPost.validateParams,
+    handlers.campus.getCampusPost.logic,
+    handlers.campus.getCampusPost.response);
+
   apiRouter.post('/campus/user/course/classes', // adding of classes of a user
     lib.params,
     lib.isTokenExist.user,
