@@ -21,7 +21,7 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   CampusPostReply.associate = function (models) {
-    this.belongsTo(models.communityPost);
+    this.belongsTo(models.campusPost);
     this.belongsTo(models.user);
   };
 

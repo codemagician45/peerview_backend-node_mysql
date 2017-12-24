@@ -18,7 +18,7 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   CampusPostReport.associate = function (models) {
-    this.belongsTo(models.communityPost);
+    this.belongsTo(models.campusPost);
     this.belongsTo(models.user, {
       foreignKey: 'reportedBy'
     });
