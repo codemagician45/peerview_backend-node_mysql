@@ -8,8 +8,14 @@ module.exports = function (sequelize, dataTypes) {
       autoIncrement: true
     },
     name: {
+      type: dataTypes.STRING
+    },
+    email: {
       type: dataTypes.STRING,
       unique: true
+    },
+    password: {
+      type: dataTypes.STRING
     }
   }, {
     tableName: 'campus',
