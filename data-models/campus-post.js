@@ -7,11 +7,24 @@ module.exports = function (sequelize, dataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    message: {
-      type: dataTypes.STRING
+    message: {// we use this in the brainstorming that is why we saved the data in json format
+      type: dataTypes.TEXT,
+      allowNull: false,
+      get: function () {
+        var rawValue = this.getDataValue('message');
+        if (!rawValue) {
+          return (undefined);
+        } else {
+          return JSON.parse(rawValue);
+        }
+      },
+      set: function (val) {
+        var json = (typeof val === 'string') ? val : JSON.stringify(val);
+        this.setDataValue('message', json);
+      }
     }
   }, {
-    tableName: 'campusPost',
+    tableName: 'campus_post',
     timestamp: true,
     collate: 'utf8_unicode_ci',
     indexes: []
@@ -20,11 +33,20 @@ module.exports = function (sequelize, dataTypes) {
   CampusPost.associate = function (models) {
     this.belongsTo(models.user);
     this.belongsTo(models.campus);
-    // this.belongsTo(models.userType);
-    // this.belongsTo(models.course);
-    this.hasMany(models.campusPostLike);
-    this.hasMany(models.campusPostRating);
-    this.hasMany(models.campusPostReply);
+    this.belongsTo(models.course);// use for course feed
+    this.belongsTo(models.campusCourseClass);// use for class feed
+    this.hasMany(models.campusPostLike, {
+      as: 'campusPostLike'
+    });
+    this.hasMany(models.campusPostRating, {
+      as: 'campusPostRating'
+    });
+    this.hasMany(models.campusPostReply, {
+      as: 'campusPostReply'
+    });
+    this.hasMany(models.campusPostPageview, {
+      as: 'campusPostPageview'
+    });
   };
 
   return CampusPost;
