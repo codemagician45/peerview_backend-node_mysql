@@ -89,7 +89,7 @@ function findUser (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findOne Error - post-user-forgot-password');
   });
 }
@@ -127,7 +127,7 @@ function postUserForgotPassword (req, res, next) {// eslint-disable-line id-leng
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.update Error - post-user-forgot-password');
   });
 }
@@ -167,7 +167,7 @@ function sendEmail (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'pug.convert Error - post-user-forgot-password');
   });
 }

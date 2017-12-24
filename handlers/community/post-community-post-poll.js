@@ -97,7 +97,7 @@ function postCommunityPostPoll (req, res, next) {// eslint-disable-line id-lengt
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'communityPoll.create Error - post-community');
   });
 }
@@ -132,7 +132,7 @@ function saveCommunityPollOption (req, res, next) {// eslint-disable-line id-len
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'communityPollOption.create Error - post-community-poll');
   });
 }

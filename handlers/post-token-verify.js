@@ -47,7 +47,7 @@ function postTokenVerify (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findOne Error - post-token-verify');
   });
 }

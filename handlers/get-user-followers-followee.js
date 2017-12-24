@@ -64,7 +64,7 @@ function getUserFollowersFollowee (req, res, next) {// eslint-disable-line id-le
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'follow.findAll Error - get-user-followers-followee');
   });
 }

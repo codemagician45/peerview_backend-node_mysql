@@ -83,7 +83,7 @@ function findUsers (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'societyClubFollow.findAll Error - get-community-users-society-club-follow');
   });
 }
@@ -113,7 +113,7 @@ function getCommunityUsersSocietyClubFollow (req, res, next) { // eslint-disable
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findAll Error - get-community-users-class');
   });
 }

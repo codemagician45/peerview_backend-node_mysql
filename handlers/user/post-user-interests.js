@@ -77,7 +77,7 @@ function postUserInterests (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userInterest.bulkCreate Error - post-user-interests');
   });
 }
@@ -99,7 +99,7 @@ function checkUserType (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userType.findOne Error - post-user-interests');
   });
 }
@@ -142,7 +142,7 @@ function sendEmail (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'pug.convert Error - post-user-interests');
   });
 }

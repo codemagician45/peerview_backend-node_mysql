@@ -75,7 +75,7 @@ function getCommunityUserClasses (req, res, next) {// eslint-disable-line id-len
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userClass.findAll Error - get-community-user-classes');
   });
 }

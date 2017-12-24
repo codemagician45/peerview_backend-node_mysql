@@ -87,7 +87,7 @@ function postEventPostReply (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'eventPostReply.create Error - post-event-post-reply');
   });
 }

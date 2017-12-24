@@ -127,7 +127,7 @@ function checkUserCurrentPassword (req, res, next) {// eslint-disable-line id-le
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findOne Error - update-user-password');
   });
 }
@@ -163,7 +163,7 @@ function updateUserPassword (req, res, next) {// eslint-disable-line id-length
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.update Error - update-user-password');
   });
 }

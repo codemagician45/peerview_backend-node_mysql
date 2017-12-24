@@ -110,7 +110,7 @@ function getCommunityCourse (req, res, next) {
     .send(new rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'course.findAll Error - get-community-course');
   });
 }

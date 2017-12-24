@@ -68,7 +68,7 @@ function postCommunityPostPageview (req, res, next) {// eslint-disable-line id-l
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'communityPostPageview.create Error - post-community-post-pageview');
   });
 }

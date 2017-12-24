@@ -91,7 +91,7 @@ function postCommunityCourse (req, res, next) {// eslint-disable-line id-length
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'course.create Error - post-community-course');
   });
 }

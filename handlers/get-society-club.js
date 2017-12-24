@@ -83,7 +83,7 @@ function getSocietyClub (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'societyClub.findAll Error - get-society-club');
   });
 }
@@ -120,7 +120,7 @@ function getAllSocietyClub (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'societyClub.findAll Error - get-society-club');
   });
 }

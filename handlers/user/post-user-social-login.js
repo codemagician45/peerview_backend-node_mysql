@@ -98,7 +98,7 @@ function findUser (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findOne Error - post-user-social-login');
   });
 }
@@ -146,7 +146,7 @@ function saveOrUpdateUser (req, res, next) {
       .send(new lib.rpc.InternalError(error));
 
       req.log.error({
-        err: error
+        err: error.message
       }, 'user.create Error - post-user-social-login');
     });
   } else {
@@ -167,7 +167,7 @@ function saveOrUpdateUser (req, res, next) {
       .send(new lib.rpc.InternalError(error));
 
       req.log.error({
-        err: error
+        err: error.message
       }, 'user.update Error - post-social-login');
     });
   }

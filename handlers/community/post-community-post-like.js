@@ -69,7 +69,7 @@ function postCommunityPostLike (req, res, next) {// eslint-disable-line id-lengt
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'postLike.create Error - post-community-post-like');
   });
 }

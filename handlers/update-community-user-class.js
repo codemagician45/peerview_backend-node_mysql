@@ -100,7 +100,7 @@ function removeCommunityUserClass (req, res, next) {// eslint-disable-line id-le
       .send(new lib.rpc.InternalError(error));
 
       req.log.error({
-        err: error
+        err: error.message
       }, 'userClass.bulkCreate Error - update-community-user-class');
     });
   })
@@ -115,7 +115,7 @@ function removeCommunityUserClass (req, res, next) {// eslint-disable-line id-le
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'sequelize.transaction Error - update-community-user-class');
   });
 }
@@ -155,7 +155,7 @@ function updateCommunityUserClass (req, res, next) {// eslint-disable-line id-le
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userClass.bulkCreate Error - update-community-user-class');
   });
 }

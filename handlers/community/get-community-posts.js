@@ -107,7 +107,7 @@ function checkUserType (req, res, next) {
       .send(new lib.rpc.InternalError(error));
 
       req.log.error({
-        err: error
+        err: error.message
       }, 'userType.findOne Error - get-community-posts');
     });
   } else {
@@ -136,7 +136,7 @@ function getProfessionalsUserTypeId (req, res, next) {// eslint-disable-line id-
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userType.findOne Error - get-community-posts');
   });
 }
@@ -230,7 +230,7 @@ function getCommunityPosts (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'postLike.create Error - get-community-posts');
   });
 }

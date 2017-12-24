@@ -87,7 +87,7 @@ function postCommunityPostReply (req, res, next) {// eslint-disable-line id-leng
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'postReply.create Error - post-community-post-reply');
   });
 }

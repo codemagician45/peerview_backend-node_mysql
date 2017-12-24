@@ -73,7 +73,7 @@ function postCommunity (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'community.create Error - post-community');
   });
 }
@@ -106,7 +106,7 @@ function inviteUsers (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'communityUsers.bulkCreate Error - post-community');
   });
 }

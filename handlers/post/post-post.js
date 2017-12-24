@@ -27,7 +27,7 @@ function checkPostCategory (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'postCategory.findOne Error - post-post');
   });
 }
@@ -122,7 +122,7 @@ function postPost (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'post.create Error - post-post');
   });
 }

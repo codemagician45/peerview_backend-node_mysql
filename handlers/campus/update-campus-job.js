@@ -108,7 +108,7 @@ function updateCampusJob (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'job.update Error - update-campus-job');
   });
 }

@@ -86,7 +86,7 @@ function postCommunityUserClass (req, res, next) {// eslint-disable-line id-leng
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userClass.bulkCreate Error - post-community-user-class');
   });
 }

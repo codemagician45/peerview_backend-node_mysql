@@ -101,7 +101,7 @@ function updateCommunityCourseClass (req, res, next) {// eslint-disable-line id-
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'courseClass.update Error - update-community-course-class');
   });
 }

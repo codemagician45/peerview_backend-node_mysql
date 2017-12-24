@@ -101,7 +101,7 @@ function checkIfEmailIsExisted (req, res, next) { // eslint-disable-line id-leng
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'community.findOne Error - post-community');
   });
 }
@@ -127,7 +127,7 @@ function postCommunity (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'community.create Error - post-community');
   });
 }

@@ -100,7 +100,7 @@ function postCommunityPost (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'communityPost.create Error - post-community-post');
   });
 }

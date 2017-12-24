@@ -77,7 +77,7 @@ function getCampusMarketplaceByCampusId (req, res, next) {// eslint-disable-line
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, `campusMarketplace.findAll Error - get-campus-marketplace-by-campus-id`);
   });
 }

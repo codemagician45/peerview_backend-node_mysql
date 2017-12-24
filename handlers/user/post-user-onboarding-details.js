@@ -26,7 +26,7 @@ function checkUserType (req, res, next) {
       .send(new lib.rpc.InternalError(error));
 
       req.log.error({
-        err: error
+        err: error.message
       }, 'userType.findOne Error - post-user-onboarding-details');
     });
   } else {
@@ -236,7 +236,7 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.update Error - post-user-onboarding-details');
   });
 }

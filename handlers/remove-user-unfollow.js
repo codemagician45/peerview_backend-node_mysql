@@ -73,7 +73,7 @@ function removeUserUnfollow (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'follow.destroy Error - remove-user-unfollow');
   });
 }

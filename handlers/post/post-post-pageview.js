@@ -58,7 +58,7 @@ function postPostPageview (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'postPageview.create Error - post-post-pageview');
   });
 }

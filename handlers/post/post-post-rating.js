@@ -83,7 +83,7 @@ function postPostRating (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'postRating.create Error - post-post-rating');
   });
 }

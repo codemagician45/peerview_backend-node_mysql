@@ -83,7 +83,7 @@ function getAdvanceSearchPost (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findAll Error - get-advance-search-post');
   });
 }

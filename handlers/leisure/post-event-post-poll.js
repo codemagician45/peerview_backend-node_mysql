@@ -100,7 +100,7 @@ function postEventPoll (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'eventPostPoll.create Error - post-event-poll');
   });
 }
@@ -135,7 +135,7 @@ function saveEventPollOption (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'eventPostPollOption.bulkCreate Error - post-event-poll');
   });
 }

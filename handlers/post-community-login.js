@@ -91,7 +91,7 @@ function postCommunityLogin (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'community.findOne Error - post-community-login');
   });
 }

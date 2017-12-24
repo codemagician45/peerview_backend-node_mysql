@@ -30,7 +30,7 @@ function getUserStudyLevels (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userStudyLevel.findAll Error - get-user-study-levels');
   });
 }

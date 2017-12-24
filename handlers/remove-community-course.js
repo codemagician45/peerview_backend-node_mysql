@@ -79,7 +79,7 @@ function removeCommunityCourse (req, res, next) { //eslint-disable-line id-lengt
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'course.destroy Error - remove-community-course');
   });
 }

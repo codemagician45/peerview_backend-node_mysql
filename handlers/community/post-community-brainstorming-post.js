@@ -71,7 +71,7 @@ function postCommunityBrainstormingPost (req, res, next) {// eslint-disable-line
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'communityBrainstorming.create Error - post-community-brainstorming');
   });
 }

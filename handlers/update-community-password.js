@@ -90,7 +90,7 @@ function updateCommunityPassword (req, res, next) {// eslint-disable-line id-len
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'community.update Error - update-community-password');
   });
 }

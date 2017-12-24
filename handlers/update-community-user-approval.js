@@ -84,7 +84,7 @@ function updateCommunityUserApproval (req, res, next) {// eslint-disable-line id
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'userCommunity.update Error - update-community-user-approval');
   });
 }
@@ -117,7 +117,7 @@ function buildNeededEmailParams (req, res, next) {// eslint-disable-line id-leng
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findOne Error - update-community-user-approval');
   });
 }
@@ -153,7 +153,7 @@ function sendEmail (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'pug.convert Error - update-community-user-approval');
   });
 }

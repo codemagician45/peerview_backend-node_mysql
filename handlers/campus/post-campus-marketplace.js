@@ -123,7 +123,7 @@ function postCampusMarketplace (req, res, next) {// eslint-disable-line id-lengt
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'campusMarketplace.create Error - post-campus-marketplace');
   });
 }
@@ -154,7 +154,7 @@ function saveCampusMarketplacePhotos (req, res, next) {// eslint-disable-line id
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'campusMarketplacePhotos.bulkCreate Error - post-campus-marketplace');
   });
 }

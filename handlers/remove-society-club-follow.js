@@ -72,7 +72,7 @@ function removeSocietyClubFollowUnfollow (req, res, next) {// eslint-disable-lin
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'societyClubFollow.destroy Error - remove-society-club-follow');
   });
 }

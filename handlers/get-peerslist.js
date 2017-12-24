@@ -30,7 +30,7 @@ function getUserCourse (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'societyClub.findAll Error - get-peerslist');
   });
 }
@@ -72,7 +72,7 @@ function getPeerslist (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'societyClub.findAll Error - get-peerslist');
   });
 }

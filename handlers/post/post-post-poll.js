@@ -88,7 +88,7 @@ function postPoll (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'poll.create Error - post-poll');
   });
 }
@@ -123,7 +123,7 @@ function savePollOption (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'pollOption.create Error - post-poll');
   });
 }

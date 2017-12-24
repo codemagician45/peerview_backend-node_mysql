@@ -58,7 +58,7 @@ function postEventPostPageview (req, res, next) {// eslint-disable-line id-lengt
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'eventPostPageview.create Error - post-event-post-pageview');
   });
 }

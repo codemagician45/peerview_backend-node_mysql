@@ -178,7 +178,7 @@ function postEvent (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'event.create Error - post-event');
   });
 }
@@ -217,7 +217,7 @@ function saveAttachments (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'eventAttachment.bulkCreate Error - post-event');
   });
 }

@@ -142,7 +142,7 @@ function checkifEmailIsExisted (req, res, next) {// eslint-disable-line id-lengt
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.findOne Error - post-user-register');
   });
 }
@@ -184,7 +184,7 @@ function postUserRegister (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'user.create Error');
   });
 }
@@ -226,7 +226,7 @@ function sendEmail (req, res, next) {
     .send(new lib.rpc.InternalError(error));
 
     req.log.error({
-      err: error
+      err: error.message
     }, 'pug.convert Error - post-user-register');
   });
 }
