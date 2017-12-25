@@ -13,6 +13,9 @@ module.exports = function (sequelize, dataTypes) {
     },
     name: {
       type: dataTypes.STRING
+    },
+    description: {
+      type: dataTypes.STRING
     }
   }, {
     tableName: 'privacy',
