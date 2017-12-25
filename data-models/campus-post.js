@@ -1,4 +1,5 @@
 'use strict';
+const validator = require('validator');
 
 module.exports = function (sequelize, dataTypes) {
   const CampusPost = sequelize.define('campusPost', {
@@ -14,8 +15,10 @@ module.exports = function (sequelize, dataTypes) {
         var rawValue = this.getDataValue('message');
         if (!rawValue) {
           return (undefined);
-        } else {
+        } else if (validator.isJSON(rawValue)){
           return JSON.parse(rawValue);
+        } else {
+          return rawValue;
         }
       },
       set: function (val) {
@@ -36,6 +39,7 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.course);// use for course feed
     this.belongsTo(models.campusCourseClass);// use for class feed
     this.belongsTo(models.campusSocietyClub);
+    this.belongsTo(models.campusStudentGroup);
     this.hasMany(models.campusPostLike, {
       as: 'campusPostLike'
     });
