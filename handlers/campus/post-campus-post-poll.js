@@ -40,6 +40,12 @@ function validateParams (req, res, next) {
       isInt: {
         errorMessage: 'Invalid Resource: Campus Course Class Id'
       }
+    },
+    clubId: {// use in society-club
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Campus Society Club Id'
+      }
     }
   };
 
@@ -101,6 +107,7 @@ function postCampusPostPoll (req, res, next) {
   let courseId = req.$params.courseId;
   let freshersFeedId = req.$params.freshersFeedId;
   let campusCourseClassId = req.$params.classId;
+  let campusSocietyClub = req.$params.clubId;
   let question = req.$params.question;
   let duration = req.$params.duration;
 
@@ -110,6 +117,7 @@ function postCampusPostPoll (req, res, next) {
     courseId: courseId,
     campusFreshersFeedId: freshersFeedId,
     campusCourseClassId: campusCourseClassId,
+    campusSocietyClub: campusSocietyClub,
     question: question,
     duration: duration
   })
