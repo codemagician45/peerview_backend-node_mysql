@@ -35,6 +35,7 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.campus);
     this.belongsTo(models.course);// use for course feed
     this.belongsTo(models.campusCourseClass);// use for class feed
+    this.belongsTo(models.campusSocietyClub);
     this.hasMany(models.campusPostLike, {
       as: 'campusPostLike'
     });
