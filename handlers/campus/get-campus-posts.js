@@ -41,6 +41,12 @@ function validateParams (req, res, next) {
         errorMessage: 'Missing Resource: Campus Freshers Feed Id'
       }
     },
+    clubId: {// use in society-club
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Campus Society Club Id'
+      }
+    },
     offset: {
       optional: true,
       isInt: {
@@ -76,6 +82,7 @@ function getCampusPosts (req, res, next) {
   let courseId = req.$params.courseId;
   let classId = req.$params.classId;
   let freshersFeedId = req.$params.freshersFeedId;
+  let clubId = req.$params.clubId;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
   const sequelize = req.db.campusPostRating.sequelize;
@@ -85,7 +92,8 @@ function getCampusPosts (req, res, next) {
     campusId: campusId || null,
     courseId: courseId || null,
     campusCourseClassId: classId || null,
-    campusFreshersFeedId: freshersFeedId || null
+    campusFreshersFeedId: freshersFeedId || null,
+    campusSocietyClubId: clubId || null
   };
 
   return req.db.campusPost.findAll({
