@@ -7,13 +7,13 @@ module.exports = function (sequelize, dataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    name: {
+    title: {
       type: dataTypes.STRING
     },
     description: {
       type: dataTypes.STRING
     },
-    cloudinaryPublicId: {
+    logo: {// cloudinaryPublicId
       type: dataTypes.STRING
     }
   }, {
@@ -26,7 +26,6 @@ module.exports = function (sequelize, dataTypes) {
   CampusSocietyClub.associate = function (models) {
     this.belongsTo(models.user);
     this.belongsTo(models.campus);
-    this.belongsTo(models.privacy);
   };
 
   return CampusSocietyClub;
