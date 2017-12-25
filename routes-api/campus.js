@@ -1,4 +1,5 @@
-'use strict';/*eslint-disable max-statements*/
+/*eslint-disable max-statements,max-lines*/
+'use strict';
 
 const handlers = require('../handlers');
 const lib = require('../lib');
@@ -35,9 +36,16 @@ function campusApi (apiRouter) {
   apiRouter.get('/campus/:campusId/freshers-feed/:freshersFeedId/posts', // the the list of post in freshers-feed
     lib.params,
     lib.isTokenExist.user,
-    handlers.campus.getCampusPost.validateParams,
-    handlers.campus.getCampusPost.logic,
-    handlers.campus.getCampusPost.response);
+    handlers.campus.getCampusPosts.validateParams,
+    handlers.campus.getCampusPosts.logic,
+    handlers.campus.getCampusPosts.response);
+
+  apiRouter.get('/campus/:campusId/society-club/:clubId/posts', // the the list of post in society club
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPosts.validateParams,
+    handlers.campus.getCampusPosts.logic,
+    handlers.campus.getCampusPosts.response);
 
   apiRouter.get('/campus/post/:postId', // get a post to all students
     lib.params,
@@ -66,6 +74,20 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusPost.validateParams,
     handlers.campus.getCampusPost.logic,
     handlers.campus.getCampusPost.response);
+
+  apiRouter.get('/campus/society-club/post/:postId', // get a post to a certain society-club
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusPost.validateParams,
+    handlers.campus.getCampusPost.logic,
+    handlers.campus.getCampusPost.response);
+
+  apiRouter.get('/campus/:campusId/society-clubs', // get all created society club
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusSocietyClubs.validateParams,
+    handlers.campus.getCampusSocietyClubs.logic,
+    handlers.campus.getCampusSocietyClubs.response);
 
   apiRouter.post('/campus/user/course/classes', // adding of classes of a user
     lib.params,
@@ -278,6 +300,64 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostRating.response);
 
   apiRouter.post('/campus/course/class/post/:postId/report',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPostReport.validateParams,
+    handlers.campus.postCampusPostReport.logic,
+    handlers.campus.postCampusPostReport.response);
+
+  //society and club
+  apiRouter.post('/campus/:campusId/society-club', // creation of a society and club
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusSocietyClub.validateParams,
+    handlers.campus.postCampusSocietyClub.logic,
+    handlers.campus.postCampusSocietyClub.response);
+
+  apiRouter.post('/campus/:campusId/society-club/:clubId/post',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.response);
+
+  apiRouter.post('/campus/:campusId/society-club/:clubId/post/poll',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPostPoll.validateParams,
+    handlers.campus.postCampusPostPoll.logic,
+    handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
+    handlers.campus.postCampusPostPoll.response);
+
+  apiRouter.post('/campus/society-club/post/:postId/reply',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPostReply.validateParams,
+    handlers.campus.postCampusPostReply.logic,
+    handlers.campus.postCampusPostReply.response);
+
+  apiRouter.post('/campus/society-club/post/:postId/like',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPostLike.validateParams,
+    handlers.campus.postCampusPostLike.logic,
+    handlers.campus.postCampusPostLike.response);
+
+  apiRouter.post('/campus/society-club/post/:postId/pageview',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPostPageview.validateParams,
+    handlers.campus.postCampusPostPageview.logic,
+    handlers.campus.postCampusPostPageview.response);
+
+  apiRouter.post('/campus/society-club/post/:postId/rating',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPostRating.validateParams,
+    handlers.campus.postCampusPostRating.logic,
+    handlers.campus.postCampusPostRating.response);
+
+  apiRouter.post('/campus/society-club/post/:postId/report',
     lib.params,
     lib.isTokenExist.user,
     handlers.campus.postCampusPostReport.validateParams,
