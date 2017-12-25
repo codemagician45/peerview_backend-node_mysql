@@ -35,7 +35,8 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.BOOLEAN
     },
     profilePicture: {
-      type: dataTypes.STRING
+      type: dataTypes.STRING,
+      defaultValue: 'avatar'
     },
     profilePrivacy: {// direct Message
       type: dataTypes.BOOLEAN,
