@@ -46,6 +46,12 @@ function validateParams (req, res, next) {
       isInt: {
         errorMessage: 'Invalid Resource: Campus Society Club Id'
       }
+    },
+    groupId: {// use in student group
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Campus Student Group Id'
+      }
     }
   };
 
@@ -82,6 +88,7 @@ function postCampusPost (req, res, next) {
   let freshersFeedId = req.$params.freshersFeedId;
   let campusCourseClassId = req.$params.classId;
   let campusSocietyClubId = req.$params.clubId;
+  let campusStudentGroupId = req.$params.groupId;
 
   return req.db.campusPost.create({
     userId: user.id,
@@ -90,6 +97,7 @@ function postCampusPost (req, res, next) {
     campusFreshersFeedId: freshersFeedId,
     campusCourseClassId: campusCourseClassId,
     campusSocietyClubId: campusSocietyClubId,
+    campusStudentGroupId: campusStudentGroupId,
     message: message
   })
   .then(campusPost => {
