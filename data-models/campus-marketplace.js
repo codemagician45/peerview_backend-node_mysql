@@ -19,9 +19,6 @@ module.exports = function (sequelize, dataTypes) {
     phone: {
       type: dataTypes.STRING
     },
-    image: {
-      type: dataTypes.STRING
-    },
     location: {
       type: dataTypes.STRING
     },
@@ -33,6 +30,10 @@ module.exports = function (sequelize, dataTypes) {
     },
     price: {
       type: dataTypes.FLOAT
+    },
+    isConfirm: {
+      type: dataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     tableName: 'campus_marketplace',
@@ -44,6 +45,7 @@ module.exports = function (sequelize, dataTypes) {
   CampusMarketplace.associate = function (models) {
     this.belongsTo(models.campus);
     this.belongsTo(models.user);
+    this.hasMany(models.attachment);
   };
 
   return CampusMarketplace;
