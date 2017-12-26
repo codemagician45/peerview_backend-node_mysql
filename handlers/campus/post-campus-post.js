@@ -63,6 +63,36 @@ function validateParams (req, res, next) {
     }
   };
 
+  // check if we have params for question; which means we
+  // are posting using poll capability
+  if (req.$params.question) {
+    let pollSchema = {
+      question: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Question'
+        }
+      },
+      options: {
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Options'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Options'
+        }
+      },
+      duration: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Duration'
+        },
+        isInt: {
+          errorMessage: 'Invalid Resource: Duration'
+        }
+      }
+    };
+
+    bodySchema = pollSchema;
+  }
+
   req.checkParams(paramsSchema);
   req.checkBody(bodySchema);
   return req.getValidationResult()
@@ -83,6 +113,8 @@ function validateParams (req, res, next) {
 function postCampusPost (req, res, next) {
   let user = req.$scope.user;
   let message = req.$params.message;
+  let question = req.$params.qusetion;
+  let duration = req.$params.duration;
   let campusId = req.$params.campusId;
   let courseId = req.$params.courseId;
   let freshersFeedId = req.$params.freshersFeedId;
@@ -98,9 +130,12 @@ function postCampusPost (req, res, next) {
     campusCourseClassId: campusCourseClassId,
     campusSocietyClubId: campusSocietyClubId,
     campusStudentGroupId: campusStudentGroupId,
-    message: message
+    message: message,
+    question: question,
+    duration: duration
   })
   .then(campusPost => {
+    req.$scope.campusPost = campusPost;
     next();
     return campusPost;
   })
@@ -111,6 +146,45 @@ function postCampusPost (req, res, next) {
     req.log.error({
       err: error.message
     }, 'campusPost.create Error - post-campus-post');
+  });
+}
+
+/**
+ * Save the options in the pollOption table
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function saveCampusPostPollOption (req, res, next) {// eslint-disable-line id-length
+  let campusPost = req.$scope.campusPost;
+  let options = req.$params.options;
+  let question = req.$params.question;
+  let campusPostPollOption = [];
+
+  // check if we have params for question
+  if (!question) {return next();}
+
+  options.forEach(option => {
+    campusPostPollOption.push({
+      name: option,
+      campusPostId: campusPost.id
+    });
+  });
+
+  return req.db.campusPostPollOption.bulkCreate(campusPostPollOption)
+  .then(campusPostPollOption => {
+    next();
+    return campusPostPollOption;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'campusPostPollOption.create Error - post-campus-post');
   });
 }
 
@@ -132,4 +206,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCampusPost;
+module.exports.saveCampusPostPollOption = saveCampusPostPollOption;
 module.exports.response = response;
