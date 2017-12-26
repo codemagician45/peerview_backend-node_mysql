@@ -478,25 +478,24 @@ function campusApi (apiRouter) {
 
   apiRouter.get('/campus/:campusId/marketplace',
     lib.params,
-    handlers.campus.getCampusMarketplaceByCampusId.validateParams,
     lib.isTokenExist.user,
-    handlers.campus.getCampusMarketplaceByCampusId.logic,
-    handlers.campus.getCampusMarketplaceByCampusId.response);
+    handlers.campus.getCampusMarketplaceList.validateParams,
+    handlers.campus.getCampusMarketplaceList.logic,
+    handlers.campus.getCampusMarketplaceList.response);
 
   apiRouter.get('/campus/marketplace/:marketplaceId',
     lib.params,
-    handlers.campus.getCampusMarketplaceByMarketplaceId.validateParams,
     lib.isTokenExist.user,
-    handlers.campus.getCampusMarketplaceByMarketplaceId.logic,
-    handlers.campus.getCampusMarketplaceByMarketplaceId.response);
+    handlers.campus.getCampusMarketplace.validateParams,
+    handlers.campus.getCampusMarketplace.logic,
+    handlers.campus.getCampusMarketplace.response);
 
-  apiRouter.post('/campus/marketplace',
+  apiRouter.post('/campus/:campusId/marketplace',
     lib.params,
-    handlers.campus.postCampusMarketplace.validateParams,
     lib.isTokenExist.user,
-    lib.upload.multiple,
+    handlers.campus.postCampusMarketplace.validateParams,
     handlers.campus.postCampusMarketplace.logic,
-    handlers.campus.postCampusMarketplace.saveCampusMarketplacePhotos,
+    handlers.campus.postCampusMarketplace.saveCampusAttachments,
     handlers.campus.postCampusMarketplace.response);
 
   apiRouter.delete('/marketplace/:marketplaceId',
