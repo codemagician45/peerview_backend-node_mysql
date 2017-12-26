@@ -15,6 +15,10 @@ module.exports = function (sequelize, dataTypes) {
     },
     logo: {// cloudinaryPublicId
       type: dataTypes.STRING
+    },
+    isConfirm: {// the admin needs to validate this first
+      type: dataTypes.BOOLEAN,
+      defaultValue: false
     }
   }, {
     tableName: 'campus_society_club',
