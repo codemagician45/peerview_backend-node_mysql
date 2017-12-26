@@ -17,9 +17,5 @@ module.exports = function (sequelize, dataTypes) {
     indexes: []
   });
 
-  CampusPostPollOption.associate = function (models) {
-    this.belongsTo(models.campusPostPoll);
-  };
-
   return CampusPostPollOption;
 };
