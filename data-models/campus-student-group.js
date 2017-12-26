@@ -34,6 +34,9 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.user);
     this.belongsTo(models.campus);
     this.belongsTo(models.campusPrivacy);
+    this.hasMany(models.campusStudentGroupUser, {
+      as: 'campusStudentGroupUser'
+    });
   };
 
   return CampusStudentGroup;
