@@ -68,14 +68,19 @@ function getCampusStudentGroups (req, res, next) {// eslint-disable-line id-leng
   let offset = req.$params.offset;
   let limit = req.$params.offset;
   let where = {
-    campusId: {
-      [req.Op.eq]: campusId
+    [req.Op.and]: {
+      campusId: campusId,
+      [req.Op.or]: [{
+        isConfirm: true
+      }, {
+        '$campusStudentGroupUser.userId$': user.id
+      }]
     }
   };
 
   /**
-   * Just get the list of society-clubs if
-   * isMyClub query path is present
+   * Just get the list of student groups if
+   * isMyGroup query path is present
    */
   if (isMyGroup && JSON.parse(isMyGroup)) {
     where = {
@@ -88,13 +93,18 @@ function getCampusStudentGroups (req, res, next) {// eslint-disable-line id-leng
 
   return req.db.campusStudentGroup.findAll({
     attributes: {
-      exclude: ['userId']
+      exclude: ['userId', 'campusId', 'campusPrivacyId']
     },
     include: [{
       model: req.db.user,
       attributes: ['id', 'firstName', 'lastName']
+    }, {
+      model: req.db.campusStudentGroupUser,
+      as: 'campusStudentGroupUser',
+      attributes: []
     }],
     where: where,
+    subQuery: false,
     offset: !offset ? 0 : parseInt(offset),
     limit: !limit ? 10 : parseInt(limit)
   })
