@@ -88,6 +88,7 @@ function postCampusStudentGroup (req, res, next) {// eslint-disable-line id-leng
     adminEmail: adminEmail
   })
   .then(campusStudentGroup => {
+    req.$scope.campusStudentGroup = campusStudentGroup;
     next();
     return campusStudentGroup;
   })
@@ -98,6 +99,42 @@ function postCampusStudentGroup (req, res, next) {// eslint-disable-line id-leng
     req.log.error({
       err: error.message
     }, 'campusStudentGroup.create Error - post-campus-student-group');
+  });
+}
+
+function addUserToStudentGroup (req, res, next) {// eslint-disable-line id-length
+  let user = req.$scope.user;
+  let campusStudentGroup = req.$scope.campusStudentGroup;
+  let campusPrivacyId = req.$params.campusPrivacyId;
+
+  return req.db.campusPrivacy.findOne({
+    where: {
+      id: {
+        [req.Op.eq]: campusPrivacyId
+      }
+    }
+  })
+  .then(campusPrivacy => {
+    if (campusPrivacy.name === 'public') {
+      return campusPrivacy;
+    }
+
+    return req.db.campusStudentGroupUser.create({
+      userId: user.id,
+      campusStudentGroupId: campusStudentGroup.id
+    });
+  })
+  .then(campusStudentGroupUser => {// eslint-disable-line id-length
+    next();
+    return campusStudentGroupUser;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'campusPrivacy/campusStudentGroupUser.create Error - post-campus-student-group');
   });
 }
 
@@ -119,4 +156,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCampusStudentGroup;
+module.exports.addUserToStudentGroup = addUserToStudentGroup;
 module.exports.response = response;
