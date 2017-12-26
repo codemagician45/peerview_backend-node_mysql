@@ -12,6 +12,13 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusFreshersFeed.logic,
     handlers.campus.getCampusFreshersFeed.response);
 
+  apiRouter.get('/campus/:campusId/user/course/classes',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusUserCourseClasses.validateParams,
+    handlers.campus.getCampusUserCourseClasses.logic,
+    handlers.campus.getCampusUserCourseClasses.response);
+
   apiRouter.get('/campus/:campusId/posts', // the the list of post in all students
     lib.params,
     lib.isTokenExist.user,
@@ -122,6 +129,7 @@ function campusApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.campus.postCampusPost.validateParams,
     handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveCampusPostPollOption, // use in poll option saving
     handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/:campusId/post/poll',
@@ -391,6 +399,7 @@ function campusApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.campus.postCampusStudentGroup.validateParams,
     handlers.campus.postCampusStudentGroup.logic,
+    handlers.campus.postCampusStudentGroup.addUserToStudentGroup,
     handlers.campus.postCampusStudentGroup.response);
 
   apiRouter.post('/campus/:campusId/student-group/:groupId/post',
@@ -407,6 +416,13 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostPoll.logic,
     handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
     handlers.campus.postCampusPostPoll.response);
+
+  apiRouter.post('/campus/:campusId/student-group/:groupId/post/brainstorming',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/student-group/post/:postId/reply',
     lib.params,
