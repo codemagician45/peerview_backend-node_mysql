@@ -82,7 +82,7 @@ function getInterest (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let interests = req.$scope.interest;
+  let interests = req.$scope.interests;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
