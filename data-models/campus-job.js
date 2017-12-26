@@ -1,14 +1,7 @@
 'use strict';
 
-/**
- * This is a job type which includes:
- * contract
- * full-time
- * part-time
- */
-
 module.exports = function (sequelize, dataTypes) {
-  const JobType = sequelize.define('jobType', {
+  const CampusJob = sequelize.define('campusJob', {
     id: {
       type: dataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -30,11 +23,16 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.DECIMAL
     }
   }, {
-    tableName: 'job_type',
+    tableName: 'campus_job',
     timestamp: true,
     collate: 'utf8_unicode_ci',
     indexes: []
   });
 
-  return JobType;
+  CampusJob.associate = function (models) {
+    this.belongsTo(models.campusJobType);
+    this.belongsTo(models.campus);
+  };
+
+  return CampusJob;
 };
