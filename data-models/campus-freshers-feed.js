@@ -26,7 +26,6 @@ module.exports = function (sequelize, dataTypes) {
   CampusFreshersFeed.associate = function (models) {
     this.belongsTo(models.campus);
     this.hasMany(models.campusPost);
-    this.hasMany(models.campusPostPoll);
   };
 
   return CampusFreshersFeed;
