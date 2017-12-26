@@ -32,6 +32,7 @@ module.exports = function (sequelize, dataTypes) {
   CampusJob.associate = function (models) {
     this.belongsTo(models.campusJobType);
     this.belongsTo(models.campus);
+    this.belongsTo(models.user);
   };
 
   return CampusJob;
