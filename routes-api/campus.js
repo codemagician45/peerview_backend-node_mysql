@@ -459,13 +459,16 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostReport.logic,
     handlers.campus.postCampusPostReport.response);
 
-  apiRouter.get('/campus/jobs',
+  apiRouter.get('/campus/:campusId/jobs',
     lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusJobs.validateParams,
     handlers.campus.getCampusJobs.logic,
     handlers.campus.getCampusJobs.response);
 
   apiRouter.get('/campus/job/:jobId',
     lib.params,
+    lib.isTokenExist.user,
     handlers.campus.getCampusJob.validateParams,
     handlers.campus.getCampusJob.logic,
     handlers.campus.getCampusJob.response);
