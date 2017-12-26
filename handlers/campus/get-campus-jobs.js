@@ -43,17 +43,21 @@ function validateParams (req, res, next) {
 
 function getCampusJobs (req, res, next) {
   let campusId = req.$params.campusId;
-  return req.db.job.findAll({
+  return req.db.campusJob.findAll({
+    include: [{
+      model: req.db.campusJobType,
+      attributes: ['id', 'code', 'description']
+    }],
     where: {
       campusId: {
         [req.Op.eq]: campusId
       }
     }
   })
-  .then(jobs => {
-    req.$scope.jobs = jobs;
+  .then(campusJobs => {
+    req.$scope.campusJobs = campusJobs;
     next();
-    return jobs;
+    return campusJobs;
   })
   .catch(error => {
     res.status(500)
@@ -61,7 +65,7 @@ function getCampusJobs (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'job.findAll Error - get-jobs');
+    }, 'campusJob.findAll Error - get-campus-jobs');
   });
 }
 
@@ -72,12 +76,12 @@ function getCampusJobs (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let jobs = req.$scope.jobs;
+  let campusJobs = req.$scope.campusJobs;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    jobs: jobs
+    campusJobs: campusJobs
   };
 
   res.status(200).send(body);

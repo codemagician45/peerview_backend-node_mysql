@@ -20,7 +20,7 @@ function validateParams (req, res, next) {
   let paramsSchema = {
     jobId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Job Id'
+        errorMessage: 'Missing Resource: Campus Job Id'
       }
     }
   };
@@ -44,17 +44,21 @@ function validateParams (req, res, next) {
 function getCampusJob (req, res, next) {
   let jobId = req.params.jobId;
 
-  return req.db.job.findOne({
+  return req.db.campusJob.findOne({
+    include: [{
+      model: req.db.campusJobType,
+      attributes: ['id', 'code', 'description']
+    }],
     where: {
       id: {
         [req.Op.eq]: jobId
       }
     }
   })
-  .then(job => {
-    req.$scope.job = job;
+  .then(campusJob => {
+    req.$scope.campusJob = campusJob;
     next();
-    return job;
+    return campusJob;
   })
   .catch(error => {
     res.status(500)
@@ -62,7 +66,7 @@ function getCampusJob (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'job.findOne Error - get-campus-job');
+    }, 'campusJob.findOne Error - get-campus-job');
   });
 }
 
@@ -73,12 +77,12 @@ function getCampusJob (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let job = req.$scope.job;
+  let campusJob = req.$scope.campusJob;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    job: job
+    campusJob: campusJob
   };
 
   res.status(200).send(body);
