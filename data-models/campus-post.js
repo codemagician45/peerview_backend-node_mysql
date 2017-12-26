@@ -10,7 +10,7 @@ module.exports = function (sequelize, dataTypes) {
     },
     message: {// we use this in the brainstorming that is why we saved the data in json format
       type: dataTypes.TEXT,
-      allowNull: false,
+      allowNull: true,
       get: function () {
         var rawValue = this.getDataValue('message');
         if (!rawValue) {
@@ -40,6 +40,7 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.campusCourseClass);// use for class feed
     this.belongsTo(models.campusSocietyClub);
     this.belongsTo(models.campusStudentGroup);
+    this.hasMany(models.campusPostPollOption);
     this.hasMany(models.campusPostLike, {
       as: 'campusPostLike'
     });
