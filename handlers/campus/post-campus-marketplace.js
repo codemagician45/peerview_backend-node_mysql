@@ -17,7 +17,15 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let schema = {
+  let paramsSchema = {
+    campusId: {
+      isInt: {
+        errorMessage: 'Invalid Resource: Campus Id'
+      }
+    }
+  };
+
+  let bodySchema = {
     title: {
       notEmpty: {
         errorMessage: 'Missing Resource: Title'
@@ -31,6 +39,9 @@ function validateParams (req, res, next) {
     email: {
       notEmpty: {
         errorMessage: 'Missing Resource: Email'
+      },
+      isEmail: {
+        errorMessage: 'Invalid Resource: Email'
       }
     },
     phone: {
@@ -41,28 +52,39 @@ function validateParams (req, res, next) {
     price: {
       notEmpty: {
         errorMessage: 'Missing Resource: Price'
+      },
+      isFloat: {
+        errorMessage: 'Invalid Resource: Price'
       }
     },
     author: {
-      optional: true
+      notEmpty: {
+        errorMessage: 'Missing Resource: Author'
+      }
     },
     location: {
-      optional: true
+      notEmpty: {
+        errorMessage: 'Missing Resource: Location'
+      }
     },
     edition: {
-      optional: true
-    },
-    cloudinaryPublicIds: {
-      optional: true
-    },
-    campusId: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Campus Id'
+        errorMessage: 'Missing Resource: Edition'
+      }
+    },
+    attachments: {
+      optional: true,
+      isArrayNotEmpty: {
+        errorMessage: 'Missing Resource: Attachments'
+      },
+      isArray: {
+        errorMessage: 'Invalid Resource: Attachments'
       }
     }
   };
 
-  req.checkBody(schema);
+  req.checkParams(paramsSchema);
+  req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -128,26 +150,28 @@ function postCampusMarketplace (req, res, next) {// eslint-disable-line id-lengt
   });
 }
 
-function saveCampusMarketplacePhotos (req, res, next) {// eslint-disable-line id-length
-  let campus = req.$scope.campus;
-  let cloudinaryPublicIds = req.$params.cloudinaryPublicIds
-    ? req.$params.cloudinaryPublicIds : [];
-  let campusMarketplacePhotos = [];// eslint-disable-line id-length
+function saveCampusAttachments (req, res, next) {// eslint-disable-line id-length
+  let campusMarketplace = req.$scope.campusMarketplace;
+  let attachments = req.$params.attachments
+    ? req.$params.attachments : [];
+  let campusAttachments = [];
 
-  if (cloudinaryPublicIds.length === 0) {
+  if (attachments.length === 0) {
     return next();
   }
 
-  cloudinaryPublicIds.forEach(cloudinaryPublicId => {
-    campusMarketplacePhotos.push({
-      campusId: campus.id,
-      cloudinaryPublicId: cloudinaryPublicId
+  attachments.forEach(attachment => {
+    campusAttachments.push({
+      campusMarketplaceId: campusMarketplace.id,
+      cloudinaryPublicId: attachment.id,
+      usage: attachment.usage
     });
   });
-  return req.db.campusMarketplacePhotos.bulkCreate(campusMarketplacePhotos)
-  .then(campusMarketplacePhotos => {// eslint-disable-line id-length
+
+  return req.db.attachment.bulkCreate(campusAttachments)
+  .then(attachments => {// eslint-disable-line id-length
     next();
-    return campusMarketplacePhotos;
+    return attachments;
   })
   .catch(error => {
     res.status(500)
@@ -155,7 +179,7 @@ function saveCampusMarketplacePhotos (req, res, next) {// eslint-disable-line id
 
     req.log.error({
       err: error.message
-    }, 'campusMarketplacePhotos.bulkCreate Error - post-campus-marketplace');
+    }, 'attachment.bulkCreate Error - post-campus-marketplace');
   });
 }
 
@@ -177,5 +201,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCampusMarketplace;
-module.exports.saveCampusMarketplacePhotos = saveCampusMarketplacePhotos;
+module.exports.saveCampusAttachments = saveCampusAttachments;
 module.exports.response = response;
