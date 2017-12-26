@@ -68,8 +68,9 @@ function getCampusSocietyClubs (req, res, next) {// eslint-disable-line id-lengt
   let offset = req.$params.offset;
   let limit = req.$params.offset;
   let where = {
-    campusId: {
-      [req.Op.eq]: campusId
+    [req.Op.and]: {
+      campusId: campusId,
+      isConfirm: true
     }
   };
 
@@ -81,7 +82,8 @@ function getCampusSocietyClubs (req, res, next) {// eslint-disable-line id-lengt
     where = {
       [req.Op.and]: {
         campusId: campusId,
-        userId: user.id
+        userId: user.id,
+        isConfirm: true
       }
     };
   }
