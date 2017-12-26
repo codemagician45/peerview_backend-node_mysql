@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * List of class inside a course in a
+ * certain campus
+ */
+
 module.exports = function (sequelize, dataTypes) {
   const CampusCourseClass = sequelize.define('campusCourseClass', {
     id: {
