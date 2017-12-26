@@ -22,12 +22,6 @@ function validateParams (req, res, next) {
       isInt: {
         errorMessage: 'Invalid Resource: Campus Post Id'
       }
-    },
-    courseId: {// use in the course feed
-      optional: true,
-      isInt: {
-        errorMessage: 'Invalid Resource: Course Id'
-      }
     }
   };
 
@@ -42,6 +36,12 @@ function validateParams (req, res, next) {
           max: 280
         }],
         errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
+      }
+    },
+    campusPostPollOptionId: {
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Campus Post Poll Option Id'
       }
     }
   };
@@ -77,13 +77,13 @@ function validateParams (req, res, next) {
 function postCampusPostReply (req, res, next) {
   let user = req.$scope.user;
   let campusPostId = req.$params.postId;
-  let courseId = req.$params.courseId;
+  let campusPostPollOptionId = req.$params.campusPostPollOptionId;// eslint-disable-line id-length
   let comment = req.$params.comment;
 
   return req.db.campusPostReply.create({
     userId: user.id,
     campusPostId: campusPostId,
-    courseId: courseId,
+    campusPostPollOptionId: campusPostPollOptionId,
     comment: comment
   })
   .then(campusPostReply => {
