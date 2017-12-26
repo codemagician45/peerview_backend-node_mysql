@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (sequelize, dataTypes) {
-  const CampusStudentGroupUser = sequelize.define('campusStudentGroupUser', {
+  const CampusStudentGroupUser = sequelize.define('campusStudentGroupUser', {// eslint-disable-line id-length
     id: {
       type: dataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
@@ -16,7 +16,7 @@ module.exports = function (sequelize, dataTypes) {
 
   CampusStudentGroupUser.associate = function (models) {
     this.belongsTo(models.user);
-    this.belongsTo(models.campus);
+    this.belongsTo(models.campusStudentGroup);
   };
 
   return CampusStudentGroupUser;
