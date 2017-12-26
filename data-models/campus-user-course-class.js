@@ -6,9 +6,6 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true
-    },
-    name: {
-      type: dataTypes.STRING
     }
   }, {
     tableName: 'campus_user_course_class',
