@@ -21,7 +21,7 @@ module.exports = function (sequelize, dataTypes) {
       autoIncrement: true
     },
     usage: {
-      type: dataTypes.ENUM('image', 'poster', 'video')
+      type: new dataTypes.ENUM('image', 'poster', 'video')
     },
     cloudinaryPublicId: {
       type: dataTypes.STRING,
