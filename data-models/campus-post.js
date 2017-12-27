@@ -25,6 +25,12 @@ module.exports = function (sequelize, dataTypes) {
         var json = (typeof val === 'string') ? val : JSON.stringify(val);
         this.setDataValue('message', json);
       }
+    },
+    question: {
+      type: dataTypes.STRING
+    },
+    duration: {
+      type: dataTypes.INTEGER
     }
   }, {
     tableName: 'campus_post',
