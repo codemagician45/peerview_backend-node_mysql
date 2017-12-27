@@ -129,16 +129,15 @@ function campusApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.campus.postCampusPost.validateParams,
     handlers.campus.postCampusPost.logic,
-    handlers.campus.postCampusPost.saveCampusPostPollOption, // use in poll option saving
     handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/:campusId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.campus.postCampusPostPoll.validateParams,
-    handlers.campus.postCampusPostPoll.logic,
-    handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
-    handlers.campus.postCampusPostPoll.response);
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveCampusPostPollOption, // use in poll option saving
+    handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/post/:postId/like',
     lib.params,
@@ -186,10 +185,10 @@ function campusApi (apiRouter) {
   apiRouter.post('/campus/:campusId/course/:courseId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.campus.postCampusPostPoll.validateParams,
-    handlers.campus.postCampusPostPoll.logic,
-    handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
-    handlers.campus.postCampusPostPoll.response);
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveCampusPostPollOption,
+    handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/course/post/:postId/reply',
     lib.params,
@@ -237,10 +236,10 @@ function campusApi (apiRouter) {
   apiRouter.post('/campus/:campusId/freshers-feed/:freshersFeedId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.campus.postCampusPostPoll.validateParams,
-    handlers.campus.postCampusPostPoll.logic,
-    handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
-    handlers.campus.postCampusPostPoll.response);
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveCampusPostPollOption,
+    handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/freshers-feed/post/:postId/reply',
     lib.params,
@@ -288,10 +287,10 @@ function campusApi (apiRouter) {
   apiRouter.post('/campus/:campusId/course/class/:classId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.campus.postCampusPostPoll.validateParams,
-    handlers.campus.postCampusPostPoll.logic,
-    handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
-    handlers.campus.postCampusPostPoll.response);
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveCampusPostPollOption,
+    handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/:campusId/course/class/:classId/post/brainstorming',
     lib.params,
@@ -353,10 +352,10 @@ function campusApi (apiRouter) {
   apiRouter.post('/campus/:campusId/society-club/:clubId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.campus.postCampusPostPoll.validateParams,
-    handlers.campus.postCampusPostPoll.logic,
-    handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
-    handlers.campus.postCampusPostPoll.response);
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveCampusPostPollOption,
+    handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/society-club/post/:postId/reply',
     lib.params,
@@ -412,10 +411,10 @@ function campusApi (apiRouter) {
   apiRouter.post('/campus/:campusId/student-group/:groupId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.campus.postCampusPostPoll.validateParams,
-    handlers.campus.postCampusPostPoll.logic,
-    handlers.campus.postCampusPostPoll.saveCampusPostPollOption,
-    handlers.campus.postCampusPostPoll.response);
+    handlers.campus.postCampusPost.validateParams,
+    handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveCampusPostPollOption,
+    handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/:campusId/student-group/:groupId/post/brainstorming',
     lib.params,
