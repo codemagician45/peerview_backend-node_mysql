@@ -3,8 +3,8 @@
 /**
  * @author Jo-Ries Canino
  * @description Get List of Community Post
- * Basically same userType
- * and same userStudyLevel for student
+ * General Post is tied with the
+ * user study level
  *
  * If the user is a professional he/she can browse
  * any userStudyLevel
@@ -36,8 +36,8 @@ function validateParams (req, res, next) {
         errorMessage: 'Invalid Resource: Course Id'
       }
     },
-    userStudyLevelId: {// when the professionals browse it so we need it as an optional params
-      optional: true,
+    userStudyLevelId: {
+      optional: true, // getting all career's
       isInt: {
         errorMessage: 'Invalid Resource: User Study Level Id'
       }
@@ -141,39 +141,114 @@ function getProfessionalsUserTypeId (req, res, next) {// eslint-disable-line id-
   });
 }
 
-function getCommunityPosts (req, res, next) {
-  let user = req.$scope.user;
-  let userType = req.$scope.userType;
-  let professionalsUserType = req.$scope.professionalsUserType;// eslint-disable-line id-length
-  let courseId = req.$params.courseId;
-  let userStudyLevelId = req.$params.userStudyLevelId;
+function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-length
   let communityId = req.$params.communityId;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
   const sequelize = req.db.communityPostRating.sequelize;
   const colRating = sequelize.col('communityPostRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
+
+  return req.db.communityPost.findAll({
+    attributes: [
+      'message',
+      'createdAt',
+      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
+      [sequelize.fn('COUNT',
+        sequelize.col(['communityPostRating', 'userId'].join('.'))), 'ratingCount'],
+      [sequelize.fn('COUNT',
+        sequelize.col(['communityPostLike', 'userId'].join('.'))), 'likeCount'],
+      [sequelize.fn('COUNT',
+        sequelize.col(['communityPostPageview', 'userId'].join('.'))), 'pageviewCount']
+    ],
+    include: [{
+      model: req.db.user,
+      attributes: ['id', 'firstName', 'lastName', 'email']
+    }, {
+      model: req.db.communityPostRating,
+      as: 'communityPostRating',
+      attributes: []
+    }, {
+      model: req.db.communityPostLike,
+      as: 'communityPostLike',
+      attributes: []
+    }, {
+      model: req.db.communityPostPageview,
+      as: 'communityPostPageview',
+      attributes: []
+    }, {
+      model: req.db.communityPostReply,
+      as: 'communityPostReply',
+      attributes: ['comment', 'createdAt'],
+      include: [{
+        model: req.db.user,
+        attributes: ['id', 'firstName', 'lastName', 'email']
+      }]
+    }],
+    group: ['communityPost.id'],
+    where: {
+      communityId: {
+        [req.Op.eq]: communityId
+      }
+    },
+    subQuery: false,
+    offset: !offset ? 0 : parseInt(offset),
+    limit: !limit ? 10 : parseInt(limit)
+  })
+  .then(communityPosts => {
+    req.$scope.communityPosts = communityPosts;
+    next();
+    return communityPosts;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'postLike.create Error - get-community-posts');
+  });
+}
+
+function getCommunityPosts (req, res, next) {
+  let user = req.$scope.user;
+  let userType = req.$scope.userType;
+  let professionalsUserType = req.$scope.professionalsUserType;// eslint-disable-line id-length
+  let courseId = req.$params.courseId;
+  let userStudyLevelId = req.$params.userStudyLevelId;
+  let offset = req.$params.offset;
+  let limit = req.$params.limit;
+  let isCareerUrl = req.url.indexOf('/community/career/posts');
+  const sequelize = req.db.communityPostRating.sequelize;
+  const colRating = sequelize.col('communityPostRating.rating');
+  const colAVG = sequelize.fn('AVG', colRating);
   let where = {// meaning professionals can access it;
-    courseId: typeof courseId === 'undefined' ? null : courseId,
-    userStudyLevelId: typeof userStudyLevelId === 'undefined' ? null : userStudyLevelId,
+    courseId: courseId || null,
+    userStudyLevelId: userStudyLevelId || null
   };
 
-  if (userType.code === 'student' && (typeof communityId === 'undefined')) {// get also the post of a professionals
+  if (userType && userType.code === 'student' && isCareerUrl === -1) {// get also the post of a professionals
     where = {
       [req.Op.and]: {
         [req.Op.or]: [{
-          userStudyLevelId: user.userStudyLevelId
+          userStudyLevelId: user.userStudyLevelId // general post is tied with this one
         }, {
           userTypeId: professionalsUserType.id// this is where we get the post from the professionals
         }],
         communityId: null,
-        courseId: typeof courseId === 'undefined' ? null : courseId
+        courseId: courseId || null
       }
     };
-  } else if (typeof communityId !== 'undefined') {// we are on the private community request
+  } else {
+    // get all the career's here
     where = {
-      communityId: {
-        [req.Op.eq]: communityId
+      [req.Op.and]: {
+        title: {
+          [req.Op.ne]: null
+        },
+        description: {
+          [req.Op.ne]: null
+        }
       }
     };
   }
@@ -257,4 +332,5 @@ module.exports.validateParams = validateParams;
 module.exports.checkUserType = checkUserType;
 module.exports.getProfessionalsUserTypeId = getProfessionalsUserTypeId;
 module.exports.logic = getCommunityPosts;
+module.exports.getPrivateCommunityPosts = getPrivateCommunityPosts;
 module.exports.response = response;
