@@ -4,13 +4,27 @@ const handlers = require('../handlers');
 const lib = require('../lib');
 
 function communityApi (apiRouter) {
-  apiRouter.get('/community/posts',
+  apiRouter.get('/community/posts', // public community posts;isCareer to get the career post
     lib.params,
     lib.isTokenExist.user,
     handlers.community.getCommunityPosts.validateParams,
     handlers.community.getCommunityPosts.checkUserType,
     handlers.community.getCommunityPosts.getProfessionalsUserTypeId,
     handlers.community.getCommunityPosts.logic,
+    handlers.community.getCommunityPosts.response);
+
+  apiRouter.get('/community/career/posts', // public community posts;isCareer to get the career post
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.getCommunityPosts.validateParams,
+    handlers.community.getCommunityPosts.logic,
+    handlers.community.getCommunityPosts.response);
+
+  apiRouter.get('/community/:communityId/posts', // private community posts
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.getCommunityPosts.validateParams,
+    handlers.community.getCommunityPosts.getPrivateCommunityPosts,
     handlers.community.getCommunityPosts.response);
 
   apiRouter.get('/community/post/:communityPostId',
@@ -28,11 +42,33 @@ function communityApi (apiRouter) {
     handlers.community.postCommunity.inviteUsers,
     handlers.community.postCommunity.response);
 
-  apiRouter.post('/community/post',
+  apiRouter.post('/community/post', // public community student and professionals can post
     lib.params,
     lib.isTokenExist.user,
     handlers.community.postCommunityPost.validateParams,
     handlers.community.postCommunityPost.logic,
+    handlers.community.postCommunityPost.response);
+
+  apiRouter.post('/community/post/career',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.postCommunityPost.validateParams,
+    handlers.community.postCommunityPost.logic,
+    handlers.community.postCommunityPost.response);
+
+  apiRouter.post('/community/:communityId/post', // private community
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.postCommunityPost.validateParams,
+    handlers.community.postCommunityPost.logic,
+    handlers.community.postCommunityPost.response);
+
+  apiRouter.post('/community/:communityId/post/poll', // private community poll; we don't have public poll
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.postCommunityPost.validateParams,
+    handlers.community.postCommunityPost.logic,
+    handlers.community.postCommunityPost.saveCommunityPostPollOption,
     handlers.community.postCommunityPost.response);
 
   apiRouter.post('/community/post/:communityPostId/reply',
@@ -70,27 +106,19 @@ function communityApi (apiRouter) {
     handlers.community.postCommunityPostReport.logic,
     handlers.community.postCommunityPostReport.response);
 
-  apiRouter.post('/community/:communityId/brainstorming/post',
+  apiRouter.post('/community/:communityId/post/brainstorming',
     lib.params,
     lib.isTokenExist.user,
-    handlers.community.postCommunityBrainstormingPost.validateParams,
-    handlers.community.postCommunityBrainstormingPost.logic,
-    handlers.community.postCommunityBrainstormingPost.response);
+    handlers.community.postCommunityPost.validateParams,
+    handlers.community.postCommunityPost.logic,
+    handlers.community.postCommunityPost.response);
 
-  apiRouter.post('/community/:communityId/post/poll',
+  apiRouter.put('/community/:communityPostId/post/brainstorming',
     lib.params,
     lib.isTokenExist.user,
-    handlers.community.postCommunityPostPoll.validateParams,
-    handlers.community.postCommunityPostPoll.logic,
-    handlers.community.postCommunityPostPoll.saveCommunityPollOption,
-    handlers.community.postCommunityPostPoll.response);
-
-  apiRouter.put('/community/brainstorming/:brainstormingId/post',
-    lib.params,
-    lib.isTokenExist.user,
-    handlers.community.updateCommunityBrainstorming.validateParams,
-    handlers.community.updateCommunityBrainstorming.logic,
-    handlers.community.updateCommunityBrainstorming.response);
+    handlers.community.updateCommunityPost.validateParams,
+    handlers.community.updateCommunityPost.logic,
+    handlers.community.updateCommunityPost.response);
 }
 
 module.exports = communityApi;
