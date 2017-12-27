@@ -3,8 +3,8 @@
 /**
  * @author Jo-Ries Canino
  * @description Community Post
- * Basically same userType
- * and same userStudyLevel for student
+ * General Post is tied with the
+ * user study level
  *
  * If the user is a professional he/she can browse
  * any userStudyLevel
@@ -29,27 +29,76 @@ const lib = require('../../lib');
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let bodySchema = {
-    courseId: {
-      optional: true // because to reuse the general tab and when the user browse in the courses(student); professionals can browse all
-    },
-    communityId: {// for private post here
-      optional: true
-    },
-    message: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Message'
-      },
-      isLength: {
-        options: [{
-          min: 1,
-          max: 280
-        }],
-        errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
-      }
-    }
-  };
+  let isCareerUrl = req.route.path.indexOf('community/post/career');
+  let isPostPollUrl = req.route.path.indexOf('community/:communityId/post/poll');
+  let paramsCommunity = req.route.path.indexOf(':communityId');
+  let bodySchema = {};
+  let paramsSchema = {};
 
+  if (paramsCommunity !== -1) {
+    paramsSchema = {
+      communityId: {
+        isInt: {
+          errorMessage: 'Invalid Resource: Community Id'
+        }
+      },
+    };
+  }
+
+  if (isCareerUrl !== -1) {
+    bodySchema = {
+      title: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Title'
+        }
+      },
+      description: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Description'
+        }
+      }
+    };
+  } else if (isPostPollUrl !== -1) {
+    bodySchema = {
+      question: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Question'
+        }
+      },
+      options: {
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Options'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Options'
+        }
+      },
+      duration: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Duration'
+        },
+        isInt: {
+          errorMessage: 'Invalid Resource: Duration'
+        }
+      }
+    };
+  } else {
+    bodySchema = {
+      courseId: {// optional because the professionals can post/and courses related post
+        optional: true,
+        isInt: {
+          errorMessage: 'Invalid Resource: Course Id'
+        }
+      },
+      message: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Message'
+        }
+      }
+    };
+  }
+
+  req.checkParams(paramsSchema);
   req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
@@ -82,16 +131,25 @@ function postCommunityPost (req, res, next) {
   let courseId = req.$params.courseId;
   let communityId = req.$params.communityId;
   let message = req.$params.message;
+  let title = req.$params.title;
+  let description = req.$params.description;
+  let question  = req.$params.question;
+  let duration = req.$params.duration;
 
   return req.db.communityPost.create({
     userId: user.id,
     userTypeId: user.userTypeId,
-    userStudyLevelId: user.userStudyLevelId,
+    userStudyLevelId: user.userStudyLevelId, // general community is tied with this one
     courseId: courseId,
     communityId: communityId,
-    message: message
+    message: message,
+    title: title,
+    description: description,
+    question: question,
+    duration: duration
   })
   .then(communityPost => {
+    req.$scope.communityPost = communityPost;
     next();
     return communityPost;
   })
@@ -102,6 +160,45 @@ function postCommunityPost (req, res, next) {
     req.log.error({
       err: error.message
     }, 'communityPost.create Error - post-community-post');
+  });
+}
+
+/**
+ * Save the options in the pollOption table
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function saveCommunityPostPollOption (req, res, next) {// eslint-disable-line id-length
+  let communityPost = req.$scope.communityPost;
+  let options = req.$params.options;
+  let question = req.$params.question;
+  let communityPostPollOption = [];// eslint-disable-line id-length
+
+  // check if we have params for question
+  if (!question) {return next();}
+
+  options.forEach(option => {
+    communityPostPollOption.push({
+      name: option,
+      communityPostId: communityPost.id
+    });
+  });
+
+  return req.db.communityPostPollOption.bulkCreate(communityPostPollOption)
+  .then(communityPostPollOption => {// eslint-disable-line id-length
+    next();
+    return communityPostPollOption;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'communityPostPollOption.create Error - post-community-post');
   });
 }
 
@@ -123,4 +220,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCommunityPost;
+module.exports.saveCommunityPostPollOption = saveCommunityPostPollOption;
 module.exports.response = response;
