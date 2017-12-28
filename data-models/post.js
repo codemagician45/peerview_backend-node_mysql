@@ -12,6 +12,12 @@ module.exports = function (sequelize, dataTypes) {
     },
     title: {
       type: dataTypes.STRING
+    },
+    question: {
+      type: dataTypes.STRING
+    },
+    duration: {
+      type: dataTypes.INTEGER
     }
   }, {
     tableName: 'post',
@@ -23,11 +29,11 @@ module.exports = function (sequelize, dataTypes) {
   Post.associate = function (models) {
     // this.hasMany(models.postComplaint);
     this.belongsTo(models.user);
+    this.hasMany(models.postPollOption);
     this.hasMany(models.post, {
       foreignKey: 'sharePostId',
       as: 'postShare'
     });
-    this.belongsTo(models.postCategory);
     this.hasMany(models.postLike, {
       as: 'postLike'
     });

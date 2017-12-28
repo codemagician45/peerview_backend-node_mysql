@@ -9,6 +9,12 @@ module.exports = function (sequelize, dataTypes) {
     },
     message: {
       type: dataTypes.STRING,
+    },
+    question: {
+      type: dataTypes.STRING
+    },
+    duration: {
+      type: dataTypes.INTEGER
     }
   }, {
     tableName: 'event_post',
@@ -21,6 +27,7 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.user);
     this.belongsTo(models.event);
     this.hasMany(models.eventAttachment);
+    this.hasMany(models.eventPostPollOption);
     this.hasMany(models.eventPostLike, {
       as: 'eventPostLike'
     });
