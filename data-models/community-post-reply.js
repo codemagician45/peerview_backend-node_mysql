@@ -23,6 +23,7 @@ module.exports = function (sequelize, dataTypes) {
   CommunityPostReply.associate = function (models) {
     this.belongsTo(models.communityPost);
     this.belongsTo(models.user);
+    this.belongsTo(models.communityPostPollOption);
   };
 
   return CommunityPostReply;
