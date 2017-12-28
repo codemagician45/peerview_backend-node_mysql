@@ -88,6 +88,48 @@ function postEventPostRating (req, res, next) {
   });
 }
 
+// check the average count of the rating
+function averageRating (req, res, next) {
+  let eventPostId = req.$params.eventPostId;
+  const sequelize = req.db.eventPostRating.sequelize;
+  const colRating = sequelize.col([req.db.eventPostRating.name, 'rating'].join('.'));
+  const colAVG = sequelize.fn('AVG', colRating);
+
+  return req.db.eventPost.findAll({
+    attributes: [
+      'id',
+      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating']
+    ],
+    include: [{
+      model: req.db.eventPostRating,
+      as: 'eventPostRating',
+      attributes: []
+    }],
+    group: ['eventPost.id'],
+    where: {
+      id: {
+        [req.Op.eq]: eventPostId
+      }
+    }
+  })
+  .then(eventPost => {
+    eventPost.length !== 0
+    && eventPost[0]
+    && (eventPost[0].newId = eventPost[0].id + '_eventPostRating');
+    req.$scope.post = eventPost[0];// use for updating credits
+    next();
+    return eventPost;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'eventPost.findAll Error - post-event-post-rating');
+  });
+}
+
 /**
  * Response data to client
  * @param {any} req request object
@@ -106,4 +148,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postEventPostRating;
+module.exports.averageRating = averageRating;
 module.exports.response = response;

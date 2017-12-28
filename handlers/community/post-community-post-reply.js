@@ -37,6 +37,12 @@ function validateParams (req, res, next) {
         }],
         errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
       }
+    },
+    communityPostPollOptionId: {
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Community Post Poll Option Id'
+      }
     }
   };
 
@@ -71,14 +77,19 @@ function validateParams (req, res, next) {
 function postCommunityPostReply (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
   let communityPostId = req.$params.postId;
+  let communityPostPollOptionId = req.$params.communityPostPollOptionId;// eslint-disable-line id-length
   let comment = req.$params.comment;
 
   return req.db.communityPostReply.create({
     communityPostId: communityPostId,
     userId: user.id,
+    communityPostPollOptionId: communityPostPollOptionId,
     comment: comment
   })
   .then(communityPostReply => {
+    communityPostReply.newId = communityPostReply.id + '_communityPostReply';
+    communityPostReply.credits = 2;
+    req.$scope.post = communityPostReply;
     next();
     return communityPostReply;
   })

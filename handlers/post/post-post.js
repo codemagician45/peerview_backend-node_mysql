@@ -7,31 +7,6 @@
 
 const lib = require('../../lib');
 
-function checkPostCategory (req, res, next) {
-  let postCategoryId = req.$params.postCategoryId;
-
-  return req.db.postCategory.findOne({
-    where: {
-      id: {
-        [req.Op.eq]: postCategoryId
-      }
-    }
-  })
-  .then(postCategory => {
-    req.$scope.postCategory = postCategory;
-    next();
-    return postCategory;
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-
-    req.log.error({
-      err: error.message
-    }, 'postCategory.findOne Error - post-post');
-  });
-}
-
 /**
  * Validation of req.body, req, param,
  * and req.query
@@ -42,34 +17,67 @@ function checkPostCategory (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function validateParams (req, res, next) {
-  let postCategory = req.$scope.postCategory;
-  let bodySchema = {
-    postCategoryId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Post Category Id'
-      },
-      isInt: {
-        errorMessage: 'Invalid Resource: Post Category Id'
-      }
-    },
-    message: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Message'
-      },
-      isLength: {
-        options: [{
-          min: 1,
-          max: 280
-        }],
-        errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
-      }
-    }
-  };
+  let isPostPollUrl = req.route.path.indexOf('post/poll');
+  let isPostStory = req.route.path.indexOf('post/story');
+  let bodySchema = {};
 
-  if (postCategory && postCategory.code === 'story') {
-    bodySchema.title = {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Title'
+  if (isPostPollUrl !== -1) {
+    bodySchema = {
+      question: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Question'
+        }
+      },
+      options: {
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Options'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Options'
+        }
+      },
+      duration: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Duration'
+        },
+        isInt: {
+          errorMessage: 'Invalid Resource: Duration'
+        }
+      }
+    };
+  } else if (isPostStory !== -1) {
+    bodySchema = {
+      title: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Title'
+        }
+      },
+      message: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Message'
+        },
+        isLength: {
+          options: [{
+            min: 1,
+            max: 280
+          }],
+          errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
+        }
+      }
+    };
+  } else {
+    bodySchema = {
+      message: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Message'
+        },
+        isLength: {
+          options: [{
+            min: 1,
+            max: 280
+          }],
+          errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
+        }
       }
     };
   }
@@ -103,17 +111,22 @@ function validateParams (req, res, next) {
  */
 function postPost (req, res, next) {
   let user = req.$scope.user;
-  let postCategoryId = req.$params.postCategoryId;
   let message = req.$params.message;
   let title = req.$params.title;
+  let question = req.$params.question;
+  let duration = req.$params.duration;
 
   return req.db.post.create({
     userId: user.id,
-    postCategoryId: postCategoryId,
     message: message,
-    title: title
+    title: title,
+    question: question,
+    duration: duration
   })
   .then(post => {
+    post.newId = post.id + '_post';
+    post.credits = 1;
+    req.$scope.post = post;
     next();
     return post;
   })
@@ -124,6 +137,45 @@ function postPost (req, res, next) {
     req.log.error({
       err: error.message
     }, 'post.create Error - post-post');
+  });
+}
+
+/**
+ * Save the options in the pollOption table
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function savePostPollOption (req, res, next) {// eslint-disable-line id-length
+  let post = req.$scope.post;
+  let options = req.$params.options;
+  let question = req.$params.question;
+  let postPollOption = [];// eslint-disable-line id-length
+
+  // check if we have params for question
+  if (!question) {return next();}
+
+  options.forEach(option => {
+    postPollOption.push({
+      name: option,
+      postId: post.id
+    });
+  });
+
+  return req.db.postPollOption.bulkCreate(postPollOption)
+  .then(postPollOption => {// eslint-disable-line id-length
+    next();
+    return postPollOption;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'postPollOption.bulkCreate Error - post-post');
   });
 }
 
@@ -143,7 +195,7 @@ function response (req, res) {
   res.status(201).send(body);
 }
 
-module.exports.checkPostCategory = checkPostCategory;
 module.exports.validateParams = validateParams;
 module.exports.logic = postPost;
+module.exports.savePostPollOption = savePostPollOption;
 module.exports.response = response;

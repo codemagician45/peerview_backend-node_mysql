@@ -16,6 +16,11 @@ function userApi (apiRouter) {
   //   handlers.user.getUser.logic,
   //   handlers.user.getUser.response);
 
+  apiRouter.get('/user/credits',
+    lib.isTokenExist.user,
+    handlers.user.getUserCredits.logic,
+    handlers.user.getUserCredits.response);
+
   apiRouter.get('/user/study-levels',
     lib.isTokenExist.user,
     handlers.user.getUserStudyLevels.logic,

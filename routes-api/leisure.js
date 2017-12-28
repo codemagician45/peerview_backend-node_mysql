@@ -50,7 +50,8 @@ function leisureApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.leisure.postEventPost.validateParams,
     handlers.leisure.postEventPost.logic,
-    handlers.leisure.postEventPost.saveAttachments,
+    lib.userCredits.updateUserCredits,
+    // handlers.leisure.postEventPost.saveAttachments,
     handlers.leisure.postEventPost.response);
 
   apiRouter.post('/event/:eventId/guest-list',
@@ -86,6 +87,8 @@ function leisureApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.leisure.postEventPostRating.validateParams,
     handlers.leisure.postEventPostRating.logic,
+    handlers.leisure.postEventPostRating.averageRating,
+    lib.userCredits.updateUserCreditsUponRating,
     handlers.leisure.postEventPostRating.response);
 
   apiRouter.post('/event/post/:eventPostId/reply',
@@ -93,6 +96,7 @@ function leisureApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.leisure.postEventPostReply.validateParams,
     handlers.leisure.postEventPostReply.logic,
+    lib.userCredits.updateUserCredits,
     handlers.leisure.postEventPostReply.response);
 
   apiRouter.post('/event/post/:eventPostId/report',
@@ -105,10 +109,10 @@ function leisureApi (apiRouter) {
   apiRouter.post('/event/:eventId/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.leisure.postEventPostPoll.validateParams,
-    handlers.leisure.postEventPostPoll.logic,
-    handlers.leisure.postEventPostPoll.saveEventPollOption,
-    handlers.leisure.postEventPostPoll.response);
+    handlers.leisure.postEventPost.validateParams,
+    handlers.leisure.postEventPost.logic,
+    handlers.leisure.postEventPost.saveEventPostPollOption,
+    handlers.leisure.postEventPost.response);
 }
 
 module.exports = leisureApi;

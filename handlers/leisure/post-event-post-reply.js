@@ -37,6 +37,12 @@ function validateParams (req, res, next) {
         }],
         errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
       }
+    },
+    eventPostPollOptionId: {
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Event Post Poll Option Id'
+      }
     }
   };
 
@@ -71,14 +77,19 @@ function validateParams (req, res, next) {
 function postEventPostReply (req, res, next) {
   let user = req.$scope.user;
   let eventPostId = req.$params.eventPostId;
+  let eventPostPollOptionId = req.$params.eventPostPollOptionId;// eslint-disable-line id-length
   let comment = req.$params.comment;
 
   return req.db.eventPostReply.create({
     eventPostId: eventPostId,
     userId: user.id,
+    eventPostPollOptionId: eventPostPollOptionId,
     comment: comment
   })
   .then(eventPostReply => {
+    eventPostReply.newId = eventPostReply.id + '_eventPostReply';
+    eventPostReply.credits = 1;
+    req.$scope.post = eventPostReply;
     next();
     return eventPostReply;
   })

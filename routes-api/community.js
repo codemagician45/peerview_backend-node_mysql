@@ -47,6 +47,7 @@ function communityApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.community.postCommunityPost.validateParams,
     handlers.community.postCommunityPost.logic,
+    lib.userCredits.updateUserCredits,
     handlers.community.postCommunityPost.response);
 
   apiRouter.post('/community/post/career',
@@ -76,6 +77,7 @@ function communityApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.community.postCommunityPostReply.validateParams,
     handlers.community.postCommunityPostReply.logic,
+    lib.userCredits.updateUserCredits,
     handlers.community.postCommunityPostReply.response);
 
   apiRouter.post('/community/post/:communityPostId/rating',
@@ -83,6 +85,8 @@ function communityApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.community.postCommunityPostRating.validateParams,
     handlers.community.postCommunityPostRating.logic,
+    handlers.community.postCommunityPostRating.averageRating,
+    lib.userCredits.updateUserCreditsUponRating,
     handlers.community.postCommunityPostRating.response);
 
   apiRouter.post('/community/post/:communityPostId/like',

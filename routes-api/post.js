@@ -23,19 +23,12 @@ function postApi (apiRouter) {
     handlers.post.getPostCategoryId.logic,
     handlers.post.getPostCategoryId.response);
 
-  apiRouter.get('/post/:postId/rating',
-    lib.params,
-    lib.isTokenExist.user,
-    handlers.post.getPostRating.validateParams,
-    handlers.post.getPostRating.logic,
-    handlers.post.getPostRating.response);
-
   apiRouter.post('/post',
     lib.params,
     lib.isTokenExist.user,
-    handlers.post.postPost.checkPostCategory,
     handlers.post.postPost.validateParams,
     handlers.post.postPost.logic,
+    lib.userCredits.updateUserCredits,
     handlers.post.postPost.response);
 
   apiRouter.post('/post/:postId/reply',
@@ -43,6 +36,7 @@ function postApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.post.postPostReply.validateParams,
     handlers.post.postPostReply.logic,
+    lib.userCredits.updateUserCredits,
     handlers.post.postPostReply.response);
 
   apiRouter.post('/post/:postId/rating',
@@ -50,6 +44,8 @@ function postApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.post.postPostRating.validateParams,
     handlers.post.postPostRating.logic,
+    handlers.post.postPostRating.averageRating,
+    lib.userCredits.updateUserCreditsUponRating,
     handlers.post.postPostRating.response);
 
   apiRouter.post('/post/:postId/like',
@@ -83,17 +79,17 @@ function postApi (apiRouter) {
   apiRouter.post('/post/story',
     lib.params,
     lib.isTokenExist.user,
-    handlers.post.postPostStory.validateParams,
-    handlers.post.postPostStory.logic,
-    handlers.post.postPostStory.response);
+    handlers.post.postPost.validateParams,
+    handlers.post.postPost.logic,
+    handlers.post.postPost.response);
 
   apiRouter.post('/post/poll',
     lib.params,
     lib.isTokenExist.user,
-    handlers.post.postPostPoll.validateParams,
-    handlers.post.postPostPoll.logic,
-    handlers.post.postPostPoll.savePollOption,
-    handlers.post.postPostPoll.response);
+    handlers.post.postPost.validateParams,
+    handlers.post.postPost.logic,
+    handlers.post.postPost.savePostPollOption,
+    handlers.post.postPost.response);
 }
 
 module.exports = postApi;

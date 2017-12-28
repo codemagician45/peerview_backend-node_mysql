@@ -66,11 +66,11 @@ function validateParams (req, res, next) {
  */
 function postCommunityPostRating (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
-  let postId = req.$params.postId;
+  let communityPostId = req.$params.communityPostId;
   let rating = req.$params.rating;
 
   return req.db.communityPostRating.create({
-    postId: postId,
+    communityPostId: communityPostId,
     userId: user.id,
     rating: rating
   })
@@ -84,7 +84,49 @@ function postCommunityPostRating (req, res, next) {// eslint-disable-line id-len
 
     req.log.error({
       err: error.message
-    }, 'postRating.create Error - post-community-post-rating');
+    }, 'communityPostRating.create Error - post-community-post-rating');
+  });
+}
+
+// check the average count of the rating
+function averageRating (req, res, next) {
+  let communityPostId = req.$params.communityPostId;
+  const sequelize = req.db.communityPostRating.sequelize;
+  const colRating = sequelize.col([req.db.communityPostRating.name, 'rating'].join('.'));
+  const colAVG = sequelize.fn('AVG', colRating);
+
+  return req.db.communityPost.findAll({
+    attributes: [
+      'id',
+      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating']
+    ],
+    include: [{
+      model: req.db.communityPostRating,
+      as: 'communityPostRating',
+      attributes: []
+    }],
+    group: ['communityPost.id'],
+    where: {
+      id: {
+        [req.Op.eq]: communityPostId
+      }
+    }
+  })
+  .then(communityPost => {
+    communityPost.length !== 0
+    && communityPost[0]
+    && (communityPost[0].newId = communityPost[0].id + '_communityPostRating');
+    req.$scope.post = communityPost[0];// use for updating credits
+    next();
+    return communityPost;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'communityPost.findAll Error - post-community-post-rating');
   });
 }
 
@@ -106,4 +148,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCommunityPostRating;
+module.exports.averageRating = averageRating;
 module.exports.response = response;

@@ -26,14 +26,6 @@ function validateParams (req, res, next) {
   };
 
   let bodySchema = {
-    postCategoryId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Post Category Id'
-      },
-      isInt: {
-        errorMessage: 'Invalid Resource: Post Category Id'
-      }
-    },
     message: {
       notEmpty: {
         errorMessage: 'Missing Resource: Message'
@@ -78,13 +70,11 @@ function validateParams (req, res, next) {
  */
 function postSharePost (req, res, next) {
   let user = req.$scope.user;
-  let postCategoryId = req.$params.postCategoryId;
   let sharePostId = req.$params.sharePostId;
   let message = req.$params.message;
 
   return req.db.post.create({
     userId: user.id,
-    postCategoryId: postCategoryId,
     sharePostId: sharePostId,
     message: message
   })

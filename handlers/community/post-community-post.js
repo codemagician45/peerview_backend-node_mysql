@@ -149,7 +149,9 @@ function postCommunityPost (req, res, next) {
     duration: duration
   })
   .then(communityPost => {
-    req.$scope.communityPost = communityPost;
+    communityPost.newId = communityPost.id + '_communityPost';
+    communityPost.credits = 1;
+    req.$scope.post = communityPost;
     next();
     return communityPost;
   })
@@ -172,7 +174,7 @@ function postCommunityPost (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function saveCommunityPostPollOption (req, res, next) {// eslint-disable-line id-length
-  let communityPost = req.$scope.communityPost;
+  let communityPost = req.$scope.post;
   let options = req.$params.options;
   let question = req.$params.question;
   let communityPostPollOption = [];// eslint-disable-line id-length

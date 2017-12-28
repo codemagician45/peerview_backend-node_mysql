@@ -135,7 +135,9 @@ function postCampusPost (req, res, next) {
     duration: duration
   })
   .then(campusPost => {
-    req.$scope.campusPost = campusPost;
+    campusPost.newId = campusPost.id + '_campusPost';
+    campusPost.credits = 1;
+    req.$scope.post = campusPost;
     next();
     return campusPost;
   })
@@ -158,7 +160,7 @@ function postCampusPost (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function saveCampusPostPollOption (req, res, next) {// eslint-disable-line id-length
-  let campusPost = req.$scope.campusPost;
+  let campusPost = req.$scope.post;
   let options = req.$params.options;
   let question = req.$params.question;
   let campusPostPollOption = [];

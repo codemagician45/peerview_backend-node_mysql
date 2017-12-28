@@ -37,6 +37,12 @@ function validateParams (req, res, next) {
         }],
         errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
       }
+    },
+    postPollOptionId: {
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Poll Option Id'
+      }
     }
   };
 
@@ -71,14 +77,19 @@ function validateParams (req, res, next) {
 function postPostReply (req, res, next) {
   let user = req.$scope.user;
   let postId = req.$params.postId;
+  let postPollOptionId = req.$params.postPollOptionId;
   let comment = req.$params.comment;
 
   return req.db.postReply.create({
     postId: postId,
     userId: user.id,
+    postPollOptionId: postPollOptionId,
     comment: comment
   })
   .then(postReply => {
+    postReply.newId = postReply.id + '_postReply';
+    postReply.credits = 1;
+    req.$scope.post = postReply;
     next();
     return postReply;
   })
