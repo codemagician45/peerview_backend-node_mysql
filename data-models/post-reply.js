@@ -23,6 +23,7 @@ module.exports = function (sequelize, dataTypes) {
   PostReply.associate = function (models) {
     this.belongsTo(models.post);
     this.belongsTo(models.user);
+    this.belongsTo(models.postPollOption);
   };
 
   return PostReply;
