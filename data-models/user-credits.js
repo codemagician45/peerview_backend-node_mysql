@@ -7,11 +7,8 @@ module.exports = function (sequelize, dataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    postId: {// for referrence of the star
+    identifier: {// for referrence of the star
       type: dataTypes.STRING
-    },
-    rating: {// for us to have a backtrack of the star
-      type: dataTypes.FLOAT
     },
     credits: {
       type: dataTypes.FLOAT
@@ -25,6 +22,8 @@ module.exports = function (sequelize, dataTypes) {
 
   UserCredits.associate = function (models) {
     this.belongsTo(models.user);
+    this.belongsTo(models.course); // use for badges in a certain course
+    this.belongsTo(models.userStudyLevel); // use for badges in a certain course
   };
 
   return UserCredits;
