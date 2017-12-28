@@ -17,9 +17,5 @@ module.exports = function (sequelize, dataTypes) {
     indexes: []
   });
 
-  EventPostPollOption.associate = function (models) {
-    this.belongsTo(models.eventPostPoll);
-  };
-
   return EventPostPollOption;
 };
