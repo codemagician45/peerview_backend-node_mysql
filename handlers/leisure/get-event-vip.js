@@ -2,7 +2,7 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Post Guest List
+ * @description Get Event VIP
  */
 
 const lib = require('../../lib');
@@ -41,17 +41,24 @@ function validateParams (req, res, next) {
   });
 }
 
-function postEventGuestList (req, res, next) {
-  let user = req.$scope.user;
-  let eventId = req.$params.eventId;
+function getEventVIP (req, res, next) {
+  let eventId = req.params.eventId;
 
-  return req.db.eventGuestList.create({
-    eventId: eventId,
-    userId: user.id
+  return req.db.eventVIP.findAll({
+    attributes: {
+      exclude: ['eventId', 'senderId']
+    },
+    include: [{
+      model: req.db.user,
+      as: 'sender',
+      attributes: ['id', 'firstName', 'lastName']
+    }],
+    eventId: eventId
   })
-  .then(eventGuestList => {
+  .then(eventVIP => {
+    req.$scope.eventVIP = eventVIP;
     next();
-    return eventGuestList;
+    return eventVIP;
   })
   .catch(error => {
     res.status(500)
@@ -59,7 +66,7 @@ function postEventGuestList (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'eventGuestList.create Error - post-event-guest-list');
+    }, 'eventVIP.findAll Error - get-event-vip');
   });
 }
 
@@ -70,15 +77,17 @@ function postEventGuestList (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
+  let eventVIP = req.$scope.eventVIP;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201
+    http_code: 200,
+    eventVIP: eventVIP
   };
 
-  res.status(201).send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = postEventGuestList;
+module.exports.logic = getEventVIP;
 module.exports.response = response;

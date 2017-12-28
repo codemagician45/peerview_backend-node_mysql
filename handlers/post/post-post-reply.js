@@ -89,7 +89,8 @@ function postPostReply (req, res, next) {
   .then(postReply => {
     postReply.newId = postReply.id + '_postReply';
     postReply.credits = 1;
-    req.$scope.post = postReply;
+    req.$scope.userCredits = postReply;
+    req.$scope.userId = user.id;
     next();
     return postReply;
   })

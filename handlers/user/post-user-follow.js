@@ -2,7 +2,8 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Post Guest List
+ * @description User follow
+ * Basically you are following another user
  */
 
 const lib = require('../../lib');
@@ -18,9 +19,9 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let paramsSchema = {
-    eventId: {
+    userId: {
       isInt: {
-        errorMessage: 'Invalid Resource: eventId'
+        errorMessage: 'Invalid Resource: User Id'
       }
     }
   };
@@ -41,17 +42,22 @@ function validateParams (req, res, next) {
   });
 }
 
-function postEventGuestList (req, res, next) {
+function postUserFollow (req, res, next) {
   let user = req.$scope.user;
-  let eventId = req.$params.eventId;
+  let followeeId = req.params.userId;
 
-  return req.db.eventGuestList.create({
-    eventId: eventId,
-    userId: user.id
+  return req.db.userFollower.create({
+    followeeId: followeeId,
+    followerId: user.id // I am the follower
   })
-  .then(eventGuestList => {
+  .then(userFollower => {
+    // use below for credits
+    userFollower.newId = userFollower.id + '_userFollower';
+    userFollower.credits = 5;
+    req.$scope.userCredits = userFollower;
+    req.$scope.userId = followeeId;
     next();
-    return eventGuestList;
+    return userFollower;
   })
   .catch(error => {
     res.status(500)
@@ -59,7 +65,7 @@ function postEventGuestList (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'eventGuestList.create Error - post-event-guest-list');
+    }, 'userFollower.create Error - post-user-follow');
   });
 }
 
@@ -80,5 +86,5 @@ function response (req, res) {
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = postEventGuestList;
+module.exports.logic = postUserFollow;
 module.exports.response = response;

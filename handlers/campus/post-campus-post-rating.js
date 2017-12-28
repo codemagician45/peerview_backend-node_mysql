@@ -113,8 +113,6 @@ function averageRating (req, res, next) {
     }
   })
   .then(campusPost => {
-    campusPost[0] && (campusPost[0].newId = campusPost[0].id + '_campusPostRating');
-    req.$scope.post = campusPost[0];// use for updating credits
     next();
     return campusPost;
   })

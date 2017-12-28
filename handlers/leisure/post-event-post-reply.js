@@ -89,7 +89,8 @@ function postEventPostReply (req, res, next) {
   .then(eventPostReply => {
     eventPostReply.newId = eventPostReply.id + '_eventPostReply';
     eventPostReply.credits = 1;
-    req.$scope.post = eventPostReply;
+    req.$scope.userCredits = eventPostReply;
+    req.$scope.userId = user.id;
     next();
     return eventPostReply;
   })

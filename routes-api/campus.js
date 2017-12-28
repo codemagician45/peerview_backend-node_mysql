@@ -129,7 +129,6 @@ function campusApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.campus.postCampusPost.validateParams,
     handlers.campus.postCampusPost.logic,
-    lib.userCredits.updateUserCredits,
     handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/:campusId/post/poll',
@@ -160,7 +159,6 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostRating.validateParams,
     handlers.campus.postCampusPostRating.logic,
     handlers.campus.postCampusPostRating.averageRating,
-    lib.userCredits.updateUserCreditsUponRating,
     handlers.campus.postCampusPostRating.response);
 
   apiRouter.post('/campus/post/:postId/reply',
@@ -220,7 +218,6 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostRating.validateParams,
     handlers.campus.postCampusPostRating.logic,
     handlers.campus.postCampusPostRating.averageRating,
-    lib.userCredits.updateUserCreditsUponRating,
     handlers.campus.postCampusPostRating.response);
 
   apiRouter.post('/campus/course/post/:postId/report',
@@ -273,7 +270,6 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostRating.validateParams,
     handlers.campus.postCampusPostRating.logic,
     handlers.campus.postCampusPostRating.averageRating,
-    lib.userCredits.updateUserCreditsUponRating,
     handlers.campus.postCampusPostRating.response);
 
   apiRouter.post('/campus/freshers-feed/post/:postId/report',
@@ -333,7 +329,6 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostRating.validateParams,
     handlers.campus.postCampusPostRating.logic,
     handlers.campus.postCampusPostRating.averageRating,
-    lib.userCredits.updateUserCreditsUponRating,
     handlers.campus.postCampusPostRating.response);
 
   apiRouter.post('/campus/course/class/post/:postId/report',
@@ -393,7 +388,6 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostRating.validateParams,
     handlers.campus.postCampusPostRating.logic,
     handlers.campus.postCampusPostRating.averageRating,
-    lib.userCredits.updateUserCreditsUponRating,
     handlers.campus.postCampusPostRating.response);
 
   apiRouter.post('/campus/society-club/post/:postId/report',
@@ -461,7 +455,6 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPostRating.validateParams,
     handlers.campus.postCampusPostRating.logic,
     handlers.campus.postCampusPostRating.averageRating,
-    lib.userCredits.updateUserCreditsUponRating,
     handlers.campus.postCampusPostRating.response);
 
   apiRouter.post('/campus/student-group/post/:postId/report',

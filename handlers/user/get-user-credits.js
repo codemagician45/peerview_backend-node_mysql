@@ -17,8 +17,11 @@ function getUserCredits (req, res, next) {
         sequelize.col('credits')), 'totalCredits'],
     ],
     where: {
-      userId: {
-        [req.Op.eq]: user.id
+      [req.Op.and]: {
+        userId: {
+          [req.Op.eq]: user.id,
+        },
+        communityId: null
       }
     }
   })

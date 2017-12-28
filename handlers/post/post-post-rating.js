@@ -113,7 +113,9 @@ function averageRating (req, res, next) {
     }
   })
   .then(post => {
-    post[0] && (post[0].newId = post[0].id + '_postRating');
+    post.length !== 0
+    && post[0]
+    && (post[0].newId = post[0].id + '_postRating');
     req.$scope.post = post[0];// use for updating credits
 
     next();

@@ -124,9 +124,12 @@ function postPost (req, res, next) {
     duration: duration
   })
   .then(post => {
+    req.$scope.post = post;
+    // below are used for user credits
     post.newId = post.id + '_post';
     post.credits = 1;
-    req.$scope.post = post;
+    req.$scope.userCredits = post;
+    req.$scope.userId = user.id;
     next();
     return post;
   })

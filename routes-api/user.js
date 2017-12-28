@@ -87,6 +87,14 @@ function userApi (apiRouter) {
     handlers.user.postUserOnboardingDetails.logic,
     handlers.user.postUserOnboardingDetails.response);
 
+  apiRouter.post('/user/:userId/follow',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.postUserFollow.validateParams,
+    handlers.user.postUserFollow.logic,
+    lib.userCredits.updateUserCredits,
+    handlers.user.postUserFollow.response);
+
   apiRouter.put('/user/password',
     lib.params,
     lib.isTokenExist.user,
@@ -116,6 +124,14 @@ function userApi (apiRouter) {
     handlers.user.updateUserSecurity.validateParams,
     handlers.user.updateUserSecurity.logic,
     handlers.user.updateUserSecurity.response);
+
+  apiRouter.delete('/user/:userId/follow',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.removeUserFollow.validateParams,
+    handlers.user.removeUserFollow.logic,
+    lib.userCredits.updateUserCredits,
+    handlers.user.removeUserFollow.response);
 
   apiRouter.delete('/user/interest/:userInterestId',
     lib.params,

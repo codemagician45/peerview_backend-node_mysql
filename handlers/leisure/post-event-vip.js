@@ -57,7 +57,7 @@ function validateParams (req, res, next) {
 
 function postEventVIP (req, res, next) {
   let user = req.$scope.user;
-  let eventId = req.$scope.id;
+  let eventId = req.$params.eventId;
   let name = req.$params.name;
   let phoneNumberOrEmail = req.$params.phoneNumberOrEmail;
 

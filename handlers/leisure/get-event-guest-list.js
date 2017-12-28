@@ -2,7 +2,7 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Post Guest List
+ * @description Get Guest List
  */
 
 const lib = require('../../lib');
@@ -41,15 +41,21 @@ function validateParams (req, res, next) {
   });
 }
 
-function postEventGuestList (req, res, next) {
-  let user = req.$scope.user;
+function getEventGuestList (req, res, next) {
   let eventId = req.$params.eventId;
 
-  return req.db.eventGuestList.create({
-    eventId: eventId,
-    userId: user.id
+  return req.db.eventGuestList.findAll({
+    attributes: {
+      exclude: ['userId', 'eventId']
+    },
+    include: [{
+      model: req.db.user,
+      attributes: ['id', 'firstName', 'lastName']
+    }],
+    eventId: eventId
   })
   .then(eventGuestList => {
+    req.$scope.eventGuestList = eventGuestList;
     next();
     return eventGuestList;
   })
@@ -59,7 +65,7 @@ function postEventGuestList (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'eventGuestList.create Error - post-event-guest-list');
+    }, 'eventGuestList.findAll Error - get-event-guest-list');
   });
 }
 
@@ -70,15 +76,17 @@ function postEventGuestList (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
+  let eventGuestList = req.$scope.eventGuestList;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201
+    http_code: 200,
+    eventGuestList: eventGuestList
   };
 
-  res.status(201).send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = postEventGuestList;
+module.exports.logic = getEventGuestList;
 module.exports.response = response;

@@ -38,6 +38,24 @@ function validateParams (req, res, next) {
         errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
       }
     },
+    studyLevelId: {// use for posting user credits
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Study Level Id'
+      }
+    },
+    courseId: {// use for posting user credits
+      optional: true,
+      isInt: {
+        errorMessage: 'Invalid Resource: Community Id'
+      }
+    },
+    averageRating: {// use for posting user credits
+      optional: true,
+      isFloat: {
+        errorMessage: 'Invalid Resource: Average Rating'
+      }
+    },
     communityPostPollOptionId: {
       optional: true,
       isInt: {
@@ -76,9 +94,12 @@ function validateParams (req, res, next) {
  */
 function postCommunityPostReply (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
-  let communityPostId = req.$params.postId;
+  let communityPostId = req.$params.communityPostId;
   let communityPostPollOptionId = req.$params.communityPostPollOptionId;// eslint-disable-line id-length
   let comment = req.$params.comment;
+  let courseId = req.$params.courseId;
+  let userStudyLevelId = req.$params.studyLevelId;
+  let averageRating = req.$params.averageRating;
 
   return req.db.communityPostReply.create({
     communityPostId: communityPostId,
@@ -89,7 +110,15 @@ function postCommunityPostReply (req, res, next) {// eslint-disable-line id-leng
   .then(communityPostReply => {
     communityPostReply.newId = communityPostReply.id + '_communityPostReply';
     communityPostReply.credits = 2;
-    req.$scope.post = communityPostReply;
+    req.$scope.userId = user.id;
+
+    if (courseId && averageRating) {
+      communityPostReply.credits = Math.round(averageRating);
+      communityPostReply.courseId = courseId;
+      communityPostReply.userStudyLevelId = userStudyLevelId;
+    }
+
+    req.$scope.userCredits = communityPostReply;
     next();
     return communityPostReply;
   })

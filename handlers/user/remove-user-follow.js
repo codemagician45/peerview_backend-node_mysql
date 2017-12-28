@@ -2,7 +2,7 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Post Guest List
+ * @description Unfollow a User
  */
 
 const lib = require('../../lib');
@@ -18,9 +18,9 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let paramsSchema = {
-    eventId: {
+    userId: {
       isInt: {
-        errorMessage: 'Invalid Resource: eventId'
+        errorMessage: 'Invalid Resource: User Id'
       }
     }
   };
@@ -41,17 +41,36 @@ function validateParams (req, res, next) {
   });
 }
 
-function postEventGuestList (req, res, next) {
+function removeUserFollow (req, res, next) {
   let user = req.$scope.user;
-  let eventId = req.$params.eventId;
+  let followeeId = req.params.userId;
 
-  return req.db.eventGuestList.create({
-    eventId: eventId,
-    userId: user.id
+  return req.db.userFollower.findOne({
+    where: {
+      [req.Op.and]: {
+        followeeId: followeeId,
+        followerId: user.id
+      }
+    }
   })
-  .then(eventGuestList => {
+  .then(userFollower => {
+    userFollower.newId = userFollower.id + '_userFollower';
+    userFollower.credits = -5;
+    req.$scope.userCredits = userFollower;
+    req.$scope.userId = followeeId;
+
+    return req.db.userFollower.destroy({
+      where: {
+        [req.Op.and]: {
+          followeeId: followeeId,
+          followerId: user.id
+        }
+      }
+    });
+  })
+  .then(userFollower => {
     next();
-    return eventGuestList;
+    return userFollower;
   })
   .catch(error => {
     res.status(500)
@@ -59,7 +78,7 @@ function postEventGuestList (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'eventGuestList.create Error - post-event-guest-list');
+    }, 'userFollower.findOne Error - remove-user-follow');
   });
 }
 
@@ -73,12 +92,12 @@ function response (req, res) {
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201
+    http_code: 200
   };
 
-  res.status(201).send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = postEventGuestList;
+module.exports.logic = removeUserFollow;
 module.exports.response = response;

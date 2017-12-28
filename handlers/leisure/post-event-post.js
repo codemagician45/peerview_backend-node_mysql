@@ -110,9 +110,12 @@ function postEventPost (req, res, next) {
     duration: duration
   })
   .then(eventPost => {
+    req.$scope.eventPost = eventPost;
+    // below are use for user credits
     eventPost.newId = eventPost.id + '_eventPost';
     eventPost.credits = 1;
-    req.$scope.post = eventPost;
+    req.$scope.userCredits = eventPost;
+    req.$scope.userId = user.id;
     next();
     return eventPost;
   })
@@ -127,7 +130,7 @@ function postEventPost (req, res, next) {
 }
 
 function saveAttachments (req, res, next) {
-  let eventPost = req.$scope.post;
+  let eventPost = req.$scope.eventPost;
   let cloudinary = req.$params.attachments
     ? req.$params.attachments : [];
   let attachments = [];
@@ -168,7 +171,7 @@ function saveAttachments (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function saveEventPostPollOption (req, res, next) {// eslint-disable-line id-length
-  let eventPost = req.$scope.post;
+  let eventPost = req.$scope.eventPost;
   let options = req.$params.options;
   let question = req.$params.question;
   let eventPostPollOption = [];// eslint-disable-line id-length

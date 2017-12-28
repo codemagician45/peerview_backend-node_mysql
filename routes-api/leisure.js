@@ -37,6 +37,20 @@ function leisureApi (apiRouter) {
     handlers.leisure.getEventMyEvents.logic,
     handlers.leisure.getEventMyEvents.response);
 
+  apiRouter.get('/event/:eventId/guest-list',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.getEventGuestList.validateParams,
+    handlers.leisure.getEventGuestList.logic,
+    handlers.leisure.getEventGuestList.response);
+
+  apiRouter.get('/event/:eventId/vip',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.getEventVip.validateParams,
+    handlers.leisure.getEventVip.logic,
+    handlers.leisure.getEventVip.response);
+
   apiRouter.post('/event',
     lib.params,
     lib.isTokenExist.user,
