@@ -17,9 +17,5 @@ module.exports = function (sequelize, dataTypes) {
     indexes: []
   });
 
-  PostPollOption.associate = function (models) {
-    this.belongsTo(models.postPoll);
-  };
-
   return PostPollOption;
 };
