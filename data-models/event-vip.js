@@ -23,7 +23,8 @@ module.exports = function (sequelize, dataTypes) {
   EventVIP.associate = function (models) {
     this.belongsTo(models.event);
     this.belongsTo(models.user, {
-      foreignKey: 'senderId'
+      foreignKey: 'senderId',
+      as: 'sender'
     });
   };
 
