@@ -31,7 +31,7 @@ function getUserCourse (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'societyClub.findAll Error - get-peerslist');
+    }, 'userCourse.findAll Error - get-peerslist');
   });
 }
 
@@ -73,7 +73,7 @@ function getPeerslist (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'societyClub.findAll Error - get-peerslist');
+    }, 'user.findAll Error - get-peerslist');
   });
 }
 
