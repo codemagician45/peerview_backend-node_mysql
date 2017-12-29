@@ -96,7 +96,7 @@ function userApi (apiRouter) {
     lib.userCredits.updateUserCredits,
     handlers.user.postUserFollow.response);
 
-  apiRouter.post('/user/invite-users',
+  apiRouter.post('/user/invite-user',
     lib.params,
     lib.isTokenExist.user,
     handlers.user.postUserInvitePeers.validateParams,
