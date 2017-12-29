@@ -2,7 +2,7 @@
 
 /**
  * This is the course of the student
- * or the course the ex-student in which
+ * or the course the ex-student(professionals) in which
  * the ex-student can have many course or field
  * of expertise
  */
