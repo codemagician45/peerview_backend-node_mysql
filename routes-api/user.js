@@ -92,8 +92,18 @@ function userApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.user.postUserFollow.validateParams,
     handlers.user.postUserFollow.logic,
+    handlers.user.postUserFollow.sendEmail,
     lib.userCredits.updateUserCredits,
     handlers.user.postUserFollow.response);
+
+  apiRouter.post('/user/invite-users',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.postUserInvitePeers.validateParams,
+    handlers.user.postUserInvitePeers.logic,
+    handlers.user.postUserInvitePeers.checkIfUserAlreadyInvited,
+    handlers.user.postUserInvitePeers.sendEmail,
+    handlers.user.postUserInvitePeers.response);
 
   apiRouter.put('/user/password',
     lib.params,
