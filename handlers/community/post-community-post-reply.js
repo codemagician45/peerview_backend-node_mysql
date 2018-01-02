@@ -6,6 +6,7 @@
  */
 
 const lib = require('../../lib');
+const templates = require('../../templates');
 
 /**
  * Validation of req.body, req, param,
@@ -133,6 +134,65 @@ function postCommunityPostReply (req, res, next) {// eslint-disable-line id-leng
 }
 
 /**
+ * Send an Email
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function sendEmail (req, res, next) {
+  let user = req.$scope.user;
+  let communityPostId = req.$params.communityPostId;
+  let comment = req.$params.comment;
+  let file = templates.communityReply;
+  let emailTosend;
+
+  if (!comment) {
+    return next();
+  }
+
+  let values = {
+    userWhoCommented: `${user.firstName} ${user.lastName}`,
+    postOwner: '',
+    comment: comment
+  };
+
+  return req.db.communityPost.findOne({
+    include: [{
+      model: req.db.user
+    }],
+    where: {
+      id: {
+        [req.Op.eq]: communityPostId
+      }
+    }
+  })
+  .then(communityPost => {
+    values.postOwner = communityPost.user.firstName + ' ' + communityPost.user.lastName;
+    emailTosend = communityPost.user.email;
+
+    return lib.pug.convert(file, values);
+  })
+  .then(content => {
+    return lib.email.send(`${user.firstName} ${user.lastName} recently commented on your post/question!`,
+      emailTosend, content);
+  })
+  .then(pug => {
+    next();
+    return pug;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'pug.convert Error - post-user-forgot-password');
+  });
+}
+
+/**
  * Response data to client
  * @param {any} req request object
  * @param {any} res response object
@@ -150,4 +210,5 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCommunityPostReply;
+module.exports.sendEmail = sendEmail;
 module.exports.response = response;
