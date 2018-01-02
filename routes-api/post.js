@@ -6,6 +6,7 @@ const lib = require('../lib');
 function postApi (apiRouter) {
   apiRouter.get('/posts',
     lib.isTokenExist.user,
+    handlers.post.getPosts.validateParams,
     handlers.post.getPosts.logic,
     handlers.post.getPosts.response);
 
@@ -28,6 +29,7 @@ function postApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.post.postPost.validateParams,
     handlers.post.postPost.logic,
+    handlers.post.postPost.saveAttachments,
     lib.userCredits.updateUserCredits,
     handlers.post.postPost.response);
 
