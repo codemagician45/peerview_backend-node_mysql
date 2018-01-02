@@ -47,6 +47,7 @@ function communityApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.community.postCommunityPost.validateParams,
     handlers.community.postCommunityPost.logic,
+    handlers.community.postCommunityPost.saveAttachments,
     lib.userCredits.updateUserCredits,
     handlers.community.postCommunityPost.response);
 
@@ -77,6 +78,7 @@ function communityApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.community.postCommunityPostReply.validateParams,
     handlers.community.postCommunityPostReply.logic,
+    handlers.community.postCommunityPostReply.sendEmail,
     lib.userCredits.updateUserCredits,
     handlers.community.postCommunityPostReply.response);
 
@@ -117,7 +119,38 @@ function communityApi (apiRouter) {
     handlers.community.postCommunityPost.logic,
     handlers.community.postCommunityPost.response);
 
-  apiRouter.put('/community/:communityPostId/post/brainstorming',
+  apiRouter.post('/comunity/post/:communityPostId/follow',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.postCommunityPostFollow.validateParams,
+    handlers.community.postCommunityPostFollow.logic,
+    handlers.community.postCommunityPostFollow.saveCommunityPostFollowCronQueue,
+    handlers.community.postCommunityPostFollow.response);
+
+  apiRouter.put('/community/post/:communityPostId', // public community student and professionals can post
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.updateCommunityPost.validateParams,
+    handlers.community.updateCommunityPost.logic,
+    handlers.community.updateCommunityPost.response);
+
+  apiRouter.put('/community/post/:communityPostId/poll',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.updateCommunityPost.validateParams,
+    handlers.community.updateCommunityPost.logic,
+    handlers.community.updateCommunityPost.removeCommunityPostPollOption,
+    handlers.community.updateCommunityPost.saveCommunityPostPollOption,
+    handlers.community.updateCommunityPost.response);
+
+  apiRouter.put('/community/post/:communityPostId/career',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.community.updateCommunityPost.validateParams,
+    handlers.community.updateCommunityPost.logic,
+    handlers.community.updateCommunityPost.response);
+
+  apiRouter.put('/community/post/:communityPostId/brainstorming',
     lib.params,
     lib.isTokenExist.user,
     handlers.community.updateCommunityPost.validateParams,
