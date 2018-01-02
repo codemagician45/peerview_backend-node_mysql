@@ -90,6 +90,9 @@ function getPost (req, res, next) {
       foreignKey: 'sharePostId',
       as: 'postShare',
       attributes: []
+    }, {
+      model: req.db.attachment,
+      attributes: ['id', 'usage', 'cloudinaryPublicId']
     }],
     group: ['post.id'],
     where: {
@@ -112,7 +115,6 @@ function getPost (req, res, next) {
     }, 'post.findAll Error - get-post');
   });
 }
-
 
 /**
  * Response data to client
