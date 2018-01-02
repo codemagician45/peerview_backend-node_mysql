@@ -25,9 +25,6 @@ module.exports = function (sequelize, dataTypes) {
     },
     cloudinaryPublicId: {
       type: dataTypes.STRING,
-    },
-    section: {
-      type: dataTypes.STRING
     }
   }, {
     tableName: 'attachment',
