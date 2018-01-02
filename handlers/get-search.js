@@ -135,7 +135,7 @@ function getSearch (req, res, next) {
 
   let searchResults = userSearchResults.concat(postSearchResults);
   // sort the 2 data by createdAt
-  searchResults = _.orderBy(searchResults, ['createdAt'], ['asc']);
+  searchResults = _.orderBy(searchResults, ['createdAt'], ['desc']);
   req.$scope.searchResults = searchResults;
   next();
 }
