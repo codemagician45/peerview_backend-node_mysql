@@ -33,6 +33,29 @@ function userApi (apiRouter) {
     handlers.user.getUserTypeId.logic,
     handlers.user.getUserTypeId.response);
 
+  apiRouter.get('/user/timeline',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.getUserTimeline.validateParams,
+    handlers.user.getUserTimeline.getPosts,
+    handlers.user.getUserTimeline.getCommunityPosts,
+    handlers.user.getUserTimeline.response);
+
+  apiRouter.post('/user/:postToId/post',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.postUserPostTo.validateParams,
+    handlers.user.postUserPostTo.logic,
+    handlers.user.postUserPostTo.response);
+
+  apiRouter.post('/user/:userId/message',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.postUserMessage.validateParams,
+    handlers.user.postUserMessage.checkUserPrivacy,
+    handlers.user.postUserMessage.logic,
+    handlers.user.postUserMessage.response);
+
   apiRouter.post('/user/login',
     lib.params,
     handlers.user.postUserLogin.validateParams,
