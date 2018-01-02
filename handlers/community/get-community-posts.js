@@ -146,7 +146,7 @@ function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-le
   let offset = req.$params.offset;
   let limit = req.$params.limit;
   const sequelize = req.db.communityPostRating.sequelize;
-  const colRating = sequelize.col('communityPostRating.rating');
+  const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
 
   return req.db.communityPost.findAll({
@@ -155,30 +155,30 @@ function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-le
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostRating', 'userId'].join('.'))), 'ratingCount'],
+        sequelize.col(['postRating', 'userId'].join('.'))), 'ratingCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostLike', 'userId'].join('.'))), 'likeCount'],
+        sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostPageview', 'userId'].join('.'))), 'pageviewCount']
+        sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount']
     ],
     include: [{
       model: req.db.user,
       attributes: ['id', 'firstName', 'lastName', 'email']
     }, {
       model: req.db.communityPostRating,
-      as: 'communityPostRating',
+      as: 'postRating',
       attributes: []
     }, {
       model: req.db.communityPostLike,
-      as: 'communityPostLike',
+      as: 'postLike',
       attributes: []
     }, {
       model: req.db.communityPostPageview,
-      as: 'communityPostPageview',
+      as: 'postPageview',
       attributes: []
     }, {
       model: req.db.communityPostReply,
-      as: 'communityPostReply',
+      as: 'postReply',
       attributes: ['comment', 'createdAt'],
       include: [{
         model: req.db.user,
@@ -206,7 +206,7 @@ function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-le
 
     req.log.error({
       err: error.message
-    }, 'postLike.create Error - get-community-posts');
+    }, 'communityPost.findAll Error - get-community-posts');
   });
 }
 
@@ -220,7 +220,7 @@ function getCommunityPosts (req, res, next) {
   let limit = req.$params.limit;
   let isCareerUrl = req.url.indexOf('/community/career/posts');
   const sequelize = req.db.communityPostRating.sequelize;
-  const colRating = sequelize.col('communityPostRating.rating');
+  const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
   let where = {// meaning professionals can access it;
     courseId: courseId || null,
@@ -259,30 +259,30 @@ function getCommunityPosts (req, res, next) {
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostRating', 'userId'].join('.'))), 'ratingCount'],
+        sequelize.col(['postRating', 'userId'].join('.'))), 'ratingCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostLike', 'userId'].join('.'))), 'likeCount'],
+        sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostPageview', 'userId'].join('.'))), 'pageviewCount']
+        sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount']
     ],
     include: [{
       model: req.db.user,
       attributes: ['id', 'firstName', 'lastName', 'email']
     }, {
       model: req.db.communityPostRating,
-      as: 'communityPostRating',
+      as: 'postRating',
       attributes: []
     }, {
       model: req.db.communityPostLike,
-      as: 'communityPostLike',
+      as: 'postLike',
       attributes: []
     }, {
       model: req.db.communityPostPageview,
-      as: 'communityPostPageview',
+      as: 'postPageview',
       attributes: []
     }, {
       model: req.db.communityPostReply,
-      as: 'communityPostReply',
+      as: 'postReply',
       attributes: ['comment', 'createdAt'],
       include: [{
         model: req.db.user,

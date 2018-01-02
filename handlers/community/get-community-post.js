@@ -44,7 +44,7 @@ function validateParams (req, res, next) {
 function getCommunityPost (req, res, next) {
   let communityPostId = req.$params.communityPostId;
   const sequelize = req.db.communityPostRating.sequelize;
-  const colRating = sequelize.col(['communityPostRating', 'rating'].join('.'));
+  const colRating = sequelize.col(['postRating', 'rating'].join('.'));
   const colAVG = sequelize.fn('AVG', colRating);
 
   return req.db.communityPost.findAll({
@@ -53,30 +53,30 @@ function getCommunityPost (req, res, next) {
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostRating', 'userId'].join('.'))), 'ratingCount'],
+        sequelize.col(['postRating', 'userId'].join('.'))), 'ratingCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostLike', 'userId'].join('.'))), 'likeCount'],
+        sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['communityPostPageview', 'userId'].join('.'))), 'pageviewCount'],
+        sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
     ],
     include: [{
       model: req.db.user,
       attributes: ['id', 'firstName', 'lastName', 'email']
     }, {
       model: req.db.communityPostRating,
-      as: 'communityPostRating',
+      as: 'postRating',
       attributes: []
     }, {
       model: req.db.communityPostLike,
-      as: 'communityPostLike',
+      as: 'postLike',
       attributes: []
     }, {
       model: req.db.communityPostPageview,
-      as: 'communityPostPageview',
+      as: 'postPageview',
       attributes: []
     }, {
       model: req.db.communityPostReply,
-      as: 'communityPostReply',
+      as: 'postReply',
       attributes: ['comment', 'createdAt'],
       include: [{
         model: req.db.user,
@@ -101,7 +101,7 @@ function getCommunityPost (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'postLike.create Error - get-community-post');
+    }, 'communityPost.findAll Error - get-community-post');
   });
 }
 
