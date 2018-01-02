@@ -78,6 +78,15 @@ function validateParams (req, res, next) {
           }],
           errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
         }
+      },
+      attachments: {
+        optional: true,
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Attachments'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Attachments'
+        }
       }
     };
   }
@@ -143,6 +152,39 @@ function postPost (req, res, next) {
   });
 }
 
+function saveAttachments (req, res, next) {
+  let post = req.$scope.post;
+  let cloudinary = req.$params.attachments
+    ? req.$params.attachments : [];
+  let attachments = [];
+
+  if (cloudinary.length === 0) {
+    return next();
+  }
+
+  cloudinary.forEach(item => {
+    attachments.push({
+      postId: post.id,
+      cloudinaryPublicId: item.cloudinaryPublicId,
+      usage: item.usage
+    });
+  });
+
+  return req.db.attachment.bulkCreate(attachments)
+  .then(attachment => {
+    next();
+    return attachment;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'attachment.bulkCreate Error - post-event-post');
+  });
+}
+
 /**
  * Save the options in the pollOption table
  * @param {any} req request object
@@ -200,5 +242,6 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postPost;
+module.exports.saveAttachments = saveAttachments;
 module.exports.savePostPollOption = savePostPollOption;
 module.exports.response = response;

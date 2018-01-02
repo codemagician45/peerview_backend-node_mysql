@@ -149,6 +149,40 @@ function postCampusPost (req, res, next) {
   });
 }
 
+
+function saveAttachments (req, res, next) {
+  let campusPost = req.$scope.campusPost;
+  let cloudinary = req.$params.attachments
+    ? req.$params.attachments : [];
+  let attachments = [];
+
+  if (cloudinary.length === 0) {
+    return next();
+  }
+
+  cloudinary.forEach(item => {
+    attachments.push({
+      campusPostId: campusPost.id,
+      cloudinaryPublicId: item.cloudinaryPublicId,
+      usage: item.usage
+    });
+  });
+
+  return req.db.attachment.bulkCreate(attachments)
+  .then(attachment => {
+    next();
+    return attachment;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'attachment.bulkCreate Error - post-campus-post');
+  });
+}
+
 /**
  * Save the options in the pollOption table
  * @param {any} req request object
@@ -206,5 +240,6 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCampusPost;
+module.exports.saveAttachments = saveAttachments;
 module.exports.saveCampusPostPollOption = saveCampusPostPollOption;
 module.exports.response = response;

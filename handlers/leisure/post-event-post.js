@@ -147,7 +147,7 @@ function saveAttachments (req, res, next) {
     });
   });
 
-  return req.db.eventAttachment.bulkCreate(attachments)
+  return req.db.attachment.bulkCreate(attachments)
   .then(eventAttachments => {
     next();
     return eventAttachments;

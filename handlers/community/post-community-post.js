@@ -94,6 +94,15 @@ function validateParams (req, res, next) {
         notEmpty: {
           errorMessage: 'Missing Resource: Message'
         }
+      },
+      attachments: {
+        optional: true,
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Attachments'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Attachments'
+        }
       }
     };
   }
@@ -168,6 +177,39 @@ function postCommunityPost (req, res, next) {
   });
 }
 
+function saveAttachments (req, res, next) {
+  let communityPost = req.$scope.communityPost;
+  let cloudinary = req.$params.attachments
+    ? req.$params.attachments : [];
+  let attachments = [];
+
+  if (cloudinary.length === 0) {
+    return next();
+  }
+
+  cloudinary.forEach(item => {
+    attachments.push({
+      communityPostId: communityPost.id,
+      cloudinaryPublicId: item.cloudinaryPublicId,
+      usage: item.usage
+    });
+  });
+
+  return req.db.attachment.bulkCreate(attachments)
+  .then(attachment => {
+    next();
+    return attachment;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'attachment.bulkCreate Error - post-community-post');
+  });
+}
+
 /**
  * Save the options in the pollOption table
  * @param {any} req request object
@@ -225,5 +267,6 @@ function response (req, res) {
 
 module.exports.validateParams = validateParams;
 module.exports.logic = postCommunityPost;
+module.exports.saveAttachments = saveAttachments;
 module.exports.saveCommunityPostPollOption = saveCommunityPostPollOption;
 module.exports.response = response;
