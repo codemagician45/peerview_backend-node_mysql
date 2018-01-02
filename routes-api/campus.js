@@ -129,6 +129,7 @@ function campusApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.campus.postCampusPost.validateParams,
     handlers.campus.postCampusPost.logic,
+    handlers.campus.postCampusPost.saveAttachments,
     handlers.campus.postCampusPost.response);
 
   apiRouter.post('/campus/:campusId/post/poll',
