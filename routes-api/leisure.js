@@ -18,6 +18,20 @@ function leisureApi (apiRouter) {
     handlers.leisure.getEvent.logic,
     handlers.leisure.getEvent.response);
 
+  apiRouter.get('/event/:eventId/posts',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.getEventPosts.validateParams,
+    handlers.leisure.getEventPosts.logic,
+    handlers.leisure.getEventPosts.response);
+
+  apiRouter.get('/event/post/:eventPostId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.leisure.getEventPost.validateParams,
+    handlers.leisure.getEventPost.logic,
+    handlers.leisure.getEventPost.response);
+
   apiRouter.get('/event/dress-codes',
     lib.params,
     lib.isTokenExist.user,
