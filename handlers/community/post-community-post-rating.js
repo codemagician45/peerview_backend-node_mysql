@@ -102,7 +102,7 @@ function averageRating (req, res, next) {
     ],
     include: [{
       model: req.db.communityPostRating,
-      as: 'communityPostRating',
+      as: 'postRating',
       attributes: []
     }],
     group: ['communityPost.id'],
