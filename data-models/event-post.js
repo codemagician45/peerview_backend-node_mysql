@@ -26,19 +26,19 @@ module.exports = function (sequelize, dataTypes) {
   EventPost.associate = function (models) {
     this.belongsTo(models.user);
     this.belongsTo(models.event);
-    this.hasMany(models.eventAttachment);
+    this.hasMany(models.attachment);
     this.hasMany(models.eventPostPollOption);
     this.hasMany(models.eventPostLike, {
-      as: 'eventPostLike'
+      as: 'postLike'
     });
     this.hasMany(models.eventPostRating, {
-      as: 'eventPostRating'
+      as: 'postRating'
     });
     this.hasMany(models.eventPostReply, {
-      as: 'eventPostReply'
+      as: 'postReply'
     });
     this.hasMany(models.eventPostPageview, {
-      as: 'eventPostPageview'
+      as: 'postPageview'
     });
   };
 

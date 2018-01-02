@@ -53,17 +53,18 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.course);
     this.belongsTo(models.community); // if this field has been filed the post belongsTo private community
     this.hasMany(models.communityPostPollOption);
+    this.hasMany(models.attachment);
     this.hasMany(models.communityPostLike, {
-      as: 'communityPostLike'
+      as: 'postLike'
     });
     this.hasMany(models.communityPostRating, {
-      as: 'communityPostRating'
+      as: 'postRating'
     });
     this.hasMany(models.communityPostReply, {
-      as: 'communityPostReply'
+      as: 'postReply'
     });
     this.hasMany(models.communityPostPageview, {
-      as: 'communityPostPageview'
+      as: 'postPageview'
     });
   };
 

@@ -29,6 +29,10 @@ module.exports = function (sequelize, dataTypes) {
   Post.associate = function (models) {
     // this.hasMany(models.postComplaint);
     this.belongsTo(models.user);
+    this.belongsTo(models.user, {
+      foreignKey: 'postTo'
+    });
+    this.hasMany(models.attachment);
     this.hasMany(models.postPollOption);
     this.hasMany(models.post, {
       foreignKey: 'sharePostId',
