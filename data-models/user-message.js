@@ -7,9 +7,6 @@ module.exports = function (sequelize, dataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    title: {
-      type: dataTypes.STRING
-    },
     message: {
       type: dataTypes.STRING
     }
