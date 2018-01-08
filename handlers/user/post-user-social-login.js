@@ -23,6 +23,9 @@ function validateParams (req, res, next) {
     email: {
       notEmpty: {
         errorMessage: 'Missing Resource: Email'
+      },
+      isEmail: {
+        errorMessage: 'Invalid Resource: Email'
       }
     },
     socialId: {
@@ -68,13 +71,13 @@ function findUser (req, res, next) {
   let email = req.$params.email;
   let query = {};
 
-  if (typeParam === 'facebook_id') {
+  if (typeParam === 'facebook') {
     query.facebookId = req.$params.socialId;
     req.$scope.social = 'facebookId';
-  } else if (typeParam === 'linkedin_id') {
+  } else if (typeParam === 'linkedin') {
     query.linkedinId = req.$params.socialId;
     req.$scope.social = 'linkedinId';
-  } else if (typeParam === 'google_id') {
+  } else if (typeParam === 'google') {
     query.googleId = req.$params.socialId;
     req.$scope.social = 'googleId';
   }
