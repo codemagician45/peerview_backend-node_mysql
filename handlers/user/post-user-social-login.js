@@ -155,13 +155,13 @@ function saveOrUpdateUser (req, res, next) {
   } else {
     let update = {};
     update[req.$scope.social] = req.$params.socialId;
+    req.$scope.user[req.$scope.social] = req.$params.socialId;
     return req.db.user.update(update, {
       where: {
         email: email
       }
     })
     .then(user => {
-      req.$scope.user = user;
       next();
       return user;
     })
