@@ -19,6 +19,7 @@ app.use(cors());
 app.db = db.models;
 app.use(function setupScope (req, res, next) {
   req.$scope = {};
+  req.$params = {};
   req.db = app.db;
   req.sequelize = db;
   req.Op = db.Sequelize.Op;
