@@ -40,14 +40,14 @@ module.exports = Object.assign({}, defaults, {
     port: 3000,
   },
   frontEnd: {
-    baseUrl: 'http://localhost:4200'
+    baseUrl: process.env.PEERSVIEW_BASEURL
   },
   db: {
     adapter: 'mysql',
-    database: 'peersview',
-    host: 'localhost',
-    user: 'root',
-    password: '',
+    database: 'peersview-dev',
+    host: 'peersview.c7iwtmdqxmmx.eu-west-1.rds.amazonaws.com',
+    user: 'peersviewDev',
+    password: 'peersview-dev',
     timezone: '+00:00',
     logging: function (s) {
       var line = sprintf('[%s] %s\n', new Date().toJSON(), s);
