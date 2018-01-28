@@ -21,7 +21,7 @@ function getUserCredits (req, res, next) {
         userId: {
           [req.Op.eq]: user.id,
         },
-        communityId: null
+        //communityId: null? check why we need this
       }
     }
   })
