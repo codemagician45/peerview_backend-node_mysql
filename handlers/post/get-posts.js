@@ -49,8 +49,8 @@ function validateParams (req, res, next) {
 }
 
 function getPosts (req, res, next) {
-  let offset = req.$params.offset;
-  let limit = req.$params.limit;
+  let offset = lib.utils.returnValue(req.$params.offset);
+  let limit = lib.utils.returnValue(req.$params.limit);
   const sequelize = req.db.postRating.sequelize;
   const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
