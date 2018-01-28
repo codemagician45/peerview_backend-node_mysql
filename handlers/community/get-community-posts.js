@@ -186,6 +186,7 @@ function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-le
       }]
     }],
     group: ['communityPost.id'],
+    order: [['createdAt', 'DESC']],
     where: {
       communityId: {
         [req.Op.eq]: communityId
