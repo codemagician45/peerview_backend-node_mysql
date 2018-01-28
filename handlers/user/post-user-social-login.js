@@ -71,13 +71,13 @@ function findUser (req, res, next) {
   let email = req.$params.email;
   let query = {};
 
-  if (typeParam === 'facebook') {
+  if (typeParam === 'facebookid') {
     query.facebookId = req.$params.socialId;
     req.$scope.social = 'facebookId';
-  } else if (typeParam === 'linkedin') {
+  } else if (typeParam === 'linkedINid') {
     query.linkedinId = req.$params.socialId;
     req.$scope.social = 'linkedinId';
-  } else if (typeParam === 'google') {
+  } else if (typeParam === 'googleid') {
     query.googleId = req.$params.socialId;
     req.$scope.social = 'googleId';
   }
