@@ -9,12 +9,11 @@ function userApi (apiRouter) {
     handlers.user.getUsers.logic,
     handlers.user.getUsers.response);
 
-  // apiRouter.get('/user/:userId', this must be /user only
-  //   lib.params,
-  //   handlers.user.getUser.validateParams,
-  //   lib.isTokenExist.user,
-  //   handlers.user.getUser.logic,
-  //   handlers.user.getUser.response);
+  apiRouter.get('/user/:userId/info',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.getUser.logic,
+    handlers.user.getUser.response);
 
   apiRouter.get('/user/credits',
     lib.isTokenExist.user,
