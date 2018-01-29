@@ -186,7 +186,7 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
   let userStudyLevelId = req.$params.userStudyLevelId;
   let userTypeId = req.$params.userTypeId;
   let schoolName = req.$params.schoolName;
-  let city = req.$params.currentCity;
+  let city = req.$params.city;
   let gender = req.$params.gender;
   let role = req.$params.role;
   let birthDate = req.$params.birthDate;
