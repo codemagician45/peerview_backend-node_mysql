@@ -14,7 +14,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  credentials: false
+}));
 
 app.db = db.models;
 app.use(function setupScope (req, res, next) {
