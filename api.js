@@ -63,6 +63,13 @@ apiRouter.get('/search', // combination of advance-search/user and advance-searc
   handlers.getSearch.logic,
   handlers.getSearch.response);
 
+apiRouter.get('/search/interests',
+  lib.params,
+  lib.isTokenExist.user,
+  handlers.getSearchInterests.validateParams,
+  handlers.getSearchInterests.logic,
+  handlers.getSearchInterests.response);
+
 apiRouter.get('/cities/:countryCode',
   lib.params,
   lib.isTokenExist.user,
