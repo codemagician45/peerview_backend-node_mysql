@@ -1,3 +1,4 @@
+/*eslint-disable max-statements,max-lines*/
 'use strict';
 
 const handlers = require('../handlers');
@@ -8,6 +9,21 @@ function userApi (apiRouter) {
     lib.params,
     handlers.user.getUsers.logic,
     handlers.user.getUsers.response);
+
+  apiRouter.get('/user/profile',
+    lib.isTokenExist.user,
+    handlers.user.getUserProfile.logic,
+    handlers.user.getUserProfile.response);
+
+  apiRouter.get('/user/posts',
+    lib.isTokenExist.user,
+    handlers.user.getUserProfile.logic,
+    handlers.user.getUserProfile.response);
+
+  apiRouter.get('/user/interests',
+    lib.isTokenExist.user,
+    handlers.user.getUserInterests.logic,
+    handlers.user.getUserInterests.response);
 
   apiRouter.get('/user/:userId/info',
     lib.params,
@@ -127,6 +143,13 @@ function userApi (apiRouter) {
     handlers.user.postUserInvitePeers.sendEmail,
     handlers.user.postUserInvitePeers.response);
 
+  apiRouter.put('/user/about-me',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.updateUserAboutme.validateParams,
+    handlers.user.updateUserAboutme.logic,
+    handlers.user.updateUserAboutme.response);
+
   apiRouter.put('/user/password',
     lib.params,
     lib.isTokenExist.user,
@@ -165,7 +188,7 @@ function userApi (apiRouter) {
     lib.userCredits.updateUserCredits,
     handlers.user.removeUserFollow.response);
 
-  apiRouter.delete('/user/interest/:userInterestId',
+  apiRouter.delete('/user/interest/:interestId',
     lib.params,
     lib.isTokenExist.user,
     handlers.user.removeUserInterest.validateParams,
