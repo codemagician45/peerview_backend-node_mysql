@@ -139,6 +139,7 @@ function getCommunityPosts (req, res, next) {// eslint-disable-line id-length
   const sequelize = req.db.communityPostRating.sequelize;
   const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
+
   return req.db.communityPost.findAll({
     attributes: [
       'message',
