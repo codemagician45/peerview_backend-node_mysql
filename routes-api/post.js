@@ -5,6 +5,7 @@ const lib = require('../lib');
 
 function postApi (apiRouter) {
   apiRouter.get('/posts',
+    lib.params,
     lib.isTokenExist.user,
     handlers.post.getPosts.validateParams,
     handlers.post.getPosts.logic,
