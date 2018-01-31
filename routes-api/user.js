@@ -150,6 +150,13 @@ function userApi (apiRouter) {
     handlers.user.updateUserAboutme.logic,
     handlers.user.updateUserAboutme.response);
 
+  apiRouter.put('/user/accomplishments',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.updateUserAccomplishments.validateParams,
+    handlers.user.updateUserAccomplishments.logic,
+    handlers.user.updateUserAccomplishments.response);
+
   apiRouter.put('/user/password',
     lib.params,
     lib.isTokenExist.user,
