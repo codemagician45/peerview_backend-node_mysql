@@ -64,6 +64,7 @@ function getPost (req, res, next) {
     ],
     include: [{
       model: req.db.user,
+      as: 'user',
       attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName']
     }, {
       model: req.db.postRating,
