@@ -25,6 +25,9 @@ module.exports = function (sequelize, dataTypes) {
     aboutMe: {
       type: dataTypes.STRING
     },
+    accomplishments: {
+      type: dataTypes.STRING
+    },
     token: {
       type: dataTypes.STRING
     },
