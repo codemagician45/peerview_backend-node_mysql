@@ -11,11 +11,25 @@ function interestApi (apiRouter) {
     handlers.getInterest.logic,
     handlers.getInterest.response);
 
-  apiRouter.get('/interest',
+  apiRouter.get('/interest', // category interest
     lib.params,
     lib.isTokenExist.user,
     handlers.getInterestCategory.logic,
     handlers.getInterestCategory.response);
+
+  apiRouter.post('/interest/:interestCategoryId', // saving of sub-interest
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.postInterest.validateParams,
+    handlers.postInterest.logic,
+    handlers.postInterest.response);
+
+  apiRouter.delete('/interest/:interestId', // remove of sub-interest
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.removeInterest.validateParams,
+    handlers.removeInterest.logic,
+    handlers.removeInterest.response);
 }
 
 module.exports = interestApi;
