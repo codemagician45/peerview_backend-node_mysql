@@ -42,7 +42,6 @@ function validateParams (req, res, next) {
 }
 
 function removeInterest (req, res, next) {
-  let user = req.$scope.user;
   let interestId = req.$params.interestId;
 
   return req.db.interest.destroy({
