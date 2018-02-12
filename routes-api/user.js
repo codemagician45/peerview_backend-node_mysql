@@ -56,6 +56,17 @@ function userApi (apiRouter) {
     handlers.user.getUserTimeline.getCommunityPosts,
     handlers.user.getUserTimeline.response);
 
+  apiRouter.get('/user/followee',
+    lib.isTokenExist.user,
+    handlers.user.getUserFollowee.logic,
+    handlers.user.getUserFollowee.response);
+
+
+  apiRouter.get('/user/follower',
+    lib.isTokenExist.user,
+    handlers.user.getUserFollower.logic,
+    handlers.user.getUserFollower.response);
+
   apiRouter.post('/user/:postToId/post',
     lib.params,
     lib.isTokenExist.user,
@@ -180,7 +191,7 @@ function userApi (apiRouter) {
     handlers.user.updateUserProfilePicture.logic,
     handlers.user.updateUserProfilePicture.response);
 
-  apiRouter.put('/user/:userId/security',
+  apiRouter.put('/user/security',
     lib.params,
     lib.isTokenExist.user,
     handlers.user.updateUserSecurity.validateParams,
