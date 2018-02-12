@@ -21,30 +21,30 @@ function validateParams (req, res, next) {
     protectPost: {
       notEmpty: {
         errorMessage: 'Missing Resource: Protect Post'
+      },
+      isBoolean: {
+        errorMessage: 'Invalid Resource: Protect Post'
       }
     },
     userPrivacyId: {
       notEmpty: {
         errorMessage: 'Missing Resource: User Privacy Id'
+      },
+      isInt: {
+        errorMessage: 'Invalid Resource: User Privacy Id'
       }
     },
     profilePrivacy: {
       notEmpty: {
         errorMessage: 'Missing Resource: Profile Privacy'
-      }
-    }
-  };
-
-  let paramsSchema = {
-    userId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: User Id Params'
+      },
+      isBoolean: {
+        errorMessage: 'Invalid Resource: Profile Privacy'
       }
     }
   };
 
   req.checkBody(bodySchema);
-  req.checkParams(paramsSchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -61,7 +61,7 @@ function validateParams (req, res, next) {
 }
 
 function updateUserSecurity (req, res, next) {
-  let userId = req.$params.userId;
+  let user = req.$scope.user;
   let protectPost = req.$params.protectPost;
   let userPrivacyId = req.$params.userPrivacyId;
   let profilePrivacy = req.$params.profilePrivacy;
@@ -73,7 +73,7 @@ function updateUserSecurity (req, res, next) {
   }, {
     where: {
       id: {
-        [req.Op.eq]: userId
+        [req.Op.eq]: user.id
       }
     }
   })
