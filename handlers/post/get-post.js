@@ -58,6 +58,8 @@ function getPost (req, res, next) {
       [sequelize.fn('COUNT',
         sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
       [sequelize.fn('COUNT',
+        sequelize.col(['postReply', 'userId'].join('.'))), 'postReplyCount'],
+      [sequelize.fn('COUNT',
         sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
       [sequelize.fn('COUNT',
         sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount']
@@ -65,7 +67,7 @@ function getPost (req, res, next) {
     include: [{
       model: req.db.user,
       as: 'user',
-      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture']
     }, {
       model: req.db.postRating,
       as: 'postRating',
