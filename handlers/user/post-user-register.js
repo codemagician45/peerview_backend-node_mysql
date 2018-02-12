@@ -210,7 +210,7 @@ function sendEmail (req, res, next) {
 
   let values = {
     name: name,
-    verifyEmailUrl: `${config.frontEnd.baseUrl}/verify-email/${jotToken}?token=${token}`
+    verifyEmailUrl: `${config.frontEnd.baseUrl}/user/verify-email?jotToken=${jotToken}&token=${token}`
   };
 
   lib.pug.convert(file, values)
