@@ -57,6 +57,7 @@ function getPosts (req, res, next) {
 
   return req.db.post.findAll({
     attributes: [
+      'id',
       'message',
       'title',
       'createdAt',
