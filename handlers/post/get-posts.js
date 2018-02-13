@@ -59,7 +59,7 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getPosts (req, res, next) {
-  let user = req.$scoper.user;
+  let user = req.$scope.user;
   let offset = lib.utils.returnValue(req.$params.offset);
   let limit = lib.utils.returnValue(req.$params.limit);
   const sequelize = req.db.postRating.sequelize;
