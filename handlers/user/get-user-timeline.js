@@ -72,7 +72,9 @@ function getPosts (req, res, next) {
       [sequelize.fn('COUNT',
         sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount']
+        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount'],
+      [sequelize.fn('COUNT', 
+        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)), 'isUserLike']
     ],
     include: [{
       model: req.db.user,
