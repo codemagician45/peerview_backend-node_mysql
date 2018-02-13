@@ -49,6 +49,7 @@ function validateParams (req, res, next) {
 }
 
 function getPosts (req, res, next) {
+  let user = req.$scoper.user;
   let offset = lib.utils.returnValue(req.$params.offset);
   let limit = lib.utils.returnValue(req.$params.limit);
   const sequelize = req.db.postRating.sequelize;
@@ -71,9 +72,10 @@ function getPosts (req, res, next) {
       [sequelize.fn('COUNT',
         sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount']
+        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount'],
       [sequelize.fn('COUNT',
-        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)), 'isUserLike']
+        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)),
+      'isUserLike']
     ],
     include: [{
       model: req.db.user,

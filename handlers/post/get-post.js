@@ -42,6 +42,7 @@ function validateParams (req, res, next) {
 }
 
 function getPost (req, res, next) {
+  let user = req.$scoper.user;
   let postId = req.$params.postId;
   const sequelize = req.db.postRating.sequelize;
   const colRating = sequelize.col(['postRating', 'rating'].join('.'));
@@ -63,9 +64,10 @@ function getPost (req, res, next) {
       [sequelize.fn('COUNT',
         sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount']
+        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount'],
       [sequelize.fn('COUNT',
-        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)), 'isUserLike']
+        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)),
+      'isUserLike']
     ],
     include: [{
       model: req.db.user,
