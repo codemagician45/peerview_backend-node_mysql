@@ -44,6 +44,16 @@ function validateParams (req, res, next) {
   });
 }
 
+/**
+ * This would be the fallback if the user existed
+ * @see {@link lib/isUserTokenExist}
+ * @see isUserTokenExist
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
 function getPostCategoryId (req, res, next) {
   let categoryCode = req.$params.categoryCode;
 

@@ -2,7 +2,9 @@
 
 /**
  * @author Jo-Ries Canino
- * @description Get Post Rating
+ * @description Remove Post Like
+ * Which includes the unlike of a post
+ * after a user like the post
  */
 
 const lib = require('../../lib');
@@ -19,8 +21,8 @@ const lib = require('../../lib');
 function validateParams (req, res, next) {
   let paramsSchema = {
     postId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Post Id Params'
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Id'
       }
     }
   };
@@ -51,27 +53,25 @@ function validateParams (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function getPostRating (req, res, next) {
+function removePostLike (req, res, next) {
+  let user = req.$scope.user;
   let postId = req.$params.postId;
-  const sequelize = req.db.postRating.sequelize;
-  const colRating = sequelize.col('rating');
-  const colAVG = sequelize.fn('AVG', colRating);
 
-  return req.db.postRating.findOne({
-    attributes: [
-      [sequelize.fn('COUNT', sequelize.col('userId')), 'ratingCount'],
-      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating']
-    ],
+  return req.db.postLike.destroy({
     where: {
-      postId: {
-        [req.Op.eq]: postId
+      [req.Op.and]: {
+        postId: {
+          [req.Op.eq]: postId
+        },
+        userId: {
+          [req.Op.eq]: user.id
+        }
       }
     }
   })
-  .then(postRating => {
-    req.$scope.postRating = postRating;
+  .then(postLike => {
     next();
-    return postRating;
+    return postLike;
   })
   .catch(error => {
     res.status(500)
@@ -79,7 +79,7 @@ function getPostRating (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'postRating.findAll Error - get-post-rating');
+    }, 'postLike.destroy Error - remove-post-like');
   });
 }
 
@@ -90,17 +90,15 @@ function getPostRating (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let postRating = req.$scope.postRating;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 200,
-    postRating: postRating
+    http_code: 200
   };
 
   res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = getPostRating;
+module.exports.logic = removePostLike;
 module.exports.response = response;

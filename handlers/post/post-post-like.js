@@ -43,7 +43,6 @@ function validateParams (req, res, next) {
 
 /**
  * This would be the fallback if the user existed
- * In which if the user is still unverified
  * @see {@link lib/isUserTokenExist}
  * @see isUserTokenExist
  * @param {any} req request object
