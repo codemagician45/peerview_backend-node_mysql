@@ -85,7 +85,10 @@ function getPosts (req, res, next) {
         sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount'],
       [sequelize.fn('COUNT',
         sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)),
-      'isUserLike']
+      'isUserPostLike'],
+      [sequelize.fn('COUNT',
+        sequelize.where(sequelize.col(['postShare', 'userId'].join('.')), user.id)),
+      'isUserPostShare']
     ],
     include: [{
       model: req.db.user,
@@ -120,7 +123,7 @@ function getPosts (req, res, next) {
       model: req.db.attachment,
       attributes: ['id', 'usage', 'cloudinaryPublicId']
     }],
-    group: ['post.id'],
+    group: ['post.id', 'postReply.id'],
     order: [['createdAt', 'DESC']],
     where: {
       postTo: {
