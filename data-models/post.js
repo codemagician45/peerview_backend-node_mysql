@@ -57,5 +57,39 @@ module.exports = function (sequelize, dataTypes) {
     });
   };
 
+  Post.prototype.getPOSTREPLY = async function (posts, model) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await post
+      .getPostReply({
+        limit: 5,
+        attributes: ['comment', 'createdAt'],
+        include: [{
+          model: model.user,
+          attributes: ['id', 'firstName', 'lastName', 'email']
+        }],
+        order: [['createdAt', 'DESC']]
+      });
+
+      post.dataValues.postReply = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
+  Post.prototype.getATTACHMENTS = async function (posts) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await post
+      .getAttachments({
+        attributes: ['id', 'usage', 'cloudinaryPublicId']
+      });
+
+      post.dataValues.attachments = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
   return Post;
 };
