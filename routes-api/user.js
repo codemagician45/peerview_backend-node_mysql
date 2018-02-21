@@ -25,6 +25,13 @@ function userApi (apiRouter) {
     handlers.user.getUserInterests.logic,
     handlers.user.getUserInterests.response);
 
+  apiRouter.get('/user/peers-list',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.getUserPeersList.getUserCourse,
+    handlers.user.getUserPeersList.logic,
+    handlers.user.getUserPeersList.response);
+
   apiRouter.get('/user/:userId/info',
     lib.params,
     lib.isTokenExist.user,
@@ -61,8 +68,7 @@ function userApi (apiRouter) {
     handlers.user.getUserFollowee.logic,
     handlers.user.getUserFollowee.response);
 
-
-  apiRouter.get('/user/follower',
+  apiRouter.get('/user/followers',
     lib.isTokenExist.user,
     handlers.user.getUserFollower.logic,
     handlers.user.getUserFollower.response);
