@@ -31,10 +31,10 @@ function getUserFollower (req, res, next) {
       }
     }
   })
-  .then(follower => {
-    req.$scope.follower = follower;
+  .then(followers => {
+    req.$scope.followers = followers;
     next();
-    return follower;
+    return followers;
   })
   .catch(error => {
     res.status(500)
@@ -53,12 +53,12 @@ function getUserFollower (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let follower = req.$scope.follower;
+  let followers = req.$scope.followers;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    follower: follower
+    followers: followers
   };
 
   res.status(200).send(body);
