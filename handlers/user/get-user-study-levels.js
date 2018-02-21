@@ -20,10 +20,10 @@ const lib = require('../../lib');
  */
 function getUserStudyLevels (req, res, next) {
   return req.db.userStudyLevel.findAll({})
-  .then(userStudyLevel => {
-    req.$scope.userStudyLevel = userStudyLevel;
+  .then(userStudyLevels => {
+    req.$scope.userStudyLevels = userStudyLevels;
     next();
-    return userStudyLevel;
+    return userStudyLevels;
   })
   .catch(error => {
     res.status(500)
@@ -42,12 +42,12 @@ function getUserStudyLevels (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let userStudyLevel = req.$scope.userStudyLevel;
+  let userStudyLevels = req.$scope.userStudyLevels;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    userStudyLevel: userStudyLevel
+    userStudyLevels: userStudyLevels
   };
 
   res.status(200).send(body);
