@@ -97,11 +97,7 @@ function getPost (req, res, next) {
     }, {
       model: req.db.postReply,
       as: 'postReply',
-      attributes: ['comment', 'createdAt'],
-      include: [{
-        model: req.db.user,
-        attributes: ['id', 'firstName', 'lastName', 'email']
-      }]
+      attributes: [],
     }, {
       model: req.db.postPageview,
       as: 'postPageview',
@@ -113,19 +109,23 @@ function getPost (req, res, next) {
       attributes: []
     }, {
       model: req.db.attachment,
-      attributes: ['id', 'usage', 'cloudinaryPublicId']
+      attributes: []
     }],
-    group: ['post.id', 'postReply.id'],
+    group: ['id'],
     where: {
       id: {
         [req.Op.eq]: postId
       }
     }
   })
-  .then(post => {
-    req.$scope.post = post[0];
+  .then((posts) => {
+    return req.db.post.prototype.getPOSTREPLY(posts, req.db)
+    .then(() => req.db.post.prototype.getATTACHMENTS(posts));
+  })
+  .then((posts) => {
+    req.$scope.posts = posts;
     next();
-    return post;
+    return posts;
   })
   .catch(error => {
     res.status(500)

@@ -105,11 +105,7 @@ function getPosts (req, res, next) {
     }, {
       model: req.db.postReply,
       as: 'postReply',
-      attributes: ['comment', 'createdAt'],
-      include: [{
-        model: req.db.user,
-        attributes: ['id', 'firstName', 'lastName', 'email']
-      }]
+      attributes: []
     }, {
       model: req.db.postPageview,
       as: 'postPageview',
@@ -121,20 +117,24 @@ function getPosts (req, res, next) {
       attributes: []
     }, {
       model: req.db.attachment,
-      attributes: ['id', 'usage', 'cloudinaryPublicId']
+      attributes: []
     }],
-    group: ['post.id', 'postReply.id'],
-    order: [['createdAt', 'DESC']],
     where: {
       postTo: {
         [req.Op.eq]: null
       }
     },
+    group: ['id'],
+    order: [['createdAt', 'DESC']],
     subQuery: false,
     offset: !offset ? 0 : parseInt(offset),
     limit: !limit ? 10 : parseInt(limit)
   })
-  .then(posts => {
+  .then((posts) => {
+    return req.db.post.prototype.getPOSTREPLY(posts, req.db)
+    .then(() => req.db.post.prototype.getATTACHMENTS(posts));
+  })
+  .then((posts) => {
     req.$scope.posts = posts;
     next();
     return posts;

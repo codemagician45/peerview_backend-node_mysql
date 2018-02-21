@@ -62,7 +62,8 @@ function getPosts (req, res, next) {
       'id',
       'message',
       'title',
-      'createdAt', [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
+      'createdAt',
+      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
         sequelize.col(['postRating', 'userId'].join('.'))), 'ratingCount'],
       [sequelize.fn('COUNT',
@@ -75,7 +76,10 @@ function getPosts (req, res, next) {
         sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount'],
       [sequelize.fn('COUNT',
         sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)),
-      'isUserLike']
+      'isUserLike'],
+      [sequelize.fn('COUNT',
+        sequelize.where(sequelize.col(['postShare', 'userId'].join('.')), user.id)),
+      'isUserPostShare']
     ],
     include: [{
       model: req.db.user,
@@ -92,26 +96,20 @@ function getPosts (req, res, next) {
     }, {
       model: req.db.postReply,
       as: 'postReply',
-      attributes: ['comment', 'createdAt'],
-      include: [{
-        model: req.db.user,
-        attributes: ['id', 'firstName', 'lastName', 'email']
-      }]
+      attributes: []
     }, {
       model: req.db.postPageview,
       as: 'postPageview',
       attributes: []
-    }, {
+    }, {// just to get the isUserPostShare but basically there are no share in profile
       model: req.db.post,
       foreignKey: 'sharePostId',
       as: 'postShare',
       attributes: []
     }, {
       model: req.db.attachment,
-      attributes: ['id', 'usage', 'cloudinaryPublicId']
+      attributes: []
     }],
-    group: ['post.id'],
-    order: [['createdAt', 'DESC']],
     where: {
       [req.Op.or]: [{
         userId: {
@@ -124,10 +122,16 @@ function getPosts (req, res, next) {
       }]
     },
     subQuery: false,
+    group: ['post.id'],
+    order: [['createdAt', 'DESC']],
     offset: !offset ? 0 : parseInt(offset),
-    limit: !limit ? 10 / 2 : parseInt(limit) / 2
+    limit: !limit ? 10 : parseInt(limit)
   })
-  .then(posts => {
+  .then((posts) => {
+    return req.db.post.prototype.getPOSTREPLY(posts, req.db)
+    .then(() => req.db.post.prototype.getATTACHMENTS(posts));
+  })
+  .then((posts) => {
     req.$scope.posts = posts;
     next();
     return posts;
@@ -152,7 +156,9 @@ function getCommunityPosts (req, res, next) {// eslint-disable-line id-length
 
   return req.db.communityPost.findAll({
     attributes: [
+      'id',
       'message',
+      'title',
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
       [sequelize.fn('COUNT',
@@ -160,11 +166,14 @@ function getCommunityPosts (req, res, next) {// eslint-disable-line id-length
       [sequelize.fn('COUNT',
         sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount']
+        sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
+      [sequelize.fn('COUNT',
+        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)),
+      'isUserPostLike']
     ],
     include: [{
       model: req.db.user,
-      attributes: ['id', 'firstName', 'lastName', 'email']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture']
     }, {
       model: req.db.communityPostRating,
       as: 'postRating',
@@ -185,6 +194,9 @@ function getCommunityPosts (req, res, next) {// eslint-disable-line id-length
         model: req.db.user,
         attributes: ['id', 'firstName', 'lastName', 'email']
       }]
+    }, {
+      model: req.db.attachment,
+      attributes: ['id', 'usage', 'cloudinaryPublicId']
     }],
     where: {
       [req.Op.and]: {
@@ -196,11 +208,11 @@ function getCommunityPosts (req, res, next) {// eslint-disable-line id-length
         }
       }
     },
-    group: ['communityPost.id'],
+    group: ['communityPost.id', 'postReply.id'],
     order: [['createdAt', 'DESC']],
     subQuery: false,
     offset: !offset ? 0 : parseInt(offset),
-    limit: !limit ? 10 / 2 : parseInt(limit) / 2
+    limit: !limit ? 10 : parseInt(limit)
   })
   .then(communityPosts => {
     req.$scope.communityPosts = communityPosts;
