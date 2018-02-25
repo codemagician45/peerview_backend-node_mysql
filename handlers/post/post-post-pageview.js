@@ -53,7 +53,7 @@ function validateParams (req, res, next) {
  */
 function postPostPageview (req, res, next) {
   let user = req.$scope.user;
-  let postId = req.$scope.postId;
+  let postId = req.$params.postId;
 
   return req.db.postPageview.create({
     user: user.id,
