@@ -118,7 +118,7 @@ function getPost (req, res, next) {
     .then(() => req.db.post.prototype.getATTACHMENTS(posts));
   })
   .then((posts) => {
-    req.$scope.posts = posts;
+    req.$scope.post = posts[0];
     next();
     return posts;
   })
@@ -144,7 +144,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    post: !post ? null : post
+    post: post
   };
 
   res.status(200).send(body);
