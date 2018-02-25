@@ -230,12 +230,12 @@ function savePostPollOption (req, res, next) {// eslint-disable-line id-length
  * @returns {any} body response object
  */
 function response (req, res) {
-  let postId = req.$scope.post.id;
+  let post = req.$scope.post;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 201,
-    postId: postId
+    postId: post.id
   };
 
   res.status(201).send(body);

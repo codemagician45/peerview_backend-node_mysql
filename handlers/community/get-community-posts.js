@@ -163,7 +163,7 @@ function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-le
     ],
     include: [{
       model: req.db.user,
-      attributes: ['id', 'firstName', 'lastName', 'email']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture']
     }, {
       model: req.db.communityPostRating,
       as: 'postRating',
@@ -185,7 +185,7 @@ function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-le
         attributes: ['id', 'firstName', 'lastName', 'email']
       }]
     }],
-    group: ['communityPost.id'],
+    group: ['communityPost.id', 'postReply.id'],
     order: [['createdAt', 'DESC']],
     where: {
       communityId: {
@@ -256,6 +256,7 @@ function getCommunityPosts (req, res, next) {
 
   return req.db.communityPost.findAll({
     attributes: [
+      'id',
       'message',
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
@@ -268,7 +269,7 @@ function getCommunityPosts (req, res, next) {
     ],
     include: [{
       model: req.db.user,
-      attributes: ['id', 'firstName', 'lastName', 'email']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'profilePicture']
     }, {
       model: req.db.communityPostRating,
       as: 'postRating',

@@ -1,3 +1,4 @@
+/*eslint-disable max-len*/
 'use strict';
 
 /**
@@ -59,7 +60,6 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getPosts (req, res, next) {
-  let user = req.$scope.user;
   let offset = lib.utils.returnValue(req.$params.offset);
   let limit = lib.utils.returnValue(req.$params.limit);
   const sequelize = req.db.postRating.sequelize;
@@ -67,29 +67,26 @@ function getPosts (req, res, next) {
   const colAVG = sequelize.fn('AVG', colRating);
 
   return req.db.post.findAll({
-    attributes: [
-      'id',
-      'message',
-      'title',
-      'createdAt',
-      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postRating', 'userId'].join('.'))), 'ratingCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postReply', 'userId'].join('.'))), 'postReplyCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount'],
-      [sequelize.fn('COUNT',
-        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)),
-      'isUserPostLike'],
-      [sequelize.fn('COUNT',
-        sequelize.where(sequelize.col(['postShare', 'userId'].join('.')), user.id)),
-      'isUserPostShare']
-    ],
+    attributes: {
+      include: [
+        'id',
+        'message',
+        'title',
+        'createdAt',
+        [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postRating.id'))), 'ratingCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postReply.id'))), 'postReplyCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postLike.id'))), 'likeCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postPageview.id'))), 'pageviewCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postShare.id'))), 'shareCount'],
+        [sequelize.fn('COUNT',
+          sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postLike.id')))),
+        'isUserPostLike'],
+        [sequelize.fn('COUNT',
+          sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postShare.id')))),
+        'isUserPostShare']
+      ]
+    },
     include: [{
       model: req.db.user,
       as: 'user',
@@ -124,7 +121,7 @@ function getPosts (req, res, next) {
         [req.Op.eq]: null
       }
     },
-    group: ['id'],
+    group: ['post.id'],
     order: [['createdAt', 'DESC']],
     subQuery: false,
     offset: !offset ? 0 : parseInt(offset),

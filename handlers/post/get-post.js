@@ -1,3 +1,4 @@
+/*eslint-disable max-len*/
 'use strict';
 
 /**
@@ -52,7 +53,6 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getPost (req, res, next) {
-  let user = req.$scope.user;
   let postId = req.$params.postId;
   const sequelize = req.db.postRating.sequelize;
   const colRating = sequelize.col(['postRating', 'rating'].join('.'));
@@ -65,21 +65,16 @@ function getPost (req, res, next) {
       'title',
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
+      [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postRating.id'))), 'ratingCount'],
+      [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postReply.id'))), 'postReplyCount'],
+      [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postLike.id'))), 'likeCount'],
+      [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postPageview.id'))), 'pageviewCount'],
+      [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postShare.id'))), 'shareCount'],
       [sequelize.fn('COUNT',
-        sequelize.col(['postRating', 'userId'].join('.'))), 'ratingCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postLike', 'userId'].join('.'))), 'likeCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postReply', 'userId'].join('.'))), 'postReplyCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postPageview', 'userId'].join('.'))), 'pageviewCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['postShare', 'sharePostId'].join('.'))), 'shareCount'],
-      [sequelize.fn('COUNT',
-        sequelize.where(sequelize.col(['postLike', 'userId'].join('.')), user.id)),
+        sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postLike.id')))),
       'isUserPostLike'],
       [sequelize.fn('COUNT',
-        sequelize.where(sequelize.col(['postShare', 'userId'].join('.')), user.id)),
+        sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postShare.id')))),
       'isUserPostShare']
     ],
     include: [{

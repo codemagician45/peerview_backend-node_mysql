@@ -49,6 +49,7 @@ function getCommunityPost (req, res, next) {
 
   return req.db.communityPost.findAll({
     attributes: [
+      'id',
       'message',
       'createdAt',
       [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
@@ -61,7 +62,7 @@ function getCommunityPost (req, res, next) {
     ],
     include: [{
       model: req.db.user,
-      attributes: ['id', 'firstName', 'lastName', 'email']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture']
     }, {
       model: req.db.communityPostRating,
       as: 'postRating',
@@ -83,7 +84,7 @@ function getCommunityPost (req, res, next) {
         attributes: ['id', 'firstName', 'lastName', 'email']
       }]
     }],
-    group: ['communityPost.id'],
+    group: ['communityPost.id', 'postReply.id'],
     where: {
       id: {
         [req.Op.eq]: communityPostId
