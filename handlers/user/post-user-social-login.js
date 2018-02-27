@@ -20,6 +20,11 @@ function validateParams (req, res, next) {
         errorMessage: 'Missing Resource: Last Name'
       }
     },
+    image: {// profile image in social login
+      notEmpty: {
+        errorMessage: 'Missing Resource: Image'
+      }
+    },
     email: {
       notEmpty: {
         errorMessage: 'Missing Resource: Email'
@@ -28,14 +33,14 @@ function validateParams (req, res, next) {
         errorMessage: 'Invalid Resource: Email'
       }
     },
-    socialId: {
+    uid: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Social Id'
+        errorMessage: 'Missing Resource: UID'
       }
     },
-    type: {
+    provider: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Type'
+        errorMessage: 'Missing Resource: Provider'
       }
     }
   };
@@ -67,18 +72,18 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function findUser (req, res, next) {
-  let typeParam = req.$params.type;
+  let provider = req.$params.provider;
   let email = req.$params.email;
   let query = {};
 
-  if (typeParam === 'facebookid') {
-    query.facebookId = req.$params.socialId;
+  if (provider === 'facebook') {
+    query.facebookId = req.$params.uid;
     req.$scope.social = 'facebookId';
-  } else if (typeParam === 'linkedINid') {
-    query.linkedinId = req.$params.socialId;
+  } else if (provider === 'linkedIN') {
+    query.linkedinId = req.$params.uid;
     req.$scope.social = 'linkedinId';
-  } else if (typeParam === 'googleid') {
-    query.googleId = req.$params.socialId;
+  } else if (provider === 'google') {
+    query.googleId = req.$params.uid;
     req.$scope.social = 'googleId';
   }
 
@@ -122,12 +127,14 @@ function saveOrUpdateUser (req, res, next) {
   let firstName = req.$params.firstName;
   let lastName = req.$params.lastName;
   let email = req.$params.email;
+  let image = req.$params.image;
   let token = randomstring.generate();
 
   let create = {
     firstName: firstName,
     lastName: lastName,
     email: email,
+    socialImage: image,
     token: token
   };
 
