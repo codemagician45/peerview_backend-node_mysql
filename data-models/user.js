@@ -37,9 +37,12 @@ module.exports = function (sequelize, dataTypes) {
     isSuspended: {
       type: dataTypes.BOOLEAN
     },
-    profilePicture: {
+    profilePicture: {// use in local sign-up
       type: dataTypes.STRING,
       defaultValue: 'avatar'
+    },
+    socialImage: {// use this when sign-up using social
+      type: dataTypes.STRING,
     },
     profilePrivacy: {// direct Message
       type: dataTypes.BOOLEAN,
