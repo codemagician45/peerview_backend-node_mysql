@@ -11,11 +11,11 @@ function interestApi (apiRouter) {
     handlers.getInterest.logic,
     handlers.getInterest.response);
 
-  apiRouter.get('/interest', // category interest
+  apiRouter.get('/interests', // category interest
     lib.params,
     lib.isTokenExist.user,
-    handlers.getInterestCategory.logic,
-    handlers.getInterestCategory.response);
+    handlers.getInterestsCategory.logic,
+    handlers.getInterestsCategory.response);
 
   apiRouter.post('/interest/:interestCategoryId', // saving of sub-interest
     lib.params,
