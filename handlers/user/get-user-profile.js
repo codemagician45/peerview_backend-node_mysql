@@ -8,12 +8,18 @@
 const lib = require('../../lib');
 
 function getUserProfile (req, res, next) {
-  let user = req.$scope.user;
+  /**
+   * Basically check if we have req.$params.userId
+   * if we are getting timeline of a certain user
+   * or getting the timeline of particular userId
+   */
+
+  let userId = req.$params.userId || req.$scope.user.id;
 
   return req.db.user.findOne({
     where: {
       id: {
-        [req.Op.eq]: user.id
+        [req.Op.eq]: userId
       }
     }
   })
