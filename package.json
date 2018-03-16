@@ -6,7 +6,8 @@
     "dev": "NODE_ENV=development node index.js",
     "lint-check": "$(npm bin)/eslint .",
     "add-hooks": "cp tool/hooks/pre-commit .git/hooks && chmod +x .git/hooks/pre-commit",
-    "db-sync": "node -pe \"require('./lib/db').sync({force: true}).then(process.exit)\";"
+    "db-sync": "node -pe \"require('./lib/db').sync({force: true}).then(process.exit)\";",
+    "pm2-prod": "$(npm bin)/pm2 start index.js -o ~/LOGS/.peersviewapioutput -e ~/LOGS/.peersviewapierror --name PEERSVIEW -i"
   },
   "dependencies": {
     "@sendgrid/mail": "6.1.4",
@@ -40,6 +41,7 @@
     "passport-facebook": "2.1.1",
     "passport-google-oauth2": "0.1.6",
     "passport-linkedin-oauth2": "1.5.0",
+    "pm2": "2.10.1",
     "promise": "8.0.1",
     "pug": "2.0.0-rc.4",
     "randomstring": "1.1.5",
