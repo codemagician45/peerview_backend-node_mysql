@@ -79,6 +79,12 @@ function validateParams (req, res, next) {
           errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
         }
       },
+      postTo: {
+        optional: true,
+        isInt: {
+          errorMessage: 'Invalid Resource: postTo'
+        }
+      },
       attachments: {
         optional: true,
         isArrayNotEmpty: {
@@ -123,13 +129,15 @@ function postPost (req, res, next) {
   let title = req.$params.title;
   let question = req.$params.question;
   let duration = req.$params.duration;
+  let postTo = req.$params.postTo;
 
   return req.db.post.create({
     userId: user.id,
     message: message,
     title: title,
     question: question,
-    duration: duration
+    duration: duration,
+    postTo: postTo
   })
   .then(post => {
     req.$scope.post = post;
