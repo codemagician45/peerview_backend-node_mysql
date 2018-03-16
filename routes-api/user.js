@@ -11,6 +11,7 @@ function userApi (apiRouter) {
     handlers.user.getUsers.response);
 
   apiRouter.get('/user/profile',
+    lib.params,
     lib.isTokenExist.user,
     handlers.user.getUserProfile.logic,
     handlers.user.getUserProfile.response);
