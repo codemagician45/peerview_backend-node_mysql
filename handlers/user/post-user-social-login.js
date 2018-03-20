@@ -142,7 +142,7 @@ function saveOrUpdateUser (req, res, next) {
    * @description - The value of req.$scope.social
    * @param {facebook_id|linkedin_id|google_id} req.$scope.social string
    */
-  create[req.$scope.social] = req.$params.socialId;
+  create[req.$scope.social] = req.$params.uid;
 
   if (!user) {
     return req.db.user.create(create)
