@@ -85,7 +85,8 @@ function getPosts (req, res, next) {
         'isUserPostLike'],
         [sequelize.fn('COUNT',
           sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postShare.userId'), user.id))), //check this if it is working or not
-        'isUserPostShare']
+        'isUserPostShare'],
+        [sequelize.where(sequelize.col('post.userId'), user.id), 'isPostUser']
       ]
     },
     include: [{

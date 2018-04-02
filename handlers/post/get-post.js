@@ -53,6 +53,7 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getPost (req, res, next) {
+  let user = req.$scope.user;
   let postId = req.$params.postId;
   const sequelize = req.db.postRating.sequelize;
   const colRating = sequelize.col(['postRating', 'rating'].join('.'));
@@ -75,7 +76,8 @@ function getPost (req, res, next) {
       'isUserPostLike'],
       [sequelize.fn('COUNT',
         sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postShare.id')))),
-      'isUserPostShare']
+      'isUserPostShare'],
+      [sequelize.where(sequelize.col('post.userId'), user.id), 'isPostUser']
     ],
     include: [{
       model: req.db.user,
