@@ -100,6 +100,13 @@ function postApi (apiRouter) {
     handlers.post.removePostLike.validateParams,
     handlers.post.removePostLike.logic,
     handlers.post.removePostLike.response);
+
+  apiRouter.delete('/post/:postId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.post.removePost.validateParams,
+    handlers.post.removePost.logic,
+    handlers.post.removePost.response);
 }
 
 module.exports = postApi;
