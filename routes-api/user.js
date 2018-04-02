@@ -205,6 +205,27 @@ function userApi (apiRouter) {
     handlers.user.updateUserSecurity.logic,
     handlers.user.updateUserSecurity.response);
 
+  apiRouter.put('/user/name',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.updateUserName.validateParams,
+    handlers.user.updateUserName.logic,
+    handlers.user.updateUserName.response);
+
+  apiRouter.put('/user/email',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.updateUserEmail.validateParams,
+    handlers.user.updateUserEmail.logic,
+    handlers.user.updateUserEmail.response);
+
+  apiRouter.put('/user/language',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.updateUserLanguage.validateParams,
+    handlers.user.updateUserLanguage.logic,
+    handlers.user.updateUserLanguage.response);
+
   apiRouter.delete('/user/:userId/follow',
     lib.params,
     lib.isTokenExist.user,
