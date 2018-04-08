@@ -17,6 +17,12 @@ function getUserProfile (req, res, next) {
   let userId = req.$params.userId || req.$scope.user.id;
 
   return req.db.user.findOne({
+    include: [{
+      model: req.db.userInterest,
+      include: [{
+        model: req.db.interest
+      }]
+    }],
     where: {
       id: {
         [req.Op.eq]: userId
