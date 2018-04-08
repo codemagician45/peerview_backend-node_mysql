@@ -37,28 +37,40 @@ function getUserCourse (req, res, next) {
 
 function getPeerslist (req, res, next) {
   let user = req.$scope.user;
-  let userCourse = req.$scope.userCourse;
-  let gender = 'male';
+  // let userCourse = req.$scope.userCourse;
+  // let gender = 'male';
 
   if (user.gender && user.gender.toLowerCase() === 'male') {
     gender = 'female';
   }
 
-  userCourse = userCourse.map(course => course.courseId);
-  return req.db.user.findAll({
-    include: [{
-      model: req.db.userCourse,
-      attributes: [],
+  /*
+    Change of logic we will use the below
+    commented code when we have many users
+    return req.db.user.findAll({
+      include: [{
+        model: req.db.userCourse,
+        attributes: [],
+        where: {
+          courseId: {
+            [req.Op.or]: userCourse
+          }
+        }
+      }],
       where: {
-        courseId: {
-          [req.Op.or]: userCourse
+        [req.Op.and]: {
+          city: user.city,
+          gender: gender
         }
       }
-    }],
+    })
+  */
+
+  userCourse = userCourse.map(course => course.courseId);
+  return req.db.user.findAll({
     where: {
-      [req.Op.and]: {
-        city: user.city,
-        gender: gender
+      id: {
+        [req.Op.ne]: user.id
       }
     }
   })
