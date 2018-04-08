@@ -40,9 +40,9 @@ function getPeerslist (req, res, next) {
   // let userCourse = req.$scope.userCourse;
   // let gender = 'male';
 
-  if (user.gender && user.gender.toLowerCase() === 'male') {
-    gender = 'female';
-  }
+  // if (user.gender && user.gender.toLowerCase() === 'male') {
+  //   gender = 'female';
+  // }
 
   /*
     Change of logic we will use the below
@@ -66,7 +66,7 @@ function getPeerslist (req, res, next) {
     })
   */
 
-  userCourse = userCourse.map(course => course.courseId);
+  // userCourse = userCourse.map(course => course.courseId);
   return req.db.user.findAll({
     where: {
       id: {
