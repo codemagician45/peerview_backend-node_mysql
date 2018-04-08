@@ -106,6 +106,7 @@ module.exports = function (sequelize, dataTypes) {
     this.hasMany(models.communityUsers);
     this.hasMany(models.communityUsers);
     this.hasMany(models.event);
+    this.hasMany(models.userInterest);
   };
 
   return User;
