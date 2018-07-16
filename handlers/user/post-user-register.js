@@ -201,7 +201,7 @@ function sendEmail (req, res, next) {
   let user = req.$scope.user;
   let token = req.$scope.token;
   let email = req.$params.email;
-  let name = `${req.$params.firstName} ${req.$params.lastName}`;
+  let name = `${req.$params.firstName}`;
   let file = templates.emailVerification;
 
   let jotToken = lib.jwt.encode({
