@@ -5,6 +5,12 @@ const handlers = require('../handlers');
 const lib = require('../lib');
 
 function campusApi (apiRouter) {
+  apiRouter.get('/campuses',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampuses.logic,
+    handlers.campus.getCampuses.response);
+
   apiRouter.get('/campus/:campusId/freshers-feed',
     lib.params,
     lib.isTokenExist.user,
