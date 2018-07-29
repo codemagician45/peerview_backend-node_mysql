@@ -258,9 +258,9 @@ function getCommunityPosts (req, res, next) { // eslint-disable-line id-length
  */
 function response (req, res) {
   let posts = req.$scope.posts;
-  let communityPosts = req.$scope.communityPosts;
-  posts = posts.concat(communityPosts);
-  _.orderBy(posts, ['createdAt'], ['desc']);
+  // let communityPosts = req.$scope.communityPosts;
+  // posts = posts.concat(communityPosts);
+  // _.orderBy(posts, ['createdAt'], ['desc']);
 
   let body = {
     status: 'SUCCESS',
