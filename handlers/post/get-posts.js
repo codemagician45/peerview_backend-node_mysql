@@ -117,6 +117,9 @@ function getPosts (req, res, next) {
     }, {
       model: req.db.attachment,
       attributes: []
+    }, {
+      model: req.db.postPollOption,
+      attributes: []
     }],
     where: {
       postTo: {
@@ -131,7 +134,8 @@ function getPosts (req, res, next) {
   })
   .then((posts) => {
     return req.db.post.prototype.getPOSTREPLY(posts, req.db)
-    .then(() => req.db.post.prototype.getATTACHMENTS(posts));
+    .then(() => req.db.post.prototype.getATTACHMENTS(posts))
+    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts));
   })
   .then((posts) => {
     req.$scope.posts = posts;
