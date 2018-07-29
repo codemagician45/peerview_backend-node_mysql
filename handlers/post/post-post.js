@@ -87,9 +87,6 @@ function validateParams (req, res, next) {
       },
       attachments: {
         optional: true,
-        isArrayNotEmpty: {
-          errorMessage: 'Missing Resource: Attachments'
-        },
         isArray: {
           errorMessage: 'Invalid Resource: Attachments'
         }
