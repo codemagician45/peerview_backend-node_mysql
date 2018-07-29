@@ -61,7 +61,6 @@ function userApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.user.getUserTimeline.validateParams,
     handlers.user.getUserTimeline.getPosts,
-    handlers.user.getUserTimeline.getCommunityPosts,
     handlers.user.getUserTimeline.response);
 
   apiRouter.get('/user/followee',
