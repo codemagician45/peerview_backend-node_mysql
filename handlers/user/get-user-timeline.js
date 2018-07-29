@@ -6,7 +6,6 @@
  * Log-in user from the home and community menu
  */
 
-const _ = require('lodash');
 const lib = require('../../lib');
 
 /**
