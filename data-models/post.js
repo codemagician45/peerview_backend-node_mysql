@@ -91,5 +91,19 @@ module.exports = function (sequelize, dataTypes) {
     return posts;
   };
 
+  Post.prototype.getPOSTPOLLOPTIONS = async function (posts) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await post
+      .getPostPollOptions({
+        attributes: ['id', 'name']
+      });
+
+      post.dataValues.postPollOptions = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
   return Post;
 };
