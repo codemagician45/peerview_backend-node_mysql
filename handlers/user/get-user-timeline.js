@@ -1,3 +1,4 @@
+/*eslint-disable max-len*/
 'use strict';
 
 /**
@@ -34,7 +35,7 @@ function validateParams (req, res, next) {
     userId: {
       optional: true,
       isInt: {
-        errorMessage: 'Invalid Resource: Limit'
+        errorMessage: 'Invalid Resource: User Id'
       }
     }
   };
@@ -68,31 +69,27 @@ function getPosts (req, res, next) {
   const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
 
+
   return req.db.post.findAll({
     attributes: {
       include: [
         'id',
         'message',
         'title',
-        'createdAt', [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
+        'createdAt',
+        [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postRating.id'))), 'ratingCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postReply.id'))), 'postReplyCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postLike.id'))), 'likeCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postPageview.id'))), 'pageviewCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postShare.id'))), 'shareCount'],
         [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT', sequelize.col('postRating.id'))), 'ratingCount'],
-        [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT', sequelize.col('postReply.id'))), 'postReplyCount'],
-        [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT', sequelize.col('postLike.id'))), 'likeCount'],
-        [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT', sequelize.col('postPageview.id'))), 'pageviewCount'],
-        [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT', sequelize.col('postShare.id'))), 'shareCount'],
-        [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT',
-            sequelize.where(sequelize.col('postLike.userId'), userId))), //check this if it is working or not
+          sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postLike.userId'), userId))), //check this if it is working or not
         'isUserPostLike'],
         [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT',
-            sequelize.where(sequelize.col('postShare.userId'), userId))), //check this if it is working or not
-        'isUserPostShare']
+          sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postShare.userId'), userId))), //check this if it is working or not
+        'isUserPostShare'],
+        [sequelize.where(sequelize.col('post.userId'), userId), 'isPostUser']
       ]
     },
     include: [{
@@ -115,13 +112,16 @@ function getPosts (req, res, next) {
       model: req.db.postPageview,
       as: 'postPageview',
       attributes: []
-    }, { // just to get the isUserPostShare but basically there are no share in profile
+    }, {
       model: req.db.post,
       foreignKey: 'sharePostId',
       as: 'postShare',
       attributes: []
     }, {
       model: req.db.attachment,
+      attributes: []
+    }, {
+      model: req.db.postPollOption,
       attributes: []
     }],
     where: {
@@ -135,17 +135,16 @@ function getPosts (req, res, next) {
         }
       }]
     },
-    subQuery: false,
     group: ['post.id'],
-    order: [
-      ['createdAt', 'DESC']
-    ],
+    order: [['createdAt', 'DESC']],
+    subQuery: false,
     offset: !offset ? 0 : parseInt(offset),
     limit: !limit ? 10 : parseInt(limit)
   })
   .then((posts) => {
     return req.db.post.prototype.getPOSTREPLY(posts, req.db)
-    .then(() => req.db.post.prototype.getATTACHMENTS(posts));
+    .then(() => req.db.post.prototype.getATTACHMENTS(posts))
+    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts));
   })
   .then((posts) => {
     req.$scope.posts = posts;
@@ -158,7 +157,7 @@ function getPosts (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'post.findAll Error - get-post');
+    }, 'post.findAll Error - get-user-timeline');
   });
 }
 
