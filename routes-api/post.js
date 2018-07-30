@@ -94,6 +94,14 @@ function postApi (apiRouter) {
     handlers.post.postPost.savePostPollOption,
     handlers.post.postPost.response);
 
+
+  apiRouter.post('/post/poll/:postPollOptionId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.post.postPollOptionVote.validateParams,
+    handlers.post.postPollOptionVote.logic,
+    handlers.post.postPollOptionVote.response);
+
   apiRouter.delete('/post/:postId/like',
     lib.params,
     lib.isTokenExist.user,

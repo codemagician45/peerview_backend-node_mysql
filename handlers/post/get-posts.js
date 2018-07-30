@@ -135,7 +135,7 @@ function getPosts (req, res, next) {
   .then((posts) => {
     return req.db.post.prototype.getPOSTREPLY(posts, req.db)
     .then(() => req.db.post.prototype.getATTACHMENTS(posts))
-    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts));
+    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts, req.db));
   })
   .then((posts) => {
     req.$scope.posts = posts;
