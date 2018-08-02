@@ -88,7 +88,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 201,
-    communityBrainstorming: communityBrainstorming
+    data: communityBrainstorming
   };
 
   res.status(201).send(body);

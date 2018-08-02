@@ -120,7 +120,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    campusSocietyClubs: campusSocietyClubs
+    data: campusSocietyClubs
   };
 
   res.status(200).send(body);

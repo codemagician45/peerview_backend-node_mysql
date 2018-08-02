@@ -37,37 +37,44 @@ function getUserCourse (req, res, next) {
 
 function getPeerslist (req, res, next) {
   let user = req.$scope.user;
-  let userCourse = req.$scope.userCourse;
-  let gender = 'male';
+  // let userCourse = req.$scope.userCourse;
+  // let gender = 'male';
+  //
+  // if (user.gender && user.gender.toLowerCase() === 'male') {
+  //   gender = 'female';
+  // }
 
-  if (user.gender && user.gender.toLowerCase() === 'male') {
-    gender = 'female';
-  }
+  // userCourse = userCourse.map(course => course.courseId);
+  // return req.db.user.findAll({ // will used when we have many users
+  //   include: [{
+  //     model: req.db.userCourse,
+  //     attributes: [],
+  //     where: {
+  //       courseId: {
+  //         [req.Op.or]: userCourse
+  //       }
+  //     }
+  //   }],
+  //   where: {
+  //     [req.Op.and]: {
+  //       city: user.city,
+  //       gender: gender,
+  //       id: {
+  //         [req.Op.ne]: user.id
+  //       }
+  //     }
+  //   }
+  // })
 
-  userCourse = userCourse.map(course => course.courseId);
   return req.db.user.findAll({
-    include: [{
-      model: req.db.userCourse,
-      attributes: [],
-      where: {
-        courseId: {
-          [req.Op.or]: userCourse
-        }
-      }
-    }],
     where: {
-      [req.Op.and]: {
-        city: user.city,
-        gender: gender,
-        id: {
-          [req.Op.ne]: user.id
-        }
+      id: {
+        [req.Op.ne]: user.id
       }
     }
   })
   .then(peersList => {
     req.$scope.peersList = peersList;
-    next();
     return next();
   })
   .catch(error => {
@@ -92,7 +99,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    peersList: peersList
+    data: peersList
   };
 
   res.status(200).send(body);

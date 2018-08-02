@@ -109,7 +109,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 201,
-    job: job
+    data: job
   };
 
   res.status(201).send(body);

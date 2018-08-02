@@ -135,7 +135,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    campusStudentGroups: campusStudentGroups
+    data: campusStudentGroups
   };
 
   res.status(200).send(body);

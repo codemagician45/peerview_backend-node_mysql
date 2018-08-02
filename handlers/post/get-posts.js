@@ -89,6 +89,7 @@ function getPosts (req, res, next) {
         [sequelize.where(sequelize.col('post.userId'), user.id), 'isPostUser']
       ]
     },
+    // include: [{all: true}],
     include: [{
       model: req.db.user,
       as: 'user',
@@ -116,7 +117,7 @@ function getPosts (req, res, next) {
       attributes: []
     }, {
       model: req.db.attachment,
-      attributes: []
+      attributes: ['id', 'cloudinaryPublicId']
     }, {
       model: req.db.postPollOption,
       attributes: []
@@ -126,7 +127,7 @@ function getPosts (req, res, next) {
         [req.Op.eq]: null
       }
     },
-    group: ['post.id'],
+    group: ['post.id', 'post.userId'],
     order: [['createdAt', 'DESC']],
     subQuery: false,
     offset: !offset ? 0 : parseInt(offset),
@@ -135,7 +136,8 @@ function getPosts (req, res, next) {
   .then((posts) => {
     return req.db.post.prototype.getPOSTREPLY(posts, req.db)
     .then(() => req.db.post.prototype.getATTACHMENTS(posts))
-    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts, req.db));
+    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts, req.db))
+    .then(() => req.db.post.prototype.getPOSTSHARE(posts, req));
   })
   .then((posts) => {
     req.$scope.posts = posts;
@@ -164,7 +166,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    posts: posts
+    data: posts
   };
 
   res.status(200).send(body);

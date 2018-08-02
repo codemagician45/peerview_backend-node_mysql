@@ -56,7 +56,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    interests: interests
+    data: interests
   };
 
   res.status(200).send(body);

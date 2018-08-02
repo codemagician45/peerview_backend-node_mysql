@@ -82,7 +82,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    courses: courses
+    data: courses
   };
 
   res.status(200)

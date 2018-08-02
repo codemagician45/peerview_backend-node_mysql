@@ -117,7 +117,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    eventPost: !eventPost ? null : eventPost
+    data: !eventPost ? null : eventPost
   };
 
   res.status(200).send(body);

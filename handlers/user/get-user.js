@@ -80,7 +80,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    user: user
+    data: user
   };
 
   res.status(200).send(body);

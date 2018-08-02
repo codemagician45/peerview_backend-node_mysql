@@ -95,7 +95,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    postRating: postRating
+    data: postRating
   };
 
   res.status(200).send(body);

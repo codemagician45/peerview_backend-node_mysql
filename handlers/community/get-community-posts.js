@@ -324,7 +324,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    communityPosts: communityPosts
+    data: communityPosts
   };
 
   res.status(200).send(body);

@@ -100,7 +100,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    postCategoryId: postCategory.id
+    data: postCategory.id
   };
 
   res.status(200).send(body);

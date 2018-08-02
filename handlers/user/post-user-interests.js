@@ -18,7 +18,7 @@ const templates = require('../../templates');
  */
 function validateParams (req, res, next) {
   let bodySchema = {
-    interestIds: {
+    subInterestIds: {
       isArrayNotEmpty: {
         errorMessage: 'Missing Resource: Interest Ids'
       },
@@ -57,13 +57,13 @@ function validateParams (req, res, next) {
  */
 function postUserInterests (req, res, next) {
   let user = req.$scope.user;
-  let interestIds = req.$params.interestIds;
+  let subInterestIds = req.$params.subInterestIds;
   let userInterest = [];
 
-  interestIds.forEach(interestId => {
+  subInterestIds.forEach(subInterestId => {
     userInterest.push({
       userId: user.id,
-      interestId: interestId
+      interestId: subInterestId
     });
   });
 

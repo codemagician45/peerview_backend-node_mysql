@@ -26,9 +26,9 @@ function validateParams (req, res, next) {
   };
 
   let bodySchema = {
-    interestName: {
+    name: {
       notEmpty: {
-        errorMessage: 'Missing Resource: InterestName'
+        errorMessage: 'Missing Resource: Name'
       }
     }
   };
@@ -52,10 +52,10 @@ function validateParams (req, res, next) {
 
 function postInterest (req, res, next) {
   let interestCategoryId = req.$params.interestCategoryId;
-  let interestName = req.$params.interestName;
+  let name = req.$params.name;
 
   return req.db.interest.create({
-    name: interestName,
+    name: name,
     interestCategoryId: interestCategoryId
   })
   .then(interest => {
@@ -85,7 +85,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 201,
-    interest: interest
+    data: interest
   };
 
   res.status(201).send(body);

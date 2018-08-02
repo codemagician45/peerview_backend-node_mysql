@@ -58,7 +58,7 @@ function response (req, res) {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    followers: followers
+    data: followers
   };
 
   res.status(200).send(body);

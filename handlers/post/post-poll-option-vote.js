@@ -57,7 +57,7 @@ function postPollOptionVote (req, res, next) {
   return req.db.postPollOptionSummary.create({
     postPollOptionId: postPollOptionId
   })
-  .then(postPollOptionSummary => {
+  .then(postPollOptionSummary => {// eslint-disable-line id-length
     next();
     return postPollOptionSummary;
   })
