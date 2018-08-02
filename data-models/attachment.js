@@ -33,5 +33,11 @@ module.exports = function (sequelize, dataTypes) {
     indexes: []
   });
 
+  Attachment.associate = function (models) {
+    this.belongsTo(models.post, {
+      foreignKey: 'postId'
+    });
+  };
+
   return Attachment;
 };

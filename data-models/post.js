@@ -77,6 +77,39 @@ module.exports = function (sequelize, dataTypes) {
     return posts;
   };
 
+  Post.prototype.getPOSTSHARE = async function (posts, req) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await req.db.post
+      .findOne({
+        include: [{
+          model: req.db.attachment,
+          exclude: []
+        }, {
+          model: req.db.user,
+          as: 'user',
+          attributes: [
+            'id',
+            'firstName',
+            'lastName',
+            'email',
+            'schoolName',
+            'profilePicture'
+          ]
+        }],
+        where: {
+          id: {
+            [req.Op.eq]: post.sharePostId
+          }
+        }
+      });
+
+      post.dataValues.postShare = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
   Post.prototype.getATTACHMENTS = async function (posts) {
     posts = await Promise.all(posts.map(async (post) => {
       const contents = await post
