@@ -11,7 +11,4 @@ export PEERSVIEW_DB_TIMEZONE='+00:00'
 export SENDGRID_API_KEY='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'
 export PEERSVIEW_BASEURL="https://teest.peersview.com"
 
-rm -rf package-lock.json
-npm install
-
 node index.js
