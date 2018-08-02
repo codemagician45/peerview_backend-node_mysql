@@ -47,13 +47,6 @@ routesApi.leisure(apiRouter);
 // campus route
 routesApi.campus(apiRouter);
 
-apiRouter.get('/peers-list',
-  lib.params,
-  lib.isTokenExist.user,
-  handlers.getPeerslist.getUserCourse,
-  handlers.getPeerslist.logic,
-  handlers.getPeerslist.response);
-
 apiRouter.get('/search', // combination of advance-search/user and advance-search/post
   lib.params,
   lib.isTokenExist.user,
