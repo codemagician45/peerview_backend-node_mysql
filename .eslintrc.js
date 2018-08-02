@@ -60,6 +60,7 @@ module.exports = {
     'semi-spacing': 2,
     semi: 2,
     'space-before-function-paren': 2,
-    'space-infix-ops': [2, {int32Hint: false}]
+    'space-infix-ops': [2, {int32Hint: false}],
+    "id-blacklist": [0, "data"]
   }
 }
