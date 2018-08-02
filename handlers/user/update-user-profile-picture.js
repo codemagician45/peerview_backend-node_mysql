@@ -18,9 +18,9 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let bodySchema = {
-    cloudinaryProfilePictureId: {
+    profilePicture: {
       notEmpty: {
-        errorMessage: 'Missing Resource: Cloudinary Profile Picture Id'
+        errorMessage: 'Missing Resource: Profile Picture'
       }
     }
   };
@@ -54,7 +54,7 @@ function validateParams (req, res, next) {
  */
 function updateUserProfilePicture (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
-  let profilePicture = req.$params.cloudinaryProfilePictureId;
+  let profilePicture = req.$params.profilePicture;
 
   return req.db.user.update({
     profilePicture: profilePicture
