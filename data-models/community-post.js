@@ -49,7 +49,6 @@ module.exports = function (sequelize, dataTypes) {
   CommunityPost.associate = function (models) {
     this.belongsTo(models.user);
     this.belongsTo(models.userType);
-    this.belongsTo(models.userStudyLevel);
     this.belongsTo(models.course);
     this.belongsTo(models.community); // if this field has been filed the post belongsTo private community
     this.hasMany(models.communityPostPollOption);

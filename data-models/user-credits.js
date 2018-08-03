@@ -23,7 +23,6 @@ module.exports = function (sequelize, dataTypes) {
   UserCredits.associate = function (models) {
     this.belongsTo(models.user);
     this.belongsTo(models.course); // use for badges in a certain course
-    this.belongsTo(models.userStudyLevel); // use for badges in a certain course
   };
 
   return UserCredits;

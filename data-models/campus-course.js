@@ -17,7 +17,6 @@ module.exports = function (sequelize, dataTypes) {
   CampusCourse.associate = function (models) {
     this.belongsTo(models.course);
     this.belongsTo(models.campus);
-    this.belongsTo(models.userStudyLevel);
   };
 
   return CampusCourse;
