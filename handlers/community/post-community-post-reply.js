@@ -99,7 +99,6 @@ function postCommunityPostReply (req, res, next) {// eslint-disable-line id-leng
   let communityPostPollOptionId = req.$params.communityPostPollOptionId;// eslint-disable-line id-length
   let comment = req.$params.comment;
   let courseId = req.$params.courseId;
-  let userStudyLevelId = req.$params.studyLevelId;
   let averageRating = req.$params.averageRating;
 
   return req.db.communityPostReply.create({
@@ -116,7 +115,6 @@ function postCommunityPostReply (req, res, next) {// eslint-disable-line id-leng
     if (courseId && averageRating) {
       communityPostReply.credits = Math.round(averageRating);
       communityPostReply.courseId = courseId;
-      communityPostReply.userStudyLevelId = userStudyLevelId;
     }
 
     req.$scope.userCredits = communityPostReply;

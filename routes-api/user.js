@@ -44,11 +44,6 @@ function userApi (apiRouter) {
     handlers.user.getUserCredits.logic,
     handlers.user.getUserCredits.response);
 
-  apiRouter.get('/user/study-levels',
-    lib.isTokenExist.user,
-    handlers.user.getUserStudyLevels.logic,
-    handlers.user.getUserStudyLevels.response);
-
   apiRouter.get('/user/type/:typeCode',
     lib.params,
     handlers.user.getUserTypeId.validateParams,

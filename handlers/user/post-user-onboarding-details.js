@@ -60,29 +60,28 @@ function validateParams (req, res, next) {
         errorMessage: 'Invalid Resource: Course Ids'
       }
     },
-    userStudyLevelId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: User Study level Id'
-      }
-    },
-    userTypeId: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: User Type Id'
-      }
-    },
     schoolName: {
-      notEmpty: {
+      isLength: {
+        options: [{min: 1}],
         errorMessage: 'Missing Resource: School Name'
       }
     },
     city: {
-      notEmpty: {
+      isLength: {
+        options: [{min: 1}],
         errorMessage: 'Missing Resource: Current City'
       }
     },
     gender: {
-      notEmpty: {
+      isLength: {
+        options: [{min: 1}],
         errorMessage: 'Missing Resource: Gender'
+      }
+    },
+    birthDate: {
+      isLength: {
+        options: [{min: 1}],
+        errorMessage: 'Missing Resource: Birth Date'
       }
     }
   };
@@ -98,27 +97,32 @@ function validateParams (req, res, next) {
         }
       },
       userTypeId: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: User Type Id'
         }
       },
       city: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Current City'
         }
       },
       role: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Role'
         }
       },
       company: {
-        notEmpty: {
+        isLength: {
+          min: 1,
           errorMessage: 'Missing Resource: Company'
         }
       },
       birthDate: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Birth Date'
         }
       }
@@ -126,27 +130,26 @@ function validateParams (req, res, next) {
   } else if (userType.code === 'organizationInstitution') {
     bodySchema = {
       institutionName: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Institution Name'
         }
       },
-      userTypeId: {
-        notEmpty: {
-          errorMessage: 'Missing Resource: User Type Id'
-        }
-      },
       city: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Current City'
         }
       },
       yearOfIncorporation: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Year Of Incorporation'
         }
       },
       website: {
-        notEmpty: {
+        isLength: {
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Website'
         }
       }
@@ -183,7 +186,6 @@ function validateParams (req, res, next) {
 function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-length
   let user = req.$scope.user;
   let courseIds = req.$params.courseIds;
-  let userStudyLevelId = req.$params.userStudyLevelId;
   let userTypeId = req.$params.userTypeId;
   let schoolName = req.$params.schoolName;
   let city = req.$params.city;
@@ -196,7 +198,6 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
   let website = req.$params.website;
 
   return req.db.user.update({
-    userStudyLevelId: userStudyLevelId,
     userTypeId: userTypeId,
     schoolName: schoolName,
     city: city,

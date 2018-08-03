@@ -3,12 +3,6 @@
 /**
  * @author Jo-Ries Canino
  * @description Community Post
- * General Post is tied with the
- * user study level
- *
- * If the user is a professional he/she can browse
- * any userStudyLevel
- *
  * It is also tied in our private community
  * So reused the communityPost table
  * and just add the communityId
@@ -148,7 +142,6 @@ function postCommunityPost (req, res, next) {
   return req.db.communityPost.create({
     userId: user.id,
     userTypeId: user.userTypeId,
-    userStudyLevelId: user.userStudyLevelId, // general community is tied with this one
     courseId: courseId,
     communityId: communityId,
     message: message,

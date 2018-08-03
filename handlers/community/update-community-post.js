@@ -128,7 +128,6 @@ function updateCommunityPost (req, res, next) {
   return req.db.communityPost.update({
     userId: user.id,
     userTypeId: user.userTypeId,
-    userStudyLevelId: user.userStudyLevelId, // general community is tied with this one
     courseId: courseId,
     message: message,
     title: title,

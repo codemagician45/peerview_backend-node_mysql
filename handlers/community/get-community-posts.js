@@ -3,15 +3,6 @@
 /**
  * @author Jo-Ries Canino
  * @description Get List of Community Post
- * General Post is tied with the
- * user study level
- *
- * If the user is a professional he/she can browse
- * any userStudyLevel
- *
- * If the post is a professional the student userType
- * can see the post.
- *
  * It is also tied in our private community
  * So reused the communityPost table
  * and just add the communityId
@@ -34,12 +25,6 @@ function validateParams (req, res, next) {
       optional: true, // because to reuse the general tab and when the user browse in the courses(student); professionals can browse all
       isInt: {
         errorMessage: 'Invalid Resource: Course Id'
-      }
-    },
-    userStudyLevelId: {
-      optional: true, // getting all career's
-      isInt: {
-        errorMessage: 'Invalid Resource: User Study Level Id'
       }
     },
     communityId: {// use for private communities
@@ -212,11 +197,9 @@ function getPrivateCommunityPosts (req, res, next) {// eslint-disable-line id-le
 }
 
 function getCommunityPosts (req, res, next) {
-  let user = req.$scope.user;
   let userType = req.$scope.userType;
   let professionalsUserType = req.$scope.professionalsUserType;// eslint-disable-line id-length
   let courseId = req.$params.courseId;
-  let userStudyLevelId = req.$params.userStudyLevelId;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
   let isCareerUrl = req.url.indexOf('/community/career/posts');
@@ -224,16 +207,13 @@ function getCommunityPosts (req, res, next) {
   const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
   let where = {// meaning professionals can access it;
-    courseId: courseId || null,
-    userStudyLevelId: userStudyLevelId || null
+    courseId: courseId || null
   };
 
   if (userType && userType.code === 'student' && isCareerUrl === -1) {// get also the post of a professionals
     where = {
       [req.Op.and]: {
         [req.Op.or]: [{
-          userStudyLevelId: user.userStudyLevelId // general post is tied with this one
-        }, {
           userTypeId: professionalsUserType.id// this is where we get the post from the professionals
         }],
         communityId: null,
