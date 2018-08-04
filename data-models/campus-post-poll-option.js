@@ -17,5 +17,12 @@ module.exports = function (sequelize, dataTypes) {
     indexes: []
   });
 
+  CampusPostPollOption.associate = function (models) {
+    this.hasMany(models.campusPostPollOptionSummary, {
+      as: 'postPollOptionSummary'
+    });
+  };
+
+
   return CampusPostPollOption;
 };

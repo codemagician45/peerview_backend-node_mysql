@@ -101,10 +101,10 @@ module.exports = function (sequelize, dataTypes) {
   CampusPost.prototype.getPOSTPOLLOPTIONS = async function (posts, model) {
     posts = await Promise.all(posts.map(async (post) => {
       const colCount = sequelize.fn('COUNT',
-        sequelize.col('postPollOptionSummary.postPollOptionId'));
+        sequelize.col('postPollOptionSummary.campusPostPollOptionId'));
 
       const contents = await post
-      .getPostPollOptions({
+      .getPostPollOption({
         attributes: {
           include: [
             'id',
@@ -113,11 +113,11 @@ module.exports = function (sequelize, dataTypes) {
           ]
         },
         include: [{
-          model: model.postPollOptionSummary,
+          model: model.campusPostPollOptionSummary,
           as: 'postPollOptionSummary',
           attributes: []
         }],
-        group: ['postPollOption.id'],
+        group: ['campusPostPollOption.id'],
       });
 
       post.dataValues.postPollOptions = contents;
