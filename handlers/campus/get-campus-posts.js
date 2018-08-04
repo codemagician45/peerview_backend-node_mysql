@@ -1,3 +1,4 @@
+/*eslint-disable max-len*/
 'use strict';
 
 /**
@@ -84,6 +85,7 @@ function validateParams (req, res, next) {
 }
 
 function getCampusPosts (req, res, next) {
+  let user = req.$scope.user;
   let campusId = req.$params.campusId;
   let courseId = req.$params.courseId;
   let classId = req.$params.classId;
@@ -93,8 +95,9 @@ function getCampusPosts (req, res, next) {
   let offset = req.$params.offset;
   let limit = req.$params.limit;
   const sequelize = req.db.campusPostRating.sequelize;
-  const colRating = sequelize.col([req.db.campusPostRating.name, 'rating'].join('.'));
+  const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
+
   let where = {
     campusId: campusId || null,
     courseId: courseId || null,
@@ -105,39 +108,48 @@ function getCampusPosts (req, res, next) {
   };
 
   return req.db.campusPost.findAll({
-    attributes: [
-      'message',
-      'createdAt',
-      [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['campusPostRating', 'userId'].join('.'))), 'ratingCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['campusPostLike', 'userId'].join('.'))), 'likeCount'],
-      [sequelize.fn('COUNT',
-        sequelize.col(['campusPostPageview', 'userId'].join('.'))), 'pageviewCount']
-    ],
+    attributes: {
+      include: [
+        'id',
+        'message',
+        'createdAt',
+        [sequelize.fn('ROUND', colAVG, 2), 'roundedRating'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postRating.id'))), 'ratingCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postReply.id'))), 'postReplyCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postLike.id'))), 'likeCount'],
+        [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postLike.id'))), 'pageviewCount'],
+        [sequelize.fn('COUNT',
+          sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postLike.userId'), user.id))), //check this if it is working or not
+        'isUserPostLike'],
+        [sequelize.where(sequelize.col('campusPost.userId'), user.id), 'isPostUser']
+      ]
+    },
     include: [{
       model: req.db.user,
-      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName']
+      as: 'user',
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture']
     }, {
       model: req.db.campusPostRating,
-      as: 'campusPostRating',
+      as: 'postRating',
       attributes: []
     }, {
       model: req.db.campusPostLike,
-      as: 'campusPostLike',
+      as: 'postLike',
       attributes: []
     }, {
       model: req.db.campusPostReply,
-      as: 'campusPostReply',
-      attributes: ['comment', 'createdAt'],
-      include: [{
-        model: req.db.user,
-        attributes: ['id', 'firstName', 'lastName', 'email']
-      }]
+      as: 'postReply',
+      attributes: []
     }, {
       model: req.db.campusPostPageview,
-      as: 'campusPostPageview',
+      as: 'postPageview',
+      attributes: []
+    }, {
+      model: req.db.attachment,
+      attributes: ['id', 'cloudinaryPublicId']
+    }, {
+      model: req.db.campusPostPollOption,
+      as: 'postPollOption',
       attributes: []
     }],
     group: ['campusPost.id'],
@@ -148,6 +160,11 @@ function getCampusPosts (req, res, next) {
     subQuery: false,
     offset: !offset ? 0 : parseInt(offset),
     limit: !limit ? 10 : parseInt(limit)
+  })
+  .then((campusPosts) => {
+    return req.db.campusPost.prototype.getPOSTREPLY(campusPosts, req.db)
+    .then(() => req.db.campusPost.prototype.getATTACHMENTS(campusPosts))
+    .then(() => req.db.campusPost.prototype.getPOSTPOLLOPTIONS(campusPosts, req.db));
   })
   .then(campusPosts => {
     req.$scope.campusPosts = campusPosts;
