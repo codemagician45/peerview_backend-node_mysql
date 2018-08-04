@@ -43,6 +43,7 @@ function validateParams (req, res, next) {
 
 function getCampusPost (req, res, next) {
   let campusPostId = req.$params.postId;
+  let campusFreshersFeedId = req.$params.campusFreshersFeedId;
   const sequelize = req.db.campusPostRating.sequelize;
   const colRating = sequelize.col([req.db.campusPostRating.name, 'rating'].join('.'));
   const colAVG = sequelize.fn('AVG', colRating);
@@ -87,7 +88,10 @@ function getCampusPost (req, res, next) {
     where: {
       id: {
         [req.Op.eq]: campusPostId
-      }
+      },
+      [req.Op.or]: [{
+        campusFreshersFeedId: campusFreshersFeedId
+      }]
     }
   })
   .then(campusPost => {

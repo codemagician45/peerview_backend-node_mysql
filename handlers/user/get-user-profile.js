@@ -22,6 +22,13 @@ function getUserProfile (req, res, next) {
       include: [{
         model: req.db.interest
       }]
+    }, {
+      model: req.db.userType
+    }, {
+      model: req.db.userCourse,
+      include: {
+        model: req.db.course
+      }
     }],
     where: {
       id: {

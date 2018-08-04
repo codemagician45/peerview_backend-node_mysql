@@ -29,7 +29,7 @@ function validateParams (req, res, next) {
         errorMessage: 'Invalid Resource: Course Id'
       }
     },
-    freshersFeedId: {// use in the freshers feed
+    campusFreshersFeedId: {// use in the freshers feed
       optional: true,
       isInt: {
         errorMessage: 'Invalid Resource: Freshers Feed Id'
@@ -57,8 +57,11 @@ function validateParams (req, res, next) {
 
   let bodySchema = {
     message: {// this will be used as a jsonData for brainstorming
-      notEmpty: {
-        errorMessage: 'Missing Resource: Message'
+      isLength: {
+        options: [{
+          min: 1
+        }],
+        errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
       }
     }
   };
@@ -68,7 +71,10 @@ function validateParams (req, res, next) {
   if (req.$params.question) {
     let pollSchema = {
       question: {
-        notEmpty: {
+        isLength: {
+          options: [{
+            min: 1
+          }],
           errorMessage: 'Missing Resource: Question'
         }
       },
@@ -81,7 +87,10 @@ function validateParams (req, res, next) {
         }
       },
       duration: {
-        notEmpty: {
+        isLength: {
+          options: [{
+            min: 1
+          }],
           errorMessage: 'Missing Resource: Duration'
         },
         isInt: {
@@ -117,7 +126,7 @@ function postCampusPost (req, res, next) {
   let duration = req.$params.duration;
   let campusId = req.$params.campusId;
   let courseId = req.$params.courseId;
-  let freshersFeedId = req.$params.freshersFeedId;
+  let campusFreshersFeedId = req.$params.campusFreshersFeedId;
   let campusCourseClassId = req.$params.classId;
   let campusSocietyClubId = req.$params.clubId;
   let campusStudentGroupId = req.$params.groupId;
@@ -126,7 +135,7 @@ function postCampusPost (req, res, next) {
     userId: user.id,
     campusId: campusId,
     courseId: courseId,
-    campusFreshersFeedId: freshersFeedId,
+    campusFreshersFeedId: campusFreshersFeedId,
     campusCourseClassId: campusCourseClassId,
     campusSocietyClubId: campusSocietyClubId,
     campusStudentGroupId: campusStudentGroupId,
