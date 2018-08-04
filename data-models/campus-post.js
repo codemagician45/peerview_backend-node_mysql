@@ -47,19 +47,84 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.campusSocietyClub);
     this.belongsTo(models.campusStudentGroup);
     this.hasMany(models.attachment);
-    this.hasMany(models.campusPostPollOption);
+    this.hasMany(models.campusPostPollOption, {
+      as: 'postPollOption'
+    });
     this.hasMany(models.campusPostLike, {
-      as: 'campusPostLike'
+      as: 'postLike'
     });
     this.hasMany(models.campusPostRating, {
-      as: 'campusPostRating'
+      as: 'postRating'
     });
     this.hasMany(models.campusPostReply, {
-      as: 'campusPostReply'
+      as: 'postReply'
     });
     this.hasMany(models.campusPostPageview, {
-      as: 'campusPostPageview'
+      as: 'postPageview'
     });
+  };
+
+  CampusPost.prototype.getPOSTREPLY = async function (posts, model) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await post
+      .getPostReply({
+        limit: 5,
+        attributes: ['comment', 'createdAt'],
+        include: [{
+          model: model.user,
+          attributes: ['id', 'firstName', 'lastName', 'email']
+        }],
+        order: [['createdAt', 'DESC']]
+      });
+
+      post.dataValues.postReply = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
+  CampusPost.prototype.getATTACHMENTS = async function (posts) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await post
+      .getAttachments({
+        attributes: ['id', 'usage', 'cloudinaryPublicId']
+      });
+
+      post.dataValues.attachments = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
+  CampusPost.prototype.getPOSTPOLLOPTIONS = async function (posts, model) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const colCount = sequelize.fn('COUNT',
+        sequelize.col('postPollOptionSummary.postPollOptionId'));
+
+      const contents = await post
+      .getPostPollOptions({
+        attributes: {
+          include: [
+            'id',
+            'name',
+            [colCount, 'count'],
+          ]
+        },
+        include: [{
+          model: model.postPollOptionSummary,
+          as: 'postPollOptionSummary',
+          attributes: []
+        }],
+        group: ['postPollOption.id'],
+      });
+
+      post.dataValues.postPollOptions = contents;
+      return post;
+    }));
+
+    return posts;
   };
 
   return CampusPost;
