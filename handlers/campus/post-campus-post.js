@@ -68,9 +68,9 @@ function validateParams (req, res, next) {
 
   // check if we have params for question; which means we
   // are posting using poll capability
-  if (req.$params.question) {
+  if (req.$params.campusPostPoll.question) {
     let pollSchema = {
-      question: {
+      'campusPostPoll.question': {
         isLength: {
           options: [{
             min: 1
@@ -78,7 +78,7 @@ function validateParams (req, res, next) {
           errorMessage: 'Missing Resource: Question'
         }
       },
-      options: {
+      'campusPostPoll.options': {
         isArrayNotEmpty: {
           errorMessage: 'Missing Resource: Options'
         },
@@ -86,7 +86,7 @@ function validateParams (req, res, next) {
           errorMessage: 'Invalid Resource: Options'
         }
       },
-      duration: {
+      'campusPostPoll.duration': {
         isLength: {
           options: [{
             min: 1
@@ -122,14 +122,19 @@ function validateParams (req, res, next) {
 function postCampusPost (req, res, next) {
   let user = req.$scope.user;
   let message = req.$params.message;
-  let question = req.$params.qusetion;
-  let duration = req.$params.duration;
   let campusId = req.$params.campusId;
   let courseId = req.$params.courseId;
   let campusFreshersFeedId = req.$params.campusFreshersFeedId;
   let campusCourseClassId = req.$params.classId;
   let campusSocietyClubId = req.$params.clubId;
   let campusStudentGroupId = req.$params.groupId;
+  let question = undefined;
+  let duration = undefined;
+
+  if (req.$params.campusPostPoll.question) {
+    question = req.$params.campusPostPoll.question;
+    duration = req.$params.campusPostPoll.duration;
+  }
 
   return req.db.campusPost.create({
     userId: user.id,
@@ -179,9 +184,11 @@ function saveAttachments (req, res, next) {
   });
 
   return req.db.attachment.bulkCreate(attachments)
-  .then(attachment => {
+  .then(attachments => {
+    campusPost.dataValues.attachments = attachments;
+    req.$scope.campusPost = campusPost;
     next();
-    return attachment;
+    return attachments;
   })
   .catch(error => {
     res.status(500)
@@ -202,13 +209,12 @@ function saveAttachments (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function saveCampusPostPollOption (req, res, next) {// eslint-disable-line id-length
-  let campusPost = req.$scope.campusPost;
-  let options = req.$params.options;
-  let question = req.$params.question;
-  let campusPostPollOption = [];
-
   // check if we have params for question
-  if (!question) {return next();}
+  if (!req.$params.campusPostPoll.question) {return next();}
+
+  let campusPost = req.$scope.campusPost;
+  let options = req.$params.campusPostPoll.options;
+  let campusPostPollOption = [];
 
   options.forEach(option => {
     campusPostPollOption.push({
@@ -218,9 +224,11 @@ function saveCampusPostPollOption (req, res, next) {// eslint-disable-line id-le
   });
 
   return req.db.campusPostPollOption.bulkCreate(campusPostPollOption)
-  .then(campusPostPollOption => {
+  .then(campusPostPollOptions => {// eslint-disable-line id-length
+    campusPost.dataValues.postPollOptions = campusPostPollOptions;
+    req.$scope.campusPost = campusPost;
     next();
-    return campusPostPollOption;
+    return campusPostPollOptions;
   })
   .catch(error => {
     res.status(500)

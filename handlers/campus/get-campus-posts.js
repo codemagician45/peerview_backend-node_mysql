@@ -164,7 +164,8 @@ function getCampusPosts (req, res, next) {
   .then((campusPosts) => {
     return req.db.campusPost.prototype.getPOSTREPLY(campusPosts, req.db)
     .then(() => req.db.campusPost.prototype.getATTACHMENTS(campusPosts))
-    .then(() => req.db.campusPost.prototype.getPOSTPOLLOPTIONS(campusPosts, req.db));
+    .then(() => req.db.campusPost.prototype.getPOSTPOLLOPTIONS(campusPosts, req.db))
+    .then(() => req.db.campusPost.prototype.getPOSTLIKES(campusPosts, req));
   })
   .then(campusPosts => {
     req.$scope.campusPosts = campusPosts;
