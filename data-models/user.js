@@ -96,6 +96,7 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   User.associate = function (models) {
+    this.hasMany(models.userCredits);
     this.belongsTo(models.userType);
     this.belongsTo(models.userPrivacy);// who can view my profile
     this.belongsTo(models.campus, {
