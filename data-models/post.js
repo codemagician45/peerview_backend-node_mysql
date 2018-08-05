@@ -153,5 +153,21 @@ module.exports = function (sequelize, dataTypes) {
     return posts;
   };
 
+  Post.prototype.getPOSTLIKES = async function (posts, req) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await post
+      .getPostLike({
+        include: [{
+          model: req.db.user
+        }]
+      });
+
+      post.dataValues.postLike = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
   return Post;
 };
