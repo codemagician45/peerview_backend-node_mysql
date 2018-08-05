@@ -15,6 +15,7 @@ function getUserProfile (req, res, next) {
    */
 
   let userId = req.$params.userId || req.$scope.user.id;
+  const sequelize = req.db.userCredits.sequelize;
 
   return req.db.user.findOne({
     include: [{
@@ -29,6 +30,12 @@ function getUserProfile (req, res, next) {
       include: {
         model: req.db.course
       }
+    }, {
+      model: req.db.userCredits,
+      attributes: [
+        [sequelize.fn('SUM',
+          sequelize.col('credits')), 'totalCredits'],
+      ],
     }],
     where: {
       id: {
