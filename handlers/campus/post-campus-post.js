@@ -144,6 +144,7 @@ function postCampusPost (req, res, next) {
     duration: duration
   })
   .then(campusPost => {
+    campusPost.dataValues.user = user.dataValues;
     req.$scope.campusPost = campusPost;
     next();
     return campusPost;
@@ -238,10 +239,13 @@ function saveCampusPostPollOption (req, res, next) {// eslint-disable-line id-le
  * @returns {any} body response object
  */
 function response (req, res) {
+  let campusPost = req.$scope.campusPost;
+
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201
+    http_code: 201,
+    data: campusPost
   };
 
   res.status(201).send(body);
