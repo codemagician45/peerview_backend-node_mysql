@@ -146,6 +146,8 @@ function postPost (req, res, next) {
   })
   .then(post => {
     post.dataValues.user = user.dataValues;
+    post.dataValues.likeCount = 0;
+    post.dataValues.isUserPostLike = 0;
     req.$scope.post = post;
     // below are used for user credits
     post.newId = post.id + '_post';

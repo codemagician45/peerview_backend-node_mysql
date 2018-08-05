@@ -150,6 +150,8 @@ function postCampusPost (req, res, next) {
   })
   .then(campusPost => {
     campusPost.dataValues.user = user.dataValues;
+    campusPost.dataValues.likeCount = 0;
+    campusPost.dataValues.isUserPostLike = 0;
     req.$scope.campusPost = campusPost;
     next();
     return campusPost;
