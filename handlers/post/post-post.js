@@ -23,12 +23,15 @@ function validateParams (req, res, next) {
 
   if (isPostPollUrl !== -1) {
     bodySchema = {
-      question: {
-        notEmpty: {
+      'postPoll.question': {
+        isLength: {
+          options: [{
+            min: 1
+          }],
           errorMessage: 'Missing Resource: Question'
         }
       },
-      options: {
+      'postPoll.options': {
         isArrayNotEmpty: {
           errorMessage: 'Missing Resource: Options'
         },
@@ -36,8 +39,11 @@ function validateParams (req, res, next) {
           errorMessage: 'Invalid Resource: Options'
         }
       },
-      duration: {
-        notEmpty: {
+      'postPoll.duration': {
+        isLength: {
+          options: [{
+            min: 1
+          }],
           errorMessage: 'Missing Resource: Duration'
         },
         isInt: {
@@ -68,9 +74,6 @@ function validateParams (req, res, next) {
   } else {
     bodySchema = {
       message: {
-        notEmpty: {
-          errorMessage: 'Missing Resource: Message'
-        },
         isLength: {
           options: [{
             min: 1,
@@ -122,11 +125,16 @@ function validateParams (req, res, next) {
  */
 function postPost (req, res, next) {
   let user = req.$scope.user;
-  let message = req.$params.message;
   let title = req.$params.title;
-  let question = req.$params.question;
-  let duration = req.$params.duration;
+  let message = req.$params.message;
   let postTo = req.$params.postTo;
+  let question = undefined;
+  let duration = undefined;
+
+  if (JSON.stringify(req.$params.postPoll) !== '{}' && req.$params.postPoll.question) {
+    question = req.$params.postPoll.question;
+    duration = req.$params.postPoll.duration;
+  }
 
   return req.db.post.create({
     userId: user.id,
@@ -137,6 +145,7 @@ function postPost (req, res, next) {
     postTo: postTo
   })
   .then(post => {
+    post.dataValues.user = user.dataValues;
     req.$scope.post = post;
     // below are used for user credits
     post.newId = post.id + '_post';
@@ -175,9 +184,11 @@ function saveAttachments (req, res, next) {
   });
 
   return req.db.attachment.bulkCreate(attachments)
-  .then(attachment => {
+  .then(attachments => {
+    post.dataValues.attachments = attachments;
+    req.$scope.post = post;
     next();
-    return attachment;
+    return attachments;
   })
   .catch(error => {
     res.status(500)
@@ -198,13 +209,14 @@ function saveAttachments (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function savePostPollOption (req, res, next) {// eslint-disable-line id-length
+  if (JSON.stringify(req.$params.postPoll) !== '{}'
+    && !req.$params.postPoll.question) {return next();}
+
   let post = req.$scope.post;
-  let options = req.$params.options;
-  let question = req.$params.question;
+  let options = req.$params.postPoll.options;
   let postPollOption = [];// eslint-disable-line id-length
 
   // check if we have params for question
-  if (!question) {return next();}
 
   options.forEach(option => {
     postPollOption.push({
@@ -214,9 +226,11 @@ function savePostPollOption (req, res, next) {// eslint-disable-line id-length
   });
 
   return req.db.postPollOption.bulkCreate(postPollOption)
-  .then(postPollOption => {// eslint-disable-line id-length
+  .then(postPollOptions => {// eslint-disable-line id-length
+    post.dataValues.postPollOptions = postPollOptions;
+    req.$scope.post = post;
     next();
-    return postPollOption;
+    return postPollOptions;
   })
   .catch(error => {
     res.status(500)
@@ -236,6 +250,7 @@ function savePostPollOption (req, res, next) {// eslint-disable-line id-length
  */
 function response (req, res) {
   let post = req.$scope.post;
+
   let body = {
     status: 'SUCCESS',
     status_code: 0,
