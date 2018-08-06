@@ -152,6 +152,8 @@ function postCampusPost (req, res, next) {
     campusPost.dataValues.user = user.dataValues;
     campusPost.dataValues.likeCount = 0;
     campusPost.dataValues.isUserPostLike = 0;
+    campusPost.dataValues.postReply = [];
+    campusPost.dataValues.postLike = [];
     req.$scope.campusPost = campusPost;
     next();
     return campusPost;
