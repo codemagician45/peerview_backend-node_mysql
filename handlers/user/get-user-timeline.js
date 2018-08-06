@@ -94,7 +94,14 @@ function getPosts (req, res, next) {
     include: [{
       model: req.db.user,
       as: 'user',
-      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture', 'socialImage'],
+      include: [{
+        model: req.db.userCredits,
+        attributes: [
+          [sequelize.fn('SUM',
+            sequelize.col('credits')), 'totalCredits'],
+        ],
+      }]
     }, {
       model: req.db.postRating,
       as: 'postRating',
@@ -118,7 +125,7 @@ function getPosts (req, res, next) {
       attributes: []
     }, {
       model: req.db.attachment,
-      attributes: []
+      attributes: ['id', 'cloudinaryPublicId']
     }, {
       model: req.db.postPollOption,
       attributes: []
@@ -143,7 +150,7 @@ function getPosts (req, res, next) {
   .then((posts) => {
     return req.db.post.prototype.getPOSTREPLY(posts, req.db)
     .then(() => req.db.post.prototype.getATTACHMENTS(posts))
-    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts));
+    .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts, req.db));
   })
   .then((posts) => {
     req.$scope.posts = posts;

@@ -44,10 +44,10 @@ module.exports = Object.assign({}, defaults, {
   },
   db: {
     adapter: 'mysql',
-    database: 'heroku_a0351cee4a00f2c' || 'peersview-dev',
-    host: 'us-cdbr-iron-east-05.cleardb.net' || 'peersview.c7iwtmdqxmmx.eu-west-1.rds.amazonaws.com', // eslint-disable-line
-    user: 'b8a1e7c2573e8c' || 'peersviewDev',
-    password: '96fc507f' || 'peersview-dev',
+    database: 'heroku_a0351cee4a00f2c',
+    host: 'us-cdbr-iron-east-05.cleardb.net',
+    user: 'b8a1e7c2573e8c',
+    password: '96fc507f',
     timezone: '+00:00',
     logging: function (s) {
       var line = sprintf('[%s] %s\n', new Date().toJSON(), s);

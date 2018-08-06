@@ -89,11 +89,10 @@ function getPosts (req, res, next) {
         [sequelize.where(sequelize.col('post.userId'), user.id), 'isPostUser']
       ]
     },
-    // include: [{all: true}],
     include: [{
       model: req.db.user,
       as: 'user',
-      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture'],
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture', 'socialImage'],
       include: [{
         model: req.db.userCredits,
         attributes: [

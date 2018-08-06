@@ -127,7 +127,14 @@ function getCampusPosts (req, res, next) {
     include: [{
       model: req.db.user,
       as: 'user',
-      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture', 'socialImage'],
+      include: [{
+        model: req.db.userCredits,
+        attributes: [
+          [sequelize.fn('SUM',
+            sequelize.col('credits')), 'totalCredits'],
+        ],
+      }]
     }, {
       model: req.db.campusPostRating,
       as: 'postRating',
