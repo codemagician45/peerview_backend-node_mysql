@@ -153,6 +153,13 @@ function campusApi (apiRouter) {
     handlers.campus.postCampusPost.saveCampusPostPollOption, // use in poll option saving
     handlers.campus.postCampusPost.response);
 
+  apiRouter.post('/campus/post/poll/:campusPostPollOptionId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.postCampusPollOptionVote.validateParams,
+    handlers.campus.postCampusPollOptionVote.logic,
+    handlers.campus.postCampusPollOptionVote.response);
+
   apiRouter.post('/campus/post/:postId/like',
     lib.params,
     lib.isTokenExist.user,
