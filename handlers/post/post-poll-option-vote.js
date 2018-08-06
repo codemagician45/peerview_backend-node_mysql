@@ -67,7 +67,7 @@ function postPollOptionVote (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'postPollOptionSummary.create Error - post-poll-option-vote-like');
+    }, 'postPollOptionSummary.create Error - post-poll-option-vote');
   });
 }
 
