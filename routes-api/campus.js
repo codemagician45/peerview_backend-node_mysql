@@ -18,6 +18,13 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusCourseList.logic,
     handlers.campus.getCampusCourseList.response);
 
+  apiRouter.get('/campus/:campusId/class-list',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getCampusClassList.validateParams,
+    handlers.campus.getCampusClassList.logic,
+    handlers.campus.getCampusClassList.response);
+
   apiRouter.get('/campus/:campusId/freshers-feed',
     lib.params,
     lib.isTokenExist.user,
@@ -39,14 +46,14 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusPosts.logic,
     handlers.campus.getCampusPosts.response);
 
-  apiRouter.get('/campus/:campusId/course/:courseId/posts', // the the list of post in course feed
+  apiRouter.get('/campus/:campusId/course-feed/:courseId/posts', // the the list of post in course feed
     lib.params,
     lib.isTokenExist.user,
     handlers.campus.getCampusPosts.validateParams,
     handlers.campus.getCampusPosts.logic,
     handlers.campus.getCampusPosts.response);
 
-  apiRouter.get('/campus/:campusId/course/class/:classId/posts', // the the list of post in course class feed
+  apiRouter.get('/campus/:campusId/class/:classId/posts', // the the list of post in course class feed
     lib.params,
     lib.isTokenExist.user,
     handlers.campus.getCampusPosts.validateParams,
@@ -88,7 +95,7 @@ function campusApi (apiRouter) {
     handlers.campus.getCampusPost.logic,
     handlers.campus.getCampusPost.response);
 
-  apiRouter.get('/campus/course/class/post/:postId', // get a post to course class feed
+  apiRouter.get('/campus/class/post/:postId', // get a post to course class feed
     lib.params,
     lib.isTokenExist.user,
     handlers.campus.getCampusPost.validateParams,
