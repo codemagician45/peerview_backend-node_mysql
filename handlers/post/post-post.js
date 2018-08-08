@@ -54,14 +54,14 @@ function validateParams (req, res, next) {
   } else if (isPostStory !== -1) {
     bodySchema = {
       title: {
-        notEmpty: {
+        isLength: {
+          options: [{
+            min: 1
+          }],
           errorMessage: 'Missing Resource: Title'
         }
       },
       message: {
-        notEmpty: {
-          errorMessage: 'Missing Resource: Message'
-        },
         isLength: {
           options: [{
             min: 1,
