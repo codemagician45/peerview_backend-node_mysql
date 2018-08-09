@@ -67,7 +67,7 @@ function validateParams (req, res, next) {
             min: 1,
             max: 600
           }],
-          errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
+          errorMessage: `Invalid Resource: Minimum 1 and maximum 600 characters are allowed`
         }
       }
     };
