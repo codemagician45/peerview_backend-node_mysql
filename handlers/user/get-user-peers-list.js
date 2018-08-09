@@ -67,6 +67,12 @@ function getPeerslist (req, res, next) {
   // })
 
   return req.db.user.findAll({
+    include: [{
+      model: req.db.userCourse,
+      include: {
+        model: req.db.course
+      }
+    }],
     where: {
       id: {
         [req.Op.ne]: user.id
