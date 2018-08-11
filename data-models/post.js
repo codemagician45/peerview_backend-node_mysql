@@ -93,7 +93,8 @@ module.exports = function (sequelize, dataTypes) {
             'lastName',
             'email',
             'schoolName',
-            'profilePicture'
+            'profilePicture',
+            'socialImage'
           ]
         }],
         where: {
