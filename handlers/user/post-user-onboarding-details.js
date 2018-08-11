@@ -108,12 +108,6 @@ function validateParams (req, res, next) {
           errorMessage: 'Missing Resource: Current City'
         }
       },
-      role: {
-        isLength: {
-          options: [{min: 1}],
-          errorMessage: 'Missing Resource: Role'
-        }
-      },
       company: {
         isLength: {
           min: 1,
@@ -190,7 +184,6 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
   let schoolName = req.$params.schoolName;
   let city = req.$params.city;
   let gender = req.$params.gender;
-  let role = req.$params.role;
   let birthDate = req.$params.birthDate;
   let company = req.$params.company;
   let institutionName = req.$params.institutionName;
@@ -202,7 +195,6 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
     schoolName: schoolName,
     city: city,
     gender: gender,
-    role: role,
     birthDate: birthDate,
     company: company,
     institutionName: institutionName,
