@@ -152,19 +152,19 @@ function postCampusMarketplace (req, res, next) {// eslint-disable-line id-lengt
 
 function saveCampusAttachments (req, res, next) {// eslint-disable-line id-length
   let campusMarketplace = req.$scope.campusMarketplace;
-  let attachments = req.$params.attachments
+  let cloudinary = req.$params.attachments
     ? req.$params.attachments : [];
-  let campusAttachments = [];
+  let attachments = [];
 
   if (attachments.length === 0) {
     return next();
   }
 
-  attachments.forEach(attachment => {
-    campusAttachments.push({
+  cloudinary.forEach(item => {
+    attachments.push({
       campusMarketplaceId: campusMarketplace.id,
-      cloudinaryPublicId: attachment.id,
-      usage: attachment.usage
+      cloudinaryPublicId: item.cloudinaryPublicId,
+      usage: item.usage
     });
   });
 
