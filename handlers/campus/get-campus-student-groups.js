@@ -66,12 +66,12 @@ function getCampusStudentGroups (req, res, next) {// eslint-disable-line id-leng
   let campusId = req.$params.campusId;
   let isMyGroup = req.$params.isMyGroup;
   let offset = req.$params.offset;
-  let limit = req.$params.offset;
+  let limit = req.$params.limit;
   let where = {
     [req.Op.and]: {
       campusId: campusId,
       [req.Op.or]: [{
-        isConfirm: true
+        isConfirm: false // for now lets have this as false because we don't have admin yet
       }, {
         '$campusStudentGroupUser.userId$': user.id
       }]
