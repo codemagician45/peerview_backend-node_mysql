@@ -25,6 +25,7 @@ function validateParams (req, res, next) {
       }
     },
     isTimeline: {
+      optional: true,
       isBoolean: {
         errorMessage: 'Invalid Resource: isTimeline'
       }
