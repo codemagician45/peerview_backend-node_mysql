@@ -27,7 +27,10 @@ function validateParams (req, res, next) {
 
   let bodySchema = {
     campusPrivacyId: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Campus Privacy Id'
       },
       isInt: {
@@ -35,22 +38,34 @@ function validateParams (req, res, next) {
       }
     },
     name: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Name'
       }
     },
     description: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Description'
       }
     },
     adminEmail: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Admin Email'
       },
       isEmail: {
         errorMessage: 'Invalid Resource: Admin Email'
       }
+    },
+    logo: {
+      optional: true
     }
   };
 
@@ -78,6 +93,7 @@ function postCampusStudentGroup (req, res, next) {// eslint-disable-line id-leng
   let name = req.$params.name;
   let description = req.$params.description;
   let adminEmail = req.$params.adminEmail;
+  let logo = req.$params.logo;
 
   return req.db.campusStudentGroup.create({
     userId: user.id,
@@ -85,7 +101,8 @@ function postCampusStudentGroup (req, res, next) {// eslint-disable-line id-leng
     campusPrivacyId: campusPrivacyId,
     name: name,
     description: description,
-    adminEmail: adminEmail
+    adminEmail: adminEmail,
+    logo: logo
   })
   .then(campusStudentGroup => {
     req.$scope.campusStudentGroup = campusStudentGroup;
