@@ -27,17 +27,26 @@ function validateParams (req, res, next) {
 
   let bodySchema = {
     title: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Title'
       }
     },
     description: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Description'
       }
     },
     email: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Email'
       },
       isEmail: {
@@ -45,12 +54,18 @@ function validateParams (req, res, next) {
       }
     },
     phone: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Phone'
       }
     },
     price: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Price'
       },
       isFloat: {
@@ -58,17 +73,26 @@ function validateParams (req, res, next) {
       }
     },
     author: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Author'
       }
     },
     location: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Location'
       }
     },
     edition: {
-      notEmpty: {
+      isLength: {
+        options: [{
+          min: 1
+        }],
         errorMessage: 'Missing Resource: Edition'
       }
     },
@@ -168,7 +192,7 @@ function saveCampusAttachments (req, res, next) {// eslint-disable-line id-lengt
     });
   });
 
-  return req.db.attachment.bulkCreate(campusAttachments)
+  return req.db.attachment.bulkCreate(attachments)
   .then(attachments => {// eslint-disable-line id-length
     next();
     return attachments;
