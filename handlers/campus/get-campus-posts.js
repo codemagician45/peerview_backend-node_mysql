@@ -24,6 +24,11 @@ function validateParams (req, res, next) {
         errorMessage: 'Missing Resource: Campus Id'
       }
     },
+    isTimeline: {
+      isBoolean: {
+        errorMessage: 'Invalid Resource: isTimeline'
+      }
+    },
     courseId: {
       optional: true,
       isInt: {
@@ -94,6 +99,7 @@ function getCampusPosts (req, res, next) {
   let studentGroupId = req.$params.groupId;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
+  let isTimeline = req.$params.isTimeline;
   const sequelize = req.db.campusPostRating.sequelize;
   const colRating = sequelize.col('postRating.rating');
   const colAVG = sequelize.fn('AVG', colRating);
@@ -106,6 +112,34 @@ function getCampusPosts (req, res, next) {
     campusSocietyClubId: clubId || null,
     campusStudentGroupId: studentGroupId || null
   };
+
+  if (classId && isTimeline) {
+    let additionalQuery = {
+      [req.Op.and]: {
+        question: {
+          [req.Op.eq]: null
+        },
+        duration: {
+          [req.Op.eq]: null
+        }
+      }
+    };
+
+    where = Object.assign(where, additionalQuery);
+  } else if (classId) {// we are in the question tab rather than in the timeline tab
+    let additionalQuery = {
+      [req.Op.and]: {
+        question: {
+          [req.Op.ne]: null
+        },
+        duration: {
+          [req.Op.ne]: null
+        }
+      }
+    };
+
+    where = Object.assign(where, additionalQuery);
+  }
 
   return req.db.campusPost.findAll({
     attributes: {
