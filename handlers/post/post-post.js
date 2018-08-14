@@ -6,6 +6,7 @@
  */
 
 const lib = require('../../lib');
+const moment = require('moment');
 
 /**
  * Validation of req.body, req, param,
@@ -130,10 +131,12 @@ function postPost (req, res, next) {
   let postTo = req.$params.postTo;
   let question = undefined;
   let duration = undefined;
+  let pollExpiration = undefined;
 
   if (JSON.stringify(req.$params.postPoll) !== '{}' && req.$params.postPoll.question) {
     question = req.$params.postPoll.question;
     duration = req.$params.postPoll.duration;
+    pollExpiration = moment().add(duration, 'day');
   }
 
   return req.db.post.create({
@@ -142,7 +145,8 @@ function postPost (req, res, next) {
     title: title,
     question: question,
     duration: duration,
-    postTo: postTo
+    postTo: postTo,
+    pollExpiration: pollExpiration
   })
   .then(post => {
     post.dataValues.user = user.dataValues;
