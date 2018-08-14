@@ -107,6 +107,14 @@ module.exports = function (sequelize, dataTypes) {
     this.hasMany(models.communityUsers);
     this.hasMany(models.event);
     this.hasMany(models.userInterest);
+    this.hasMany(models.userFollower, {
+      foreignKey: 'followeeId',
+      as: 'followee'
+    });
+    this.hasMany(models.userFollower, {
+      foreignKey: 'followerId',
+      as: 'follower'
+    });
   };
 
   return User;
