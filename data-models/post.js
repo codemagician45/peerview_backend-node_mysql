@@ -18,6 +18,9 @@ module.exports = function (sequelize, dataTypes) {
     },
     duration: {
       type: dataTypes.INTEGER
+    },
+    pollExpiration: {
+      type: dataTypes.DATE
     }
   }, {
     tableName: 'post',
