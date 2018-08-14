@@ -7,6 +7,7 @@
  */
 
 const lib = require('../../lib');
+const moment = require('moment');
 
 /**
  * Validation of req.body, req, param,
@@ -131,7 +132,16 @@ function getPosts (req, res, next) {
     where: {
       postTo: {
         [req.Op.eq]: null
-      }
+      },
+      [req.Op.or]: [{
+        pollExpiration: {
+          [req.Op.eq]: null
+        }
+      }, {
+        pollExpiration: {
+          [req.Op.gt]: moment()
+        }
+      }]
     },
     group: ['post.id', 'post.userId'],
     order: [['createdAt', 'DESC']],
