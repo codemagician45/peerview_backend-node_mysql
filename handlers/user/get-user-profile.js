@@ -15,6 +15,7 @@ function getUserProfile (req, res, next) {
    */
 
   let userId = req.$params.userId || req.$scope.user.id;
+  let currentLoginUserId = req.$scope.user.id;
   const sequelize = req.db.userCredits.sequelize;
 
   return req.db.user.findOne({
@@ -31,6 +32,10 @@ function getUserProfile (req, res, next) {
         model: req.db.course
       }
     }, {
+      model: req.db.userFollower,
+      as: 'followee',
+      attributes: []
+    }, {
       model: req.db.userCredits,
       attributes: [
         [sequelize.fn('SUM',
@@ -45,9 +50,21 @@ function getUserProfile (req, res, next) {
   })
   .then(user => {
     req.$scope.user = user;
+    return user.getFollowee({
+      where: {
+        followerId: currentLoginUserId
+      }
+    });
+  })
+  .then((userFollowers) => {
+    let user = req.$scope.user;
+    if (userFollowers.length !== 0) {
+      user.dataValues.isAlreadyFollowed = true;
+      req.$scope.user = user;
+    }
 
     next();
-    return user;
+    return userFollowers;
   })
   .catch(error => {
     res.status(500)
