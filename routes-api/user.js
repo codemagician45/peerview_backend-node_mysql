@@ -94,6 +94,7 @@ function userApi (apiRouter) {
     handlers.user.postUserSocialLogin.validateParams,
     handlers.user.postUserSocialLogin.findUser,
     handlers.user.postUserSocialLogin.saveOrUpdateUser,
+    handlers.user.postUserSocialLogin.getUserProfile,
     handlers.user.postUserSocialLogin.response);
 
   apiRouter.post('/user/register',
