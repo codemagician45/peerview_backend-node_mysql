@@ -110,7 +110,7 @@ function validateParams (req, res, next) {
       },
       company: {
         isLength: {
-          min: 1,
+          options: [{min: 1}],
           errorMessage: 'Missing Resource: Company'
         }
       },
