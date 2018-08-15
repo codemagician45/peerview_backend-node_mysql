@@ -17,7 +17,6 @@ module.exports = {
     'computed-property-spacing': [2, 'never'],
     'consistent-this': [2, 'self'],
     'func-call-spacing': [2, 'never'],
-    'func-style': [1, 'declaration'],
     'id-blacklist': [2, 'data', 'info', 'obj'],
     'id-length': [1, {
       min: 1, max: 20,
