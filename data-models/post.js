@@ -128,27 +128,28 @@ module.exports = function (sequelize, dataTypes) {
     return posts;
   };
 
-  Post.prototype.getPOSTPOLLOPTIONS = async function (posts, model) {
+  Post.prototype.getPOSTPOLLOPTIONS = async function (posts) {
     posts = await Promise.all(posts.map(async (post) => {
-      const colCount = sequelize.fn('COUNT',
-        sequelize.col('postPollOptionSummary.postPollOptionId'));
-
-      const contents = await post
-      .getPostPollOptions({
-        attributes: {
-          include: [
-            'id',
-            'name',
-            [colCount, 'count'],
-          ]
-        },
-        include: [{
-          model: model.postPollOptionSummary,
-          as: 'postPollOptionSummary',
-          attributes: []
-        }],
-        group: ['postPollOption.id'],
-      });
+      const contents = post.sequelize.query(`
+        SELECT a.id, a.name, COALESCE(ROUND(((a.rcount/a.sum) * 100)),0) as average
+      	FROM
+      		(SELECT postPollOption.id, postPollOption.name, count(posPollOptionSummary.postPollOptionId) as rcount,
+      		(SELECT SUM(ab.counts) as sum
+      			FROM (SELECT postPollOptionId, a.rcount as counts
+      				FROM
+      					(SELECT postPollOptionId, count(posPollOptionSummary.postPollOptionId) as rcount
+      						FROM post_poll_option_summary as posPollOptionSummary
+      						LEFT OUTER JOIN post_poll_option AS postPollOption
+      						ON posPollOptionSummary.postPollOptionId = postPollOption.id
+      						WHERE postPollOption.postId = ${post.id}
+      						GROUP BY posPollOptionSummary.postPollOptionId) as a
+      				GROUP BY postPollOptionId) as ab) as sum
+      		FROM post_poll_option as postPollOption
+      		LEFT OUTER JOIN post_poll_option_summary AS posPollOptionSummary
+      		ON postPollOption.id = posPollOptionSummary.postPollOptionId
+      		WHERE postPollOption.postId = ${post.id}
+      		GROUP BY postPollOption.id) as a
+        `,  { type: post.sequelize.QueryTypes.SELECT});
 
       post.dataValues.postPollOptions = contents;
       return post;
