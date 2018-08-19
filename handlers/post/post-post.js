@@ -235,7 +235,15 @@ function savePostPollOption (req, res, next) {// eslint-disable-line id-length
 
   return req.db.postPollOption.bulkCreate(postPollOption)
   .then(postPollOptions => {// eslint-disable-line id-length
-    post.dataValues.postPollOptions = postPollOptions;
+    postPollOptions = postPollOptions.map(postPoll => {
+      postPoll.dataValues.sum = 0;
+      postPoll.dataValues.count = 0;
+      postPoll.dataValues.average = 0;
+      return postPoll;
+    });
+
+    post.dataValues.postPollOptions = {};
+    post.dataValues.postPollOptions.fulfillmentValue = postPollOptions;
     req.$scope.post = post;
     next();
     return postPollOptions;
