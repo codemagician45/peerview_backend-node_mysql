@@ -131,7 +131,7 @@ module.exports = function (sequelize, dataTypes) {
   Post.prototype.getPOSTPOLLOPTIONS = async function (posts) {
     posts = await Promise.all(posts.map(async (post) => {
       const contents = post.sequelize.query(`
-        SELECT a.id, a.name, COALESCE(ROUND(((a.rcount/a.sum) * 100)),0) as average
+        SELECT a.id, a.name, a.rcount as count, COALESCE(a.sum, 0) as sum, COALESCE(ROUND(((a.rcount/a.sum) * 100), 2), 0) as average
       	FROM
       		(SELECT postPollOption.id, postPollOption.name, count(posPollOptionSummary.postPollOptionId) as rcount,
       		(SELECT SUM(ab.counts) as sum
