@@ -229,7 +229,16 @@ function saveCampusPostPollOption (req, res, next) {// eslint-disable-line id-le
 
   return req.db.campusPostPollOption.bulkCreate(campusPostPollOption)
   .then(campusPostPollOptions => {// eslint-disable-line id-length
-    campusPost.dataValues.postPollOptions = campusPostPollOptions;
+    campusPostPollOptions = campusPostPollOptions.map(postPoll => {
+      postPoll.dataValues.sum = 0;
+      postPoll.dataValues.count = 0;
+      postPoll.dataValues.average = 0;
+
+      return postPoll;
+    });
+
+    campusPost.dataValues.postPollOptions = {};
+    campusPost.dataValues.postPollOptions.fulfillmentValue = campusPostPollOptions;
     req.$scope.campusPost = campusPost;
     next();
     return campusPostPollOptions;

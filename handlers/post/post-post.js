@@ -239,6 +239,7 @@ function savePostPollOption (req, res, next) {// eslint-disable-line id-length
       postPoll.dataValues.sum = 0;
       postPoll.dataValues.count = 0;
       postPoll.dataValues.average = 0;
+
       return postPoll;
     });
 

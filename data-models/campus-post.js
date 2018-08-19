@@ -98,27 +98,28 @@ module.exports = function (sequelize, dataTypes) {
     return posts;
   };
 
-  CampusPost.prototype.getPOSTPOLLOPTIONS = async function (posts, model) {
+  CampusPost.prototype.getPOSTPOLLOPTIONS = async function (posts) {
     posts = await Promise.all(posts.map(async (post) => {
-      const colCount = sequelize.fn('COUNT',
-        sequelize.col('postPollOptionSummary.campusPostPollOptionId'));
-
-      const contents = await post
-      .getPostPollOption({
-        attributes: {
-          include: [
-            'id',
-            'name',
-            [colCount, 'count'],
-          ]
-        },
-        include: [{
-          model: model.campusPostPollOptionSummary,
-          as: 'postPollOptionSummary',
-          attributes: []
-        }],
-        group: ['campusPostPollOption.id'],
-      });
+      const contents = post.sequelize.query(`
+        SELECT a.id, a.name, a.rcount as count, COALESCE(a.sum, 0) as sum, COALESCE(ROUND(((a.rcount/a.sum) * 100), 2),0) as average
+        FROM
+        	(SELECT postPollOption.id, postPollOption.name, count(posPollOptionSummary.campusPostPollOptionId) as rcount,
+        		(SELECT SUM(ab.counts) as sum
+        			FROM (SELECT campusPostPollOptionId, a.rcount as counts
+        				FROM
+        					(SELECT campusPostPollOptionId, count(posPollOptionSummary.campusPostPollOptionId) as rcount
+        						FROM campus_post_poll_option_summary as posPollOptionSummary
+        						LEFT OUTER JOIN campus_post_poll_option AS postPollOption
+        						ON posPollOptionSummary.campusPostPollOptionId = postPollOption.id
+        						WHERE postPollOption.campusPostId = ${post.id}
+        						GROUP BY posPollOptionSummary.campusPostPollOptionId) as a
+        				GROUP BY campusPostPollOptionId) as ab) as sum
+        		FROM campus_post_poll_option as postPollOption
+        		LEFT OUTER JOIN campus_post_poll_option_summary AS posPollOptionSummary
+        		ON postPollOption.id = posPollOptionSummary.campusPostPollOptionId
+        		WHERE postPollOption.campusPostId = ${post.id}
+        		GROUP BY postPollOption.id) as a
+        `,  { type: post.sequelize.QueryTypes.SELECT});
 
       post.dataValues.postPollOptions = contents;
       return post;
