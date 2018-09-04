@@ -74,7 +74,7 @@ function getCampusMarketplaceList (req, res, next) {// eslint-disable-line id-le
     where: {
       [req.Op.and]: {
         campusId: campusId,
-        isConfirm: true
+        isConfirm: false//true
       }
     },
     order: [['createdAt', 'DESC']],
