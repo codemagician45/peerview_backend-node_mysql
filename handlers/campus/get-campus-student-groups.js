@@ -31,6 +31,11 @@ function validateParams (req, res, next) {
         errorMessage: 'Invalid Resource: isMyGroup'
       }
     },
+    campusPrivacyId: {
+      isInt: {
+        errorMessage: 'Missing Resource: Campus Privacy Id'
+      }
+    },
     offset: {
       optional: true,
       isInt: {
@@ -65,11 +70,14 @@ function getCampusStudentGroups (req, res, next) {// eslint-disable-line id-leng
   let user = req.$scope.user;
   let campusId = req.$params.campusId;
   let isMyGroup = req.$params.isMyGroup;
+  let campusPrivacyId = req.$params.campusPrivacyId;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
+
   let where = {
     [req.Op.and]: {
       campusId: campusId,
+      campusPrivacyId: campusPrivacyId,
       [req.Op.or]: [{
         isConfirm: false // for now lets have this as false because we don't have admin yet
       }, {
