@@ -56,6 +56,9 @@ function getCampusMarketplace (req, res, next) {// eslint-disable-line id-length
     include: [{
       model: req.db.user,
       attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName']
+    }, {
+      model: req.db.attachment,
+      attributes: ['id', 'cloudinaryPublicId']
     }],
     where: {
       [req.Op.and]: {
