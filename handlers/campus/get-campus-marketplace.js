@@ -59,8 +59,8 @@ function getCampusMarketplace (req, res, next) {// eslint-disable-line id-length
     }],
     where: {
       [req.Op.and]: {
-        id: marketplaceId,
-        isConfirm: true
+        id: marketplaceId
+        // isConfirm: true
       }
     }
   })
