@@ -180,7 +180,7 @@ function saveCampusAttachments (req, res, next) {// eslint-disable-line id-lengt
     ? req.$params.attachments : [];
   let attachments = [];
 
-  if (attachments.length === 0) {
+  if (cloudinary.length === 0) {
     return next();
   }
 
