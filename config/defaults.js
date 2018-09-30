@@ -43,6 +43,7 @@ module.exports = {
     database: process.env.PEERSVIEW_DATABASE,
     port: process.env.PEERSVIEW_DB_PORT,
     timezone: process.env.PEERSVIEW_DB_TIMEZONE,
+    dialect: process.env.PEERSVIEW_DB_DIALECT,
     dialectOptions: {},
     // pool: {
     //   idle: ~~process.env.PEERSVIEW_DB_MAX_IDLE_TIME || 2 * 1000,
