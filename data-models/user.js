@@ -107,6 +107,9 @@ module.exports = function (sequelize, dataTypes) {
     this.hasMany(models.communityUsers);
     this.hasMany(models.event);
     this.hasMany(models.userInterest);
+    this.hasMany(models.postPollOptionSummary, {
+      as: 'postPollOptionSummary'
+    });
     this.hasMany(models.userFollower, {
       foreignKey: 'followeeId',
       as: 'followee'
