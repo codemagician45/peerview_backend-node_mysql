@@ -153,6 +153,7 @@ function getPosts (req, res, next) {
     return req.db.post.prototype.getPOSTREPLY(posts, req.db)
     .then(() => req.db.post.prototype.getATTACHMENTS(posts))
     .then(() => req.db.post.prototype.getPOSTPOLLOPTIONS(posts, req.db))
+    .then(() => req.db.post.prototype.getIfUserAlreadyVoted(posts, user.id))
     .then(() => req.db.post.prototype.getPOSTSHARE(posts, req))
     .then(() => req.db.post.prototype.getPOSTLIKES(posts, req));
   })
