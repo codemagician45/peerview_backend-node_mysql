@@ -30,7 +30,7 @@ module.exports = {
     }
   },
   server: {
-    port: process.env.PORT || process.env.PEERSVIEW_PORT,
+    port: process.env.PEERSVIEW_PORT || process.env.PORT,
   },
   frontEnd: {
     baseUrl: process.env.PEERSVIEW_BASEURL
