@@ -1,3 +1,4 @@
+/*eslint-disable max-len*/
 'use strict';
 
 module.exports = function (sequelize, dataTypes) {
@@ -152,6 +153,24 @@ module.exports = function (sequelize, dataTypes) {
         `,  { type: post.sequelize.QueryTypes.SELECT});
 
       post.dataValues.postPollOptions = contents;
+      return post;
+    }));
+
+    return posts;
+  };
+
+  Post.prototype.getIfUserAlreadyVoted = async function (posts, userId) {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = post.sequelize.query(`
+        SELECT count(posPollOptionSummary.userId) as isUserAlreadyVoted
+					FROM post_poll_option_summary as posPollOptionSummary
+					LEFT OUTER JOIN post_poll_option AS postPollOption
+					ON posPollOptionSummary.postPollOptionId = postPollOption.id
+					WHERE postPollOption.postId = ${post.id} and posPollOptionSummary.userId = ${userId}
+        `,  { type: post.sequelize.QueryTypes.SELECT});
+
+      post.dataValues.isUserAlreadyVoted = await contents;
+      post.dataValues.isUserAlreadyVoted = post.dataValues.isUserAlreadyVoted[0].isUserAlreadyVoted;
       return post;
     }));
 
