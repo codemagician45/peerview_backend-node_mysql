@@ -50,7 +50,7 @@ module.exports = Object.assign({}, defaults, {
     password: '',
     timezone: '+00:00',
     logging: function (s) {
-      var line = sprintf('[%s] %s\n', new Date().toJSON(), s);
+      let line = sprintf('[%s] %s\n', new Date().toJSON(), s);
       sqlLog.write(line);
     }
   },
