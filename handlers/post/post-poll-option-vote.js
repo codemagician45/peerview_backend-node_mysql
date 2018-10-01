@@ -52,10 +52,12 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function postPollOptionVote (req, res, next) {
+  let user = req.$scope.user;
   let postPollOptionId = req.$params.postPollOptionId;
 
   return req.db.postPollOptionSummary.create({
-    postPollOptionId: postPollOptionId
+    postPollOptionId: postPollOptionId,
+    userId: user.id
   })
   .then(postPollOptionSummary => {// eslint-disable-line id-length
     next();
