@@ -9,23 +9,23 @@
 const lib = require('../../lib');
 
 function getUserFollowee (req, res, next) {
-  let user = req.$scope.user;
+  let userId = req.$params.userId;
 
   return req.db.userFollower.findAll({
     include: [{
       model: req.db.user,
-      as: 'follower'
+      as: 'followee'
     }],
     where: {
-      followeeId: {
-        [req.Op.eq]: user.id
+      followerId: {
+        [req.Op.eq]: userId
       }
     }
   })
-  .then(follower => {
-    req.$scope.follower = follower;
+  .then(followee => {
+    req.$scope.followee = followee;
     next();
-    return follower;
+    return followee;
   })
   .catch(error => {
     res.status(500)
@@ -44,12 +44,12 @@ function getUserFollowee (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let follower = req.$scope.follower;
+  let followee = req.$scope.followee;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    data: follower
+    data: followee
   };
 
   res.status(200).send(body);
