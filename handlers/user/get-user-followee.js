@@ -8,22 +8,13 @@
 
 const lib = require('../../lib');
 
-/**
- * This will get the interest or sub-interest in the
- * current context provided the interestCategoryId
- * @param {any} req request object
- * @param {any} res response object
- * @param {any} next next object
- * @returns {next} returns the next handler - success response
- * @returns {rpc} returns the validation error - failed response
- */
 function getUserFollowee (req, res, next) {
   let user = req.$scope.user;
 
   return req.db.userFollower.findAll({
     include: [{
       model: req.db.user,
-      as: 'followee'
+      as: 'follower'
     }],
     where: {
       followeeId: {
@@ -31,10 +22,10 @@ function getUserFollowee (req, res, next) {
       }
     }
   })
-  .then(followee => {
-    req.$scope.followee = followee;
+  .then(follower => {
+    req.$scope.follower = follower;
     next();
-    return followee;
+    return follower;
   })
   .catch(error => {
     res.status(500)
@@ -53,12 +44,12 @@ function getUserFollowee (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let followee = req.$scope.followee;
+  let follower = req.$scope.follower;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    data: followee
+    data: follower
   };
 
   res.status(200).send(body);
