@@ -58,12 +58,14 @@ function userApi (apiRouter) {
     handlers.user.getUserTimeline.getPosts,
     handlers.user.getUserTimeline.response);
 
-  apiRouter.get('/user/followee',
+  apiRouter.get('/user/followee/:userId',
+    lib.params,
     lib.isTokenExist.user,
     handlers.user.getUserFollowee.logic,
     handlers.user.getUserFollowee.response);
 
-  apiRouter.get('/user/followers',
+  apiRouter.get('/user/followers/:userId',
+    lib.params,
     lib.isTokenExist.user,
     handlers.user.getUserFollower.logic,
     handlers.user.getUserFollower.response);
