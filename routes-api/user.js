@@ -5,7 +5,7 @@ const handlers = require('../handlers');
 const lib = require('../lib');
 
 function userApi (apiRouter) {
-  apiRouter.get('/user/:jotToken',
+  apiRouter.get('/user/by-jot-token/:jotToken',
     lib.params,
     handlers.user.getUserByJotToken.validateParams,
     handlers.user.getUserByJotToken.logic,
