@@ -5,6 +5,7 @@
  * @description Post User Email Verification
  */
 
+const moment = require('moment');
 const randomstring = require('randomstring');
 const lib = require('../../lib');
 
@@ -55,11 +56,15 @@ function findUser (req, res, next) {
   let token = req.$params.token;
   let jotToken = req.$params.jotToken;
   let decoded = lib.jwt.decode(jotToken, token);
+  let tokenActiveDate = moment(new Date()).utc();
 
   return req.db.user.findOne({
     where: {
       id: {
         [req.Op.eq]: decoded.userId
+      },
+      tokenActiveDate: {
+        [req.Op.gte]: tokenActiveDate
       }
     }
   })
