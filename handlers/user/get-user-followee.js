@@ -9,7 +9,7 @@
 const lib = require('../../lib');
 
 function getUserFollowee (req, res, next) {
-  let userId = req.$params.userId;
+  let userId = req.$params.userId || req.$scope.user.id;
 
   return req.db.userFollower.findAll({
     include: [{
