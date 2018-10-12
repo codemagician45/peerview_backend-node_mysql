@@ -6,6 +6,7 @@
  */
 
 const randomstring = require('randomstring');
+const moment = require('moment');
 const md5 = require('MD5');
 const lib = require('../../lib');
 const templates = require('../../templates');
@@ -161,13 +162,14 @@ function postUserRegister (req, res, next) {
   let email = req.$params.email;
   let password = md5(req.$params.password);
   let token = randomstring.generate();
+  let tokenActiveDate = moment(new Date()).utc().add(24, 'hours');
 
   let create = {
     firstName: firstName,
     lastName: lastName,
     email: email,
-    password: password
-    // token: token
+    password: password,
+    tokenActiveDate: tokenActiveDate
     // dont save the token so that we don't have a token for user verification yet
     // until the user verify its email
   };
