@@ -6,18 +6,22 @@
  */
 const path = require('path');
 const url = require('url');
+const bformat = require('bunyan-format');
 const sprintf = require('util').format;
 const defaults = require('./defaults');
 const openFile = require('fs').createWriteStream;
 const sqlLog = openFile(path.resolve(__dirname, '..', 'log', 'sql.log'), {
   defaultEncoding: 'utf8', flags: 'a'
 });
+const formatOut = bformat({
+  outputMode: 'short'
+});
 
 module.exports = Object.assign({}, defaults, {
   appLog: {
     name: 'PeerviewApp',
     streams: [{
-      stream: process.stdout,
+      stream: formatOut,
       level: 'debug'
     }],
     serializers: {
@@ -31,8 +35,8 @@ module.exports = Object.assign({}, defaults, {
           params: params
         };
       },
-      res: function (request, response) {
-        return response;
+      statusCode: function (response) {
+        return response.statusCode;
       }
     }
   },
@@ -51,7 +55,7 @@ module.exports = Object.assign({}, defaults, {
     timezone: '+00:00',
     logging: function (s) {
       let line = sprintf('[%s] %s\n', new Date().toJSON(), s);
-      sqlLog.write(line);
+      /*sqlLog.write(line);*/
     }
   },
   cloudinary: {
