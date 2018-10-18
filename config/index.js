@@ -1,7 +1,7 @@
 'use strict';
 
 var defaults = require(__dirname + '/defaults');
-var environment = process.env.NODE_ENV;
+var environment = process.env.NODE_ENV || 'development';
 var activeConfig;
 
 try {
