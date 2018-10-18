@@ -3,6 +3,7 @@
 
 const express = require('express');
 const validator = require('express-validator');
+const url = require('url');
 const apiRouter = new express.Router({mergeParams: true, strict: true});
 const app = require(__dirname + '/server');
 const handlers = require('./handlers');
@@ -17,6 +18,22 @@ const routesApi = require('./routes-api');
 apiRouter.use(validator({
   customValidators: lib.customValidators
 }));
+/**
+ * Basically this would the referrence of all the api's
+ * This would be beneficial when we setup all the needed
+ * testing (unit, integration).
+ */
+apiRouter.use((req, res, next) => {
+  /**
+   * This will be used as a merge params
+   * of the req.query, req.body, and req.params
+   * from the request object.
+   */
+  let query = url.parse(req.url, true).query;
+  req.$params = Object.assign(req.params, req.body, query);
+
+  next();
+});
 app.use('/api/v1', apiRouter);
 
 // basic routes
@@ -46,6 +63,8 @@ routesApi.leisure(apiRouter);
 
 // campus route
 routesApi.campus(apiRouter);
+
+routesApi.message(apiRouter);
 
 apiRouter.get('/search', // combination of advance-search/user and advance-search/post
   lib.params,
