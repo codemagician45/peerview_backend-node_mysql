@@ -12,6 +12,10 @@ module.exports = function (sequelize, dataTypes) {
     },
     detail: {
       type: dataTypes.STRING
+    },
+    isRead: {
+      type: dataTypes.BOOLEAN,
+      default: false
     }
   }, {
     tableName: 'message',
@@ -23,13 +27,15 @@ module.exports = function (sequelize, dataTypes) {
   Message.associate = function (models) {
     this.belongsTo(models.user, {
       foreignKey: 'fromId',
-      constraints: false,
       as: 'from'
     });
     this.belongsTo(models.user, {
       foreignKey: 'toId',
-      constraints: false,
       as: 'to'
+    });
+    this.hasMany(models.message, {
+      foreignKey: 'parentId',
+      as: 'messages'
     });
   };
 
