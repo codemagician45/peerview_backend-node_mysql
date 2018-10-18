@@ -12,6 +12,12 @@ module.exports = function (sequelize, dataTypes) {
     },
     isRead: {
       type: dataTypes.BOOLEAN
+    },
+    type: {
+      type: dataTypes.STRING
+    },
+    message: {
+      type: dataTypes.STRING
     }
   }, {
     tableName: 'notification',
@@ -22,10 +28,7 @@ module.exports = function (sequelize, dataTypes) {
 
   Notification.associate = function (models) {
     this.belongsTo(models.user, {
-      foreignKey: 'senderId'
-    });
-    this.belongsTo(models.user, {
-      foreignKey: 'receiverId'
+      foreignKey: 'subject'
     });
   };
 
