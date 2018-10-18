@@ -4,10 +4,12 @@ const express = require('express');
 const bodyParser  = require('body-parser');
 const passport = require('passport');
 const cors = require('cors');
+const perfHooks = require('perf_hooks');
 const config = require(__dirname + '/config');
 const log = require('bunyan').createLogger(config.appLog);
 let app = express();
 let db = require(__dirname + '/lib/db');
+let utilitites = require('./lib/utilities');
 
 require('./config/passport.js')(passport);
 app.use(passport.initialize());
@@ -32,9 +34,36 @@ app.use(function setupScope (req, res, next) {
 });
 
 app.use(function trafficLogger (req, res, next) {
-  req.log.info({req: req}, 'HTTP Request');
+  let chunks = [];
+  let resToReapply = res.end;
+  let start = perfHooks.performance.now();
+  let end;
+
+  req.log.info({
+    req: req
+  }, 'HTTP Request');
+  res.end = function (chunk) {
+    if (chunk) {
+      chunks.push(new Buffer(chunk));
+    }
+
+    let body = Buffer.concat(chunks).toString('utf8');
+    if (utilitites.isJsonString(body)) {
+      body = JSON.parse(body);
+    }
+
+    req.log.info({
+      response: body
+    }, 'HTTP Response');
+    resToReapply.apply(res, arguments);
+  };
+
   res.once('finish', function resLogger () {
-    req.log.info({res: res}, 'HTTP Response');
+    end = perfHooks.performance.now();
+    req.log.info({
+      statusCode: res
+    }, 'HTTP Finish');
+    req.log.info(end - start, 'Api Performance Time');
   });
 
   next();
