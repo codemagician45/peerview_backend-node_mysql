@@ -39,6 +39,15 @@ const getMessageListByParentId = (req, res, next) => {// eslint-disable-line id-
   return req.db
   .message
   .findAll({
+    include: [{
+      model: req.db.user,
+      as: 'from',
+      attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage']
+    }, {
+      model: req.db.user,
+      as: 'to',
+      attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage']
+    }],
     where: {
       [req.Op.or]: [{
         id: parentId
@@ -66,7 +75,7 @@ const getMessageListByParentId = (req, res, next) => {// eslint-disable-line id-
   .catch((error) => {
     req.log.error({
       error: error
-    }, 'handlers.message get-message-list-b-parent-id [message.findAll] Error');
+    }, 'handlers.message get-message-list-by-parent-id [message.findAll] Error');
 
     return res.status(lib.httpCodes.SERVER_ERROR)
     .send(new lib.rpc.InternalError(error));
