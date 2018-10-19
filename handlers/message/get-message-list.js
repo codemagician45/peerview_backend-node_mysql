@@ -40,14 +40,26 @@ const getMessageList = (req, res, next) => {
       order: [
         ['createdAt', 'DESC']
       ],
+      include: [{
+        model: req.db.user,
+        as: 'from',
+        attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage']
+      }, {
+        model: req.db.user,
+        as: 'to',
+        attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage'],
+      }]
+    }, {
+      model: req.db.user,
+      as: 'from',
+      attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage']
+    }, {
+      model: req.db.user,
+      as: 'to',
+      attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage'],
     }],
     where: {
-      parentId: null,
-      [req.Op.or]: [{
-        fromId: user.id
-      }, {
-        toId: user.id
-      }]
+      parentId: null
     },
     order: [
       ['createdAt', 'DESC']
