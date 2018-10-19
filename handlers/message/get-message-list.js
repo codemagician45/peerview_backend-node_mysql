@@ -26,7 +26,6 @@ const querySchema = {
 };
 
 const getMessageList = (req, res, next) => {
-  let user = req.$scope.user;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
 
