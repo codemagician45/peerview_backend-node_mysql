@@ -7,14 +7,12 @@ module.exports = function (sequelize, dataTypes) {
       primaryKey: true,
       autoIncrement: true
     },
-    notification: {
-      type: dataTypes.STRING
-    },
     isRead: {
-      type: dataTypes.BOOLEAN
+      type: dataTypes.BOOLEAN,
+      default: false
     },
     type: {
-      type: dataTypes.STRING
+      type: dataTypes.STRING/*post, etc*/
     },
     message: {
       type: dataTypes.STRING
