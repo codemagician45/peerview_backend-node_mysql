@@ -26,7 +26,13 @@ module.exports = function (sequelize, dataTypes) {
 
   Notification.associate = function (models) {
     this.belongsTo(models.user, {
-      foreignKey: 'subject'
+      foreignKey: 'subjectId',
+      as: 'subject'
+    });
+
+    this.belongsTo(models.post, {
+      foreignKey: 'postId',
+      as: 'post'
     });
   };
 
