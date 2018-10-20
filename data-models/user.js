@@ -87,6 +87,12 @@ module.exports = function (sequelize, dataTypes) {
     },
     website: {
       type: dataTypes.STRING
+    },
+    name: {
+      type: dataTypes.VIRTUAL,
+      get: function () {
+        return `${this.get('firstName')} ${this.get('lastName')}`;
+      }
     }
   }, {
     tableName: 'user',
