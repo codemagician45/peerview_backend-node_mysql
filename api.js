@@ -70,6 +70,8 @@ routesApi.userV1(apiRouter);
 
 routesApi.postV1(apiRouter);
 
+routesApi.notification(apiRouter);
+
 apiRouter.get('/search', // combination of advance-search/user and advance-search/post
   lib.params,
   lib.isTokenExist.user,
