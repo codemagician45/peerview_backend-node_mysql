@@ -19,6 +19,11 @@ let chart = (api) => {
     handlers.message.getMessageList.logic,
     handlers.message.getMessageList.response);
 
+  api.get('/count',
+    lib.isTokenExist.user,
+    handlers.message.getMessageCount.logic,
+    handlers.message.getMessageCount.response);
+
   api.post('/',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.message.postMessage.querySchema),
