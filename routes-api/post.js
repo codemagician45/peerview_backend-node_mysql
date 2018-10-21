@@ -25,15 +25,6 @@ function postApi (apiRouter) {
     handlers.post.getPostCategoryId.logic,
     handlers.post.getPostCategoryId.response);
 
-  apiRouter.post('/post',
-    lib.params,
-    lib.isTokenExist.user,
-    handlers.post.postPost.validateParams,
-    handlers.post.postPost.logic,
-    handlers.post.postPost.saveAttachments,
-    lib.userCredits.updateUserCredits,
-    handlers.post.postPost.response);
-
   apiRouter.post('/post/:postId/rating',
     lib.params,
     lib.isTokenExist.user,
