@@ -32,7 +32,9 @@ const getNotificationList = (req, res, next) => {
   const user = req.$scope.user;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
-  let where = {};
+  let where = {
+    recipientId: user.id
+  };
 
   if (req.$params.state) {
     where.isRead = state[req.$params.state];
@@ -42,12 +44,6 @@ const getNotificationList = (req, res, next) => {
   .notification
   .findAndCountAll({
     include: [{
-      model: req.db.post,
-      as: 'post',
-      where: {
-        userId: user.id
-      }
-    }, {
       model: req.db.user,
       as: 'subject',
     }],
