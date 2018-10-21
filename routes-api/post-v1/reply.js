@@ -5,7 +5,7 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let chart = (api) => {
-  api.get('/:postId/reply',
+  api.post('/:postId/reply',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostReply.querySchema),
     lib.schemaValidator.validationResult,
