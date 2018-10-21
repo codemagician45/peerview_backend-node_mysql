@@ -9,39 +9,26 @@
 const lib = require('../../lib');
 const templates = require('../../templates');
 
+
 /**
- * Validation of req.body, req, param,
- * and req.query
- * @param {any} req request object
- * @param {any} res response object
- * @param {any} next next object
- * @returns {next} returns the next handler - success response
- * @returns {rpc} returns the validation error - failed response
+ * Initialized the schema Object
  */
-function validateParams (req, res, next) {
-  let paramsSchema = {
-    userId: {
-      isInt: {
-        errorMessage: 'Invalid Resource: User Id'
-      }
+const querySchema = {
+  userId: { in: ['params'],
+    isInt: {
+      errorMessage: 'Invalid Resource: User Id'
     }
-  };
-
-  req.checkParams(paramsSchema);
-  return req.getValidationResult()
-  .then(validationErrors => {
-    if (validationErrors.array().length !== 0) {
-      return res.status(400)
-      .send(new lib.rpc.ValidationError(validationErrors.array()));
+  },
+  recipientId: { in: ['body'],
+    isEmpty: {
+      negated: true,
+      errorMessage: 'Missing Resource: Recipient Id'
+    },
+    isInt: {
+      errorMessage: 'Invalid Resource: Recipient Id'
     }
-
-    return next();
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-  });
-}
+  }
+};
 
 function postUserFollow (req, res, next) {
   let user = req.$scope.user;
@@ -133,15 +120,11 @@ async function sendEmail (req, res, next) {
  * @param {any} res response object
  * @returns {any} body response object
  */
-function response (req, res) {
-  let body = {
-    status: 'SUCCESS',
-    status_code: 0,
-    http_code: 201
-  };
+const response = (req, res) => {
+  let body = lib.response.created();
 
-  res.status(201).send(body);
-}
+  res.status(lib.httpCodes.CREATED).send(body);
+};
 
 function getListOfFriendSuggestion (req) {// eslint-disable-line id-length
   return getUserCourse(req)
@@ -208,8 +191,7 @@ function getPeerslist (req) {
   });
 }
 
-
-module.exports.validateParams = validateParams;
+module.exports.querySchema = querySchema;
 module.exports.logic = postUserFollow;
 module.exports.sendEmail = sendEmail;
 module.exports.response = response;
