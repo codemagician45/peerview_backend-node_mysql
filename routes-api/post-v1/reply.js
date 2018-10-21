@@ -4,7 +4,7 @@
 const handlers = require('../../handlers');
 const lib = require('../../lib');
 
-let chart = (api) => {
+let replyApi = (api) => {
   api.post('/:postId/reply',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostReply.querySchema),
@@ -15,4 +15,4 @@ let chart = (api) => {
     handlers.post.postPostReply.response);
 };
 
-module.exports = chart;
+module.exports = replyApi;
