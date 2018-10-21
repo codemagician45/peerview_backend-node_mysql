@@ -30,9 +30,9 @@ module.exports = function (sequelize, dataTypes) {
       as: 'subject'
     });
 
-    this.belongsTo(models.post, {
-      foreignKey: 'postId',
-      as: 'post'
+    this.belongsTo(models.user, {// use for now in the newFollower
+      foreignKey: 'recipientId',
+      as: 'recipient'
     });
   };
 
