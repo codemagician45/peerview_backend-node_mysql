@@ -89,6 +89,12 @@ function validateParams (req, res, next) {
           errorMessage: 'Invalid Resource: postTo'
         }
       },
+      recipientId: {
+        optional: true,
+        isInt: {
+          errorMessage: 'Invalid Resource: Recipient Id'
+        }
+      },
       attachments: {
         optional: true,
         isArray: {
@@ -155,6 +161,7 @@ function postPost (req, res, next) {
     post.dataValues.postReply = [];
     post.dataValues.postLike = [];
     req.$scope.post = post;
+    req.$params.postId = post.id;// use in the notification
     // below are used for user credits
     post.newId = post.id + '_post';
     post.credits = 1;
