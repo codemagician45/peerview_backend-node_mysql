@@ -146,15 +146,6 @@ function userApi (apiRouter) {
     handlers.user.postUserOnboardingDetails.logic,
     handlers.user.postUserOnboardingDetails.response);
 
-  apiRouter.post('/user/:userId/follow',
-    lib.params,
-    lib.isTokenExist.user,
-    handlers.user.postUserFollow.validateParams,
-    handlers.user.postUserFollow.logic,
-    handlers.user.postUserFollow.sendEmail,
-    lib.userCredits.updateUserCredits,
-    handlers.user.postUserFollow.response);
-
   apiRouter.post('/user/invite-user',
     lib.params,
     lib.isTokenExist.user,
