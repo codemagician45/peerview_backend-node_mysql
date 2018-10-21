@@ -7,7 +7,20 @@ const lib = require('../../lib');
  * Initialized the schema Object
  */
 const querySchema = {
+  limit: { in: ['query'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Limit'
+    }
+  },
+  offset: { in: ['query'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Offset'
+    }
+  },
   state: { in: ['query'],
+    optional: true,
     isIn: {
       options: ['unread', 'read'],
       errorMessage: 'Invalid Resource: State'
@@ -16,20 +29,31 @@ const querySchema = {
 };
 
 const getNotificationList = (req, res, next) => {
-  const user = req.$params.user;
-  let query = {
-    subject: user.id
-  };
+  const user = req.$scope.user;
+  let offset = req.$params.offset;
+  let limit = req.$params.limit;
+  let where = {};
 
   if (req.$params.state) {
-    query.isRead = state[req.$params.state];
+    where.isRead = state[req.$params.state];
   }
 
   return req.db
   .notification
   .findAndCountAll({
-    where: query,
-    limit: 10
+    include: [{
+      model: req.db.post,
+      as: 'post',
+      where: {
+        userId: user.id
+      }
+    }, {
+      model: req.db.user,
+      as: 'subject',
+    }],
+    where: where,
+    offset: !offset ? 0 : parseInt(offset),
+    limit: !limit ? 10 : parseInt(limit)
   })
   .then(notificationList => {
     req.$scope.notificationList = notificationList;
