@@ -22,16 +22,36 @@ const querySchema = {
     isInt: {
       errorMessage: 'Invalid Resource: Offset'
     }
+  },
+  state: { in: ['query'],
+    optional: true,
+    isIn: {
+      options: ['unread', 'read'],
+      errorMessage: 'Invalid Resource: State'
+    }
   }
 };
 
 const getMessageList = (req, res, next) => {
+  let user = req.$scope.user;
   let offset = req.$params.offset;
   let limit = req.$params.limit;
+  let where = {
+    parentId: null,
+    [req.Op.or]: [{
+      fromId: user.id
+    }, {
+      toId: user.id
+    }]
+  };
+
+  if (req.$params.state) {
+    where.isRead = state[req.$params.state];
+  }
 
   req.db
   .message
-  .findAll({
+  .findAndCountAll({
     include: [{
       model: req.db.message,
       as: 'messages',
@@ -57,9 +77,7 @@ const getMessageList = (req, res, next) => {
       as: 'to',
       attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage'],
     }],
-    where: {
-      parentId: null
-    },
+    where: where,
     order: [
       ['createdAt', 'DESC']
     ],
@@ -93,6 +111,11 @@ const response = (req, res) => {
   let body = lib.response.createOk(messageList);
 
   res.status(lib.httpCodes.OK).send(body);
+};
+
+const state = {
+  'unread': false,
+  'read': true
 };
 
 module.exports.querySchema = querySchema;
