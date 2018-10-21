@@ -16,6 +16,12 @@ const querySchema = {
       errorMessage: 'Invalid Resource: Post Id'
     }
   },
+  recipientId: { in: ['body'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Recipient Id'
+    }
+  },
   comment: { in: ['body'],
     isEmpty: {
       negated: true,
