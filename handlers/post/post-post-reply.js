@@ -8,60 +8,34 @@
 const lib = require('../../lib');
 
 /**
- * Validation of req.body, req, param,
- * and req.query
- * @param {any} req request object
- * @param {any} res response object
- * @param {any} next next object
- * @returns {next} returns the next handler - success response
- * @returns {rpc} returns the validation error - failed response
+ * Initialized the schema Object
  */
-function validateParams (req, res, next) {
-  let paramsSchema = {
-    postId: {
-      isInt: {
-        errorMessage: 'Invalid Resource: Post Id'
-      }
+const querySchema = {
+  postId: { in: ['params'],
+    isInt: {
+      errorMessage: 'Invalid Resource: Post Id'
     }
-  };
-
-  let bodySchema = {
-    comment: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Comment'
-      },
-      isLength: {
-        options: [{
-          min: 1,
-          max: 280
-        }],
-        errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
-      }
+  },
+  comment: { in: ['body'],
+    isEmpty: {
+      negated: true,
+      errorMessage: 'Missing Resource: Comment'
     },
-    postPollOptionId: {
-      optional: true,
-      isInt: {
-        errorMessage: 'Invalid Resource: Post Poll Option Id'
-      }
+    isLength: {
+      options: [{
+        min: 1,
+        max: 280
+      }],
+      errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
     }
-  };
-
-  req.checkParams(paramsSchema);
-  req.checkBody(bodySchema);
-  return req.getValidationResult()
-  .then(validationErrors => {
-    if (validationErrors.array().length !== 0) {
-      return res.status(400)
-      .send(new lib.rpc.ValidationError(validationErrors.array()));
+  },
+  postPollOptionId: { in: ['body'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Post Poll Option Id'
     }
-
-    return next();
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-  });
-}
+  }
+};
 
 /**
  * This would be the fallback if the user existed
@@ -75,7 +49,7 @@ function validateParams (req, res, next) {
  */
 function postPostReply (req, res, next) {
   let user = req.$scope.user;
-  let postId = req.$params.postId;
+  let postId = req.params.postId;
   let postPollOptionId = req.$params.postPollOptionId;
   let comment = req.$params.comment;
 
@@ -109,16 +83,12 @@ function postPostReply (req, res, next) {
  * @param {any} res response object
  * @returns {any} body response object
  */
-function response (req, res) {
-  let body = {
-    status: 'SUCCESS',
-    status_code: 0,
-    http_code: 201
-  };
+const response = (req, res) => {
+  let body = lib.response.created();
 
-  res.status(201).send(body);
-}
+  res.status(lib.httpCodes.CREATED).send(body);
+};
 
-module.exports.validateParams = validateParams;
+module.exports.querySchema = querySchema;
 module.exports.logic = postPostReply;
 module.exports.response = response;
