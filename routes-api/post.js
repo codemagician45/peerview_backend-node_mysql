@@ -34,14 +34,6 @@ function postApi (apiRouter) {
     lib.userCredits.updateUserCredits,
     handlers.post.postPost.response);
 
-  apiRouter.post('/post/:postId/reply',
-    lib.params,
-    lib.isTokenExist.user,
-    handlers.post.postPostReply.validateParams,
-    handlers.post.postPostReply.logic,
-    lib.userCredits.updateUserCredits,
-    handlers.post.postPostReply.response);
-
   apiRouter.post('/post/:postId/rating',
     lib.params,
     lib.isTokenExist.user,
@@ -94,13 +86,19 @@ function postApi (apiRouter) {
     handlers.post.postPost.savePostPollOption,
     handlers.post.postPost.response);
 
-
   apiRouter.post('/post/poll/:postPollOptionId',
     lib.params,
     lib.isTokenExist.user,
     handlers.post.postPollOptionVote.validateParams,
     handlers.post.postPollOptionVote.logic,
     handlers.post.postPollOptionVote.response);
+
+  apiRouter.put('/post/:postId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.post.updatePost.validateParams,
+    handlers.post.updatePost.logic,
+    handlers.post.updatePost.response);
 
   apiRouter.delete('/post/:postId/like',
     lib.params,
