@@ -59,9 +59,6 @@ module.exports = function (sequelize, dataTypes) {
     this.hasMany(models.postPageview, {
       as: 'postPageview'
     });
-    this.hasMany(models.notification, {
-      as: 'notification'
-    });
   };
 
   Post.prototype.getPOSTREPLY = async function (posts, model) {
