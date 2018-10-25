@@ -5,9 +5,9 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let searchApi = (api) => {
-  api.post(':userId/follow',
+  api.post('/:userId/follow',
     lib.isTokenExist.user,
-    lib.schemaValidator.validateParams(handlers.user.getUserSearchViaTag.querySchema),
+    lib.schemaValidator.validateParams(handlers.user.postUserFollow.querySchema),
     lib.schemaValidator.validationResult,
     handlers.user.postUserFollow.logic,
     handlers.user.postUserFollow.sendEmail,
