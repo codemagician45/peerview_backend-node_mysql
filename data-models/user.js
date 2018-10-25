@@ -126,5 +126,26 @@ module.exports = function (sequelize, dataTypes) {
     });
   };
 
+  User.prototype.isUserAlreadyFollowed = async function (peersList, db, userId) {
+    peersList = await Promise.all(peersList.map(async (peer) => {
+      let isUserAlreadyFollowed = false;
+      const contents = await db.userFollower.count({
+        where: {
+          followerId: userId,
+          followeeId: peer.id
+        }
+      });
+
+      if (contents > 0) {
+        isUserAlreadyFollowed = true;
+      }
+
+      peer.dataValues.isUserAlreadyFollowed = isUserAlreadyFollowed;
+      return peer;
+    }));
+
+    return peersList;
+  };
+
   return User;
 };
