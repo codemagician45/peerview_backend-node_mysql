@@ -67,31 +67,21 @@ function getPeerslist (req, res, next) {
   //   }
   // })
 
-  const sequelize = req.db.user.sequelize;
-
   return req.db.user.findAll({
-    // attributes: {
-    //   include: [
-    //     [sequelize.fn('COUNT',
-    //       sequelize.fn('DISTINCT', sequelize.where(sequelize.col('followee.followerId'), user.id))),
-    //     'isUserAlreadyFollowed']
-    //   ]
-    // },
     include: [{
       model: req.db.userCourse,
       include: {
         model: req.db.course
       }
-    }, {
-      model: req.db.userFollower,
-      as: 'followee',
-      attributes: []
     }],
     where: {
       id: {
         [req.Op.ne]: user.id
       }
     }
+  })
+  .then((peersList) => {
+    return req.db.user.prototype.isUserAlreadyFollowed(peersList, req.db, user.id);
   })
   .then(peersList => {
     req.$scope.peersList = peersList;
