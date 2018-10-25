@@ -17,7 +17,8 @@ const querySchema = {
   userId: { in: ['params'],
     isInt: {
       errorMessage: 'Invalid Resource: User Id'
-    }
+    },
+    toInt: true
   },
   recipientId: { in: ['body'],
     isEmpty: {
@@ -77,7 +78,7 @@ async function sendEmail (req, res, next) {
     return req.db.user.findOne({
       where: {
         id: {
-          [req.Op.eq]: req.$params.userId
+          [req.Op.eq]: req.params.userId
         }
       }
     });
