@@ -70,13 +70,13 @@ function getPeerslist (req, res, next) {
   const sequelize = req.db.user.sequelize;
 
   return req.db.user.findAll({
-    attributes: {
-      include: [
-        [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT', sequelize.where(sequelize.col('followee.followerId'), user.id))),
-        'isUserAlreadyFollowed']
-      ]
-    },
+    // attributes: {
+    //   include: [
+    //     [sequelize.fn('COUNT',
+    //       sequelize.fn('DISTINCT', sequelize.where(sequelize.col('followee.followerId'), user.id))),
+    //     'isUserAlreadyFollowed']
+    //   ]
+    // },
     include: [{
       model: req.db.userCourse,
       include: {
