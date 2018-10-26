@@ -54,11 +54,13 @@ const getMessageListByParentId = (req, res, next) => {// eslint-disable-line id-
       }, {
         parentId: parentId
       }],
-      [req.Op.or]: [{
-        fromId: user.id
-      }, {
-        toId: user.id
-      }]
+      [req.Op.and]: {
+        [req.Op.or]: [{
+          fromId: user.id
+        }, {
+          toId: user.id
+        }]
+      }
     },
     order: [
       ['createdAt', 'DESC']
