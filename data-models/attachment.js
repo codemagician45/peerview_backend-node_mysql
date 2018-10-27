@@ -37,6 +37,10 @@ module.exports = function (sequelize, dataTypes) {
     this.belongsTo(models.post, {
       foreignKey: 'postId'
     });
+
+    this.belongsTo(models.postv1, {
+      foreignKey: 'postv1Id'
+    });
   };
 
   return Attachment;
