@@ -19,6 +19,15 @@ let defaultApi = (api) => {
       next();
     },
     handlers.post.postPost.response);
+
+  api.post('/v2', // public community student and professionals can post
+    lib.isTokenExist.user,
+    lib.schemaValidator.validateParams(handlers.post.postPostV1.querySchema),
+    lib.schemaValidator.validationResult,
+    handlers.post.postPostV1.logic,
+    handlers.post.postPostV1.saveAttachments,
+    lib.userCredits.updateUserCredits,
+    handlers.post.postPostV1.response);
 };
 
 module.exports = defaultApi;
