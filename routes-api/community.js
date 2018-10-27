@@ -41,15 +41,15 @@ function communityApi (apiRouter) {
     handlers.community.postCommunity.logic,
     handlers.community.postCommunity.inviteUsers,
     handlers.community.postCommunity.response);
-
-  apiRouter.post('/community/post', // public community student and professionals can post
-    lib.params,
-    lib.isTokenExist.user,
-    handlers.community.postCommunityPost.validateParams,
-    handlers.community.postCommunityPost.logic,
-    handlers.community.postCommunityPost.saveAttachments,
-    lib.userCredits.updateUserCredits,
-    handlers.community.postCommunityPost.response);
+  // public community student and professionals can post
+  // apiRouter.post('/community/post',
+  //   lib.params,
+  //   lib.isTokenExist.user,
+  //   handlers.community.postCommunityPost.validateParams,
+  //   handlers.community.postCommunityPost.logic,
+  //   handlers.community.postCommunityPost.saveAttachments,
+  //   lib.userCredits.updateUserCredits,
+  //   handlers.community.postCommunityPost.response);
 
   apiRouter.post('/community/post/career',
     lib.params,
