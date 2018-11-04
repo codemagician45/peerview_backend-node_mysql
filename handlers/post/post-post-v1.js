@@ -82,7 +82,7 @@ function postCommunityPost (req, res, next) {
   .then(postv1 => {
     req.$scope.postv1 = postv1;
     // below are use for user credits
-    postv1.newId = `postv1.id${area}${type}`;
+    postv1.newId = `${postv1.id}${area}${type}`;
     postv1.credits = 1;
     req.$scope.userCredits = postv1;
     req.$scope.userId = user.id;
