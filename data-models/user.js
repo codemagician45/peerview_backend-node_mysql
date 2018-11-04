@@ -124,6 +124,7 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'followerId',
       as: 'follower'
     });
+    this.belongsToMany(models.postv1, {through: models.followPost});
   };
 
   User.prototype.isUserAlreadyFollowed = async function (peersList, db, userId) {
