@@ -56,11 +56,14 @@ module.exports = function (sequelize, dataTypes) {
   });
 
   PostV1.associate = function (models) {
-    this.belongsTo(models.user);
     this.belongsTo(models.course);
     this.belongsTo(models.community); // if this field has been filed the post belongsTo private community
     this.hasMany(models.pollOption);
     this.hasMany(models.attachment);
+    this.belongsTo(models.user, {
+      foreignKey: 'userId',
+      as: 'user'
+    });
     this.hasMany(models.like, {
       as: 'like'
     });
