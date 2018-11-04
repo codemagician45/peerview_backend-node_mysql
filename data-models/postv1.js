@@ -85,6 +85,8 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'postTo',
       as: 'directPost'
     });
+
+    this.belongsToMany(models.user, {through: models.followPost});
   };
 
   PostV1.prototype.getReplyCount = async function (posts, db) {
