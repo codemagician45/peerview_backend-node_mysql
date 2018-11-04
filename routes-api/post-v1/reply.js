@@ -5,14 +5,14 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let replyApi = (api) => {
-  api.post('/:postId/reply',
+  api.post('/v2/:postId/reply',
     lib.isTokenExist.user,
-    lib.schemaValidator.validateParams(handlers.post.postPostReply.querySchema),
+    lib.schemaValidator.validateParams(handlers.post.postPostReplyV1.querySchema),
     lib.schemaValidator.validationResult,
-    handlers.post.postPostReply.logic,
+    handlers.post.postPostReplyV1.logic,
     lib.userCredits.updateUserCredits,
     lib.notification.createPostReplyNotification,
-    handlers.post.postPostReply.response);
+    handlers.post.postPostReplyV1.response);
 };
 
 module.exports = replyApi;
