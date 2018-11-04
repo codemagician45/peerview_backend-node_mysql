@@ -69,6 +69,10 @@ function getPosts (req, res, next) {
       as: 'share',
       attributes: []
     }, {
+      model: req.db.rating,
+      as: 'rating',
+      attributes: []
+    }, {
       model: req.db.postv1,
       as: 'originalPost'
     }, {
