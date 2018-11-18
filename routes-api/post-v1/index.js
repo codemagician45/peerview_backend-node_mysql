@@ -7,6 +7,7 @@ const listApi = require('./list');
 const replyApi = require('./reply');
 const likeApi = require('./like');
 const reportApi = require('./report');
+const ratingApi = require('./rating');
 
 const postApi = (api) => {
   api.use('/post', router);
@@ -16,6 +17,7 @@ const postApi = (api) => {
   replyApi(router);
   likeApi(router);
   reportApi(router);
+  ratingApi(router);
 };
 
 module.exports = postApi;
