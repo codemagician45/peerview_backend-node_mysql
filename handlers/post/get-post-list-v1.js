@@ -42,11 +42,20 @@ function getPosts (req, res, next) {
   let offset = lib.utils.returnValue(req.$params.offset);
   let limit = lib.utils.returnValue(req.$params.limit);
 
+  const sequelize = req.db.rating.sequelize;
+  const colRating = sequelize.col('rating');
+  const colAVG = sequelize.fn('AVG', colRating);
+
   return req.db.postv1.findAll({
     include: [{
+      model: req.db.user,
+      as: 'user'
+    }, {
       model: req.db.rating,
       as: 'rating',
-      attributes: []
+      attributes: [
+        [sequelize.fn('ROUND', colAVG, 2), 'roundedRating']
+      ],
     }, {
       model: req.db.like,
       as: 'like',
@@ -67,10 +76,6 @@ function getPosts (req, res, next) {
     }, {
       model: req.db.postv1,
       as: 'share',
-      attributes: []
-    }, {
-      model: req.db.rating,
-      as: 'rating',
       attributes: []
     }, {
       model: req.db.postv1,
@@ -97,6 +102,7 @@ function getPosts (req, res, next) {
       }]
     },
     order: [['createdAt', 'DESC']],
+    group: ['id'],
     subQuery: false,
     offset: !offset ? 0 : parseInt(offset),
     limit: !limit ? 10 : parseInt(limit)
