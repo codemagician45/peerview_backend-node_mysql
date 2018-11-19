@@ -20,7 +20,7 @@ let defaultApi = (api) => {
     },
     handlers.post.postPost.response);
 
-  api.post('/v2', // public community student and professionals can post
+  api.post('/v2(/:communityId)?', // public community student and professionals can post
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostV1.querySchema),
     lib.schemaValidator.validationResult,

@@ -5,7 +5,7 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let listApi = (api) => {
-  api.get('/v2/list',
+  api.get('/v2/(:communityId/)?list',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.getPostListV1.querySchema),
     lib.schemaValidator.validationResult,

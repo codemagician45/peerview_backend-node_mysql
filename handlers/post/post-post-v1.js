@@ -23,6 +23,12 @@ const querySchema = {
       errorMessage: 'Invalid Resource: Course Id'
     }
   },
+  communityId: { in: ['params'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Community Id'
+    }
+  },
   message: { in: ['body'],
     isEmpty: {
       negated: true,
@@ -68,6 +74,7 @@ const querySchema = {
 function postCommunityPost (req, res, next) {
   let user = req.$scope.user;
   let courseId = req.$params.courseId;
+  let communityId = req.params.communityId;
   let message = req.$params.message;
   let area = req.$params.area;
   let type = req.$params.type;
@@ -75,6 +82,7 @@ function postCommunityPost (req, res, next) {
   return req.db.postv1.create({
     userId: user.id,
     courseId: courseId,
+    communityId: communityId,
     message: message,
     area: area,
     type: type

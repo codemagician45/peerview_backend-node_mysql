@@ -13,16 +13,22 @@ const moment = require('moment');
  * Initialized the schema Object
  */
 const querySchema = {
-  offset: { in: ['body'],
+  offset: { in: ['query'],
     optional: true,
     isInt: {
       errorMessage: 'Invalid Resource: Offset'
     }
   },
-  limit: { in: ['body'],
+  limit: { in: ['query'],
     optional: true,
     isInt: {
       errorMessage: 'Invalid Resource: Limit'
+    }
+  },
+  communityId: { in: ['params'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Community Id'
     }
   }
 };
@@ -41,6 +47,11 @@ function getPosts (req, res, next) {
   let user = req.$scope.user;
   let offset = lib.utils.returnValue(req.$params.offset);
   let limit = lib.utils.returnValue(req.$params.limit);
+  let communityId = req.params.communityId;
+
+  if (!communityId) {
+    communityId = null;
+  }
 
   const sequelize = req.db.rating.sequelize;
   const colRating = sequelize.col('rating');
@@ -90,6 +101,9 @@ function getPosts (req, res, next) {
     where: {
       postTo: {
         [req.Op.eq]: null
+      },
+      communityId: {
+        [req.Op.eq]: communityId
       },
       [req.Op.or]: [{
         expiration: {
