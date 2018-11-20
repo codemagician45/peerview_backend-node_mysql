@@ -9,51 +9,25 @@
 const lib = require('../../lib');
 
 /**
- * Validation of req.body, req, param,
- * and req.query
- * @param {any} req request object
- * @param {any} res response object
- * @param {any} next next object
- * @returns {next} returns the next handler - success response
- * @returns {rpc} returns the validation error - failed response
+ * Initialized the schema Object
  */
-function validateParams (req, res, next) {
-  let bodySchema = {
-    communityName: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Community Name'
-      }
-    },
-    institutionName: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Institution Name'
-      }
-    },
-    users: {
-      isArrayNotEmpty: {
-        errorMessage: 'Missing Resource: Users'
-      },
-      isArray: {
-        errorMessage: 'Invalid Resource: Users'
-      }
+const querySchema = {
+  communityName: { in: ['body'],
+    isEmpty: {
+      negated: true,
+      errorMessage: 'Missing Resource: Community Name'
     }
-  };
-
-  req.checkBody(bodySchema);
-  return req.getValidationResult()
-  .then(validationErrors => {
-    if (validationErrors.array().length !== 0) {
-      return res.status(400)
-      .send(new lib.rpc.ValidationError(validationErrors.array()));
+  },
+  institutionName: { in: ['body'],
+    isEmpty: {
+      negated: true,
+      errorMessage: 'Missing Resource: Institution Name'
     }
-
-    return next();
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-  });
-}
+  },
+  users: { in: ['body'],
+    optional: true
+  }
+};
 
 function postCommunity (req, res, next) {
   let communityName = req.$params.communityName;
@@ -89,9 +63,13 @@ function inviteUsers (req, res, next) {
     isCreator: true
   }];
 
-  users.forEach(user => {
+  if (!users) {
+    users = [];
+  }
+
+  users.forEach(id => {
     usersData.push({
-      userId: user.id,
+      userId: id,
       communityId: community.id
     });
   });
@@ -127,7 +105,7 @@ function response (req, res) {
   res.status(201).send(body);
 }
 
-module.exports.validateParams = validateParams;
+module.exports.querySchema = querySchema;
 module.exports.logic = postCommunity;
 module.exports.inviteUsers = inviteUsers;
 module.exports.response = response;
