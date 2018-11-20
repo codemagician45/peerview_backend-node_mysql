@@ -54,6 +54,7 @@ routesApi.post(apiRouter);
 
 // community route
 routesApi.community(apiRouter);
+routesApi.communityV1(apiRouter);
 
 // course route
 routesApi.course(apiRouter);
