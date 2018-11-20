@@ -35,9 +35,9 @@ function communityApi (apiRouter) {
     handlers.community.getCommunityPost.response);
 
   apiRouter.post('/community',
-    lib.params,
     lib.isTokenExist.user,
-    handlers.community.postCommunity.validateParams,
+    lib.schemaValidator.validateParams(handlers.community.postCommunity.querySchema),
+    lib.schemaValidator.validationResult,
     handlers.community.postCommunity.logic,
     handlers.community.postCommunity.inviteUsers,
     handlers.community.postCommunity.response);
