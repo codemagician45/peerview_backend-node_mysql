@@ -71,6 +71,9 @@ module.exports = function (sequelize, dataTypes) {
       as: 'rating'
     });
     this.hasMany(models.reply, {
+      as: 'countReplyVirtual'
+    });
+    this.hasMany(models.reply, {
       as: 'reply'
     });
     this.hasMany(models.pageview, {
