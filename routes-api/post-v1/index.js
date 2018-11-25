@@ -12,8 +12,8 @@ const ratingApi = require('./rating');
 const postApi = (api) => {
   api.use('/post', router);
 
-  defaultApi(router);
   listApi(router);
+  defaultApi(router);
   replyApi(router);
   likeApi(router);
   reportApi(router);
