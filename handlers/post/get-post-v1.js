@@ -13,22 +13,10 @@ const moment = require('moment');
  * Initialized the schema Object
  */
 const querySchema = {
-  offset: { in: ['query'],
+  postId: { in: ['params'],
     optional: true,
     isInt: {
-      errorMessage: 'Invalid Resource: Offset'
-    }
-  },
-  limit: { in: ['query'],
-    optional: true,
-    isInt: {
-      errorMessage: 'Invalid Resource: Limit'
-    }
-  },
-  communityId: { in: ['params'],
-    optional: true,
-    isInt: {
-      errorMessage: 'Invalid Resource: Community Id'
+      errorMessage: 'Invalid Resource: Post Id'
     }
   }
 };
@@ -43,21 +31,14 @@ const querySchema = {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function getPosts (req, res, next) {
+function getPost (req, res, next) {
   let user = req.$scope.user;
-  let offset = lib.utils.returnValue(req.$params.offset);
-  let limit = lib.utils.returnValue(req.$params.limit);
-  let communityId = req.params.communityId;
-
-  if (!communityId) {
-    communityId = null;
-  }
-
+  let postId = req.params.postId;
   const sequelize = req.db.postv1.sequelize;
   const colRating = sequelize.col('rating');
   const colAVG = sequelize.fn('AVG', colRating);
 
-  return req.db.postv1.findAll({
+  return req.db.postv1.findOne({
     attributes: [
       'id',
       'message',
@@ -113,45 +94,22 @@ function getPosts (req, res, next) {
       attributes: []
     }],
     where: {
-      postTo: {
-        [req.Op.eq]: null
-      },
-      communityId: {
-        [req.Op.eq]: communityId
-      },
-      [req.Op.or]: [{
-        expiration: {
-          [req.Op.eq]: null
-        }
-      }, {
-        expiration: {
-          [req.Op.gt]: moment()
-        }
-      }]
+      id: {
+        [req.Op.eq]: postId
+      }
     },
-    order: [['createdAt', 'DESC']],
     group: ['id'],
     subQuery: false,
-    offset: !offset ? 0 : parseInt(offset),
-    limit: !limit ? 10 : parseInt(limit)
-  // })
-  // .then((posts) => {
-    // return req.db.postv1.prototype.getReplyCount(posts, req.db)
-    // .then(() => req.db.postv1.prototype.getLikeCount(posts, req.db))
-    // .then(() => req.db.postv1.prototype.getPageViewCount(posts, req.db));
-    // .then(() => req.db.postv1.prototype.getShareCount(posts, req.db))
-    // .then(() => req.db.postv1.prototype.isUserPostShare(posts, req.db, user.id))
-    // .then(() => req.db.postv1.prototype.isPostUser(posts, req.db, user.id));
   })
-  .then((posts) => {
-    req.$scope.posts = posts;
+  .then((post) => {
+    req.$scope.post = post;
     next();
-    return posts;
+    return post;
   })
   .catch(error => {
     req.log.error({
       error: error
-    }, 'handlers.post get-post-list-v1 [postv1.findAll] Error');
+    }, 'handlers.post get-post-v1 [postv1.findOne] Error');
 
     return res.status(lib.httpCodes.SERVER_ERROR)
     .send(new lib.rpc.InternalError(error));
@@ -165,12 +123,12 @@ function getPosts (req, res, next) {
  * @returns {any} body response object
  */
 const response = (req, res) => {
-  let posts = req.$scope.posts;
-  let body = lib.response.createOk(posts);
+  let post = req.$scope.post;
+  let body = lib.response.createOk(post);
 
   res.status(lib.httpCodes.OK).send(body);
 };
 
 module.exports.querySchema = querySchema;
-module.exports.logic = getPosts;
+module.exports.logic = getPost;
 module.exports.response = response;
