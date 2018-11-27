@@ -14,9 +14,10 @@ let defaultApi = (api) => {
 
   api.post('/v2',
     lib.isTokenExist.user,
-    handlers.post.postPost.validateParams,
-    handlers.post.postPost.logic,
-    handlers.post.postPost.saveAttachments,
+    lib.schemaValidator.validateParams(handlers.post.postPostV1.querySchema),
+    lib.schemaValidator.validationResult,
+    handlers.post.postPostV1.logic,
+    handlers.post.postPostV1.saveAttachments,
     lib.userCredits.updateUserCredits,
     (req, res, next) => {
       if (req.$params.postTo) {
@@ -25,7 +26,7 @@ let defaultApi = (api) => {
 
       next();
     },
-    handlers.post.postPost.response);
+    handlers.post.postPostV1.response);
 
   api.post('/v2(/:communityId)?', // public community student and professionals can post
     lib.isTokenExist.user,
