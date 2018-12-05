@@ -87,11 +87,11 @@ function getPosts (req, res, next) {
     }, {
       model: req.db.reply,
       as: 'reply',
-      limit: 2,
+      limit: 5,
       order: [['createdAt', 'DESC']],
       include: [{
         model: req.db.user,
-        attributes: ['id', 'firstName', 'lastName', 'email']
+        attributes: ['id', 'firstName', 'lastName', 'email', 'socialImage', 'profilePicture']
       }, {
         model: req.db.like,
         as: 'replyLike',
