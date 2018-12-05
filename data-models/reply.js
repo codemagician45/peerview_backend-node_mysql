@@ -31,6 +31,9 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'tagUserId',
       as: 'tagUser'
     });
+    this.hasMany(models.like, {
+      as: 'replyLike'
+    });
   };
 
   return Reply;
