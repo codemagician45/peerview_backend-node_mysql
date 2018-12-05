@@ -13,6 +13,20 @@ let replyApi = (api) => {
     lib.userCredits.updateUserCredits,
     lib.notification.createPostReplyNotification,
     handlers.post.postPostReplyV1.response);
+
+  api.post('/v2/reply/:replyId/like',
+    lib.isTokenExist.user,
+    lib.schemaValidator.validateParams(handlers.post.postPostReplyLike.querySchema),
+    lib.schemaValidator.validationResult,
+    handlers.post.postPostReplyLike.logic,
+    handlers.post.postPostReplyLike.response);
+
+  api.delete('/v2/reply/:replyId',
+    lib.isTokenExist.user,
+    lib.schemaValidator.validateParams(handlers.post.removePostReply.querySchema),
+    lib.schemaValidator.validationResult,
+    handlers.post.removePostReply.logic,
+    handlers.post.removePostReply.response);
 };
 
 module.exports = replyApi;
