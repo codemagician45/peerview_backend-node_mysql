@@ -30,6 +30,12 @@ const querySchema = {
     isInt: {
       errorMessage: 'Invalid Resource: Community Id'
     }
+  },
+  courseId: { in: ['params'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Course Id'
+    }
   }
 };
 
@@ -47,11 +53,8 @@ function getPosts (req, res, next) {
   let user = req.$scope.user;
   let offset = lib.utils.returnValue(req.$params.offset);
   let limit = lib.utils.returnValue(req.$params.limit);
-  let communityId = req.params.communityId;
-
-  if (!communityId) {
-    communityId = null;
-  }
+  let communityId = lib.utilities.assignNullIfUndefined(req.params.communityId);
+  let courseId = lib.utilities.assignNullIfUndefined(req.params.courseId);
 
   const sequelize = req.db.postv1.sequelize;
   const colRating = sequelize.col('rating');
@@ -89,6 +92,12 @@ function getPosts (req, res, next) {
       include: [{
         model: req.db.user,
         attributes: ['id', 'firstName', 'lastName', 'email']
+      }, {
+        model: req.db.like,
+        as: 'replyLike',
+        attributes: [
+          [sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
+        ]
       }]
     }, {
       model: req.db.reply,
@@ -118,6 +127,9 @@ function getPosts (req, res, next) {
       },
       communityId: {
         [req.Op.eq]: communityId
+      },
+      courseId: {
+        [req.Op.eq]: courseId
       },
       [req.Op.or]: [{
         expiration: {
