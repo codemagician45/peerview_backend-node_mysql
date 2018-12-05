@@ -18,6 +18,18 @@ const querySchema = {
     isInt: {
       errorMessage: 'Invalid Resource: Post Id'
     }
+  },
+  communityId: { in: ['params'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Community Id'
+    }
+  },
+  courseId: { in: ['params'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Course Id'
+    }
   }
 };
 
@@ -34,6 +46,8 @@ const querySchema = {
 function getPost (req, res, next) {
   let user = req.$scope.user;
   let postId = req.params.postId;
+  let communityId = lib.utilities.assignNullIfUndefined(req.params.communityId);
+  let courseId = lib.utilities.assignNullIfUndefined(req.params.courseId);
   const sequelize = req.db.postv1.sequelize;
   const colRating = sequelize.col('rating');
   const colAVG = sequelize.fn('AVG', colRating);
@@ -102,6 +116,12 @@ function getPost (req, res, next) {
     where: {
       id: {
         [req.Op.eq]: postId
+      },
+      communityId: {
+        [req.Op.eq]: communityId
+      },
+      courseId: {
+        [req.Op.eq]: courseId
       }
     },
     group: ['id'],

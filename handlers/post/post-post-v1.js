@@ -17,7 +17,7 @@ const lib = require('../../lib');
  * Initialized the schema Object
  */
 const querySchema = {
-  courseId: { in: ['body'],
+  courseId: { in: ['params'],
     optional: true,
     isInt: {
       errorMessage: 'Invalid Resource: Course Id'
@@ -73,7 +73,7 @@ const querySchema = {
  */
 function postCommunityPost (req, res, next) {
   let user = req.$scope.user;
-  let courseId = req.$params.courseId;
+  let courseId = req.params.courseId;
   let communityId = req.params.communityId;
   let message = req.$params.message;
   let area = req.$params.area;
