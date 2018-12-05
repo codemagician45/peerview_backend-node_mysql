@@ -5,7 +5,7 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let reportApi = (api) => {
-  api.post('/v2/:postId/report',
+  api.post('/v2/community/:postId/report',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostReportV1.querySchema),
     lib.schemaValidator.validationResult,

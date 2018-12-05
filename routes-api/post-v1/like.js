@@ -5,7 +5,7 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let likeApi = (api) => {
-  api.post('/v2/:postId/like',
+  api.post('/v2/community/:postId/like',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostLikeV1.querySchema),
     lib.schemaValidator.validationResult,

@@ -5,7 +5,7 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let replyApi = (api) => {
-  api.post('/v2/:postId/reply',
+  api.post('/v2/community/:postId/reply',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostReplyV1.querySchema),
     lib.schemaValidator.validationResult,
@@ -14,14 +14,14 @@ let replyApi = (api) => {
     lib.notification.createPostReplyNotification,
     handlers.post.postPostReplyV1.response);
 
-  api.post('/v2/reply/:replyId/like',
+  api.post('/v2/community/reply/:replyId/like',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostReplyLike.querySchema),
     lib.schemaValidator.validationResult,
     handlers.post.postPostReplyLike.logic,
     handlers.post.postPostReplyLike.response);
 
-  api.delete('/v2/reply/:replyId',
+  api.delete('/v2/community/reply/:replyId',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.removePostReply.querySchema),
     lib.schemaValidator.validationResult,

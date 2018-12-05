@@ -5,7 +5,7 @@ const handlers = require('../../handlers');
 const lib = require('../../lib');
 
 let ratingApi = (api) => {
-  api.post('/v2/:postId/rating',
+  api.post('/v2/community/:postId/rating',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostRatingV1.querySchema),
     lib.schemaValidator.validationResult,
