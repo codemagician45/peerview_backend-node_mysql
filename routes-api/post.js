@@ -34,6 +34,14 @@ function postApi (apiRouter) {
     lib.userCredits.updateUserCredits,
     handlers.post.postPost.response);
 
+  apiRouter.post('/post/:postId/reply',
+    lib.isTokenExist.user,
+    lib.schemaValidator.validateParams(handlers.post.postPostReply.querySchema),
+    lib.schemaValidator.validationResult,
+    handlers.post.postPostReply.logic,
+    lib.userCredits.updateUserCredits,
+    handlers.post.postPostReply.response);
+
   apiRouter.post('/post/:postId/rating',
     lib.params,
     lib.isTokenExist.user,
