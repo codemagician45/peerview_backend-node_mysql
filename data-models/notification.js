@@ -11,11 +11,11 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.BOOLEAN,
       default: false
     },
-    type: {
-      type: dataTypes.STRING/*post, etc*/
+    area: {
+      type: new dataTypes.ENUM('home', 'campus', 'community')
     },
-    message: {
-      type: dataTypes.STRING
+    type: {
+      type: new dataTypes.ENUM('post', 'replyLike', 'replyViaFollowPost', 'replyViaReply')
     }
   }, {
     tableName: 'notification',
@@ -29,10 +29,18 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'subjectId',
       as: 'subject'
     });
-
-    this.belongsTo(models.user, {// use for now in the newFollower
+    this.belongsTo(models.user, {
       foreignKey: 'recipientId',
       as: 'recipient'
+    });
+    this.belongsTo(models.postv1, {
+      as: 'post'
+    });
+    this.belongsTo(models.course, {
+      as: 'course'
+    });
+    this.belongsTo(models.reply, {
+      as: 'reply'
     });
   };
 
