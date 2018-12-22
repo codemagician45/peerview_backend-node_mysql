@@ -8,7 +8,7 @@
 
 const lib = require('../../lib');
 const templates = require('../../templates');
-
+const config = require('../../config');
 
 /**
  * Initialized the schema Object
@@ -86,11 +86,13 @@ async function sendEmail (req, res, next) {
   .then(userToFollow => {
     req.$scope.userToFollow = userToFollow;
     let friendList = req.$scope.friendList;
-    let followee = `${userToFollow.firstName} ${userToFollow.lastName}`;
+    let followee = `${userToFollow.firstName}`;
 
+    const userId = crypto.cipher(user.id);
     let values = {
       friendList: friendList,
       follower: follower,
+      followerProfileLink: `${config.frontEnd.baseUrl}/profile/${userId}`,
       followee: followee
     };
 
@@ -98,7 +100,7 @@ async function sendEmail (req, res, next) {
   })
   .then(content => {
     let userToFollow = req.$scope.userToFollow;
-    lib.email.send(`You have a special Invitation`, userToFollow.email, content);
+    lib.email.send(`You have a new follower`, userToFollow.email, content);
     return content;
   })
   .then(pug => {

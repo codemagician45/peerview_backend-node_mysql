@@ -6,6 +6,7 @@
  */
 const lib = require('../../lib');
 const templates = require('../../templates');
+const config = require('../../config');
 
 /**
  * Validation of req.body, req, param,
@@ -116,9 +117,10 @@ function sendEmail (req, res, next) {
   let user = req.$scope.user;
   let userType = req.$scope.userType;
   let file = templates.welcomeStudent;
-  let name = `${user.firstName} ${user.lastName}`;
+  let name = `${user.firstName}`;
 
   if (userType.code === 'professionals') {
+    name = `${user.firstName} ${user.lastName}`;
     file = templates.welcomeProfessionals;
   } else if (userType.code === 'organizationInstitution') {
     file = templates.welcomeOrganizationInstitution;
@@ -126,7 +128,13 @@ function sendEmail (req, res, next) {
   }
 
   let values = {
-    name: name
+    name: name,
+    homepageUrl: `${config.frontEnd.baseUrl}`,
+    unsubscribeUrl: `${config.frontEnd.baseUrl}`,
+    contactUsUrl: `${config.frontEnd.baseUrl}/contact-us`,
+    privacyUrl: `${config.frontEnd.baseUrl}/privacy-policy`,
+    exploreCommunityPage: `${config.frontEnd.baseUrl}/community/student-community/landing`,
+    campusPage: `${config.frontEnd.baseUrl}/campus`
   };
 
   lib.pug.convert(file, values)
