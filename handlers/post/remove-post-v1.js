@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @author Jo-Ries Canino
+ * @author Developer
  * @description Remove Post
  */
 
