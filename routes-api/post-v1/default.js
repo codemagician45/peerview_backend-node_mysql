@@ -36,7 +36,7 @@ let defaultApi = (api) => {
     handlers.post.postPostV1.saveAttachments,
     lib.userCredits.updateUserCredits,
     handlers.post.postPostV1.response);
-  
+
   api.delete('/v2/community/:postId', // Delete community post
       lib.params,
       lib.isTokenExist.user,
