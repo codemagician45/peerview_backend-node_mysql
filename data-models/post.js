@@ -66,10 +66,10 @@ module.exports = function (sequelize, dataTypes) {
       const contents = await post
       .getPostReply({
         limit: 5,
-        attributes: ['comment', 'createdAt'],
+        attributes: ['id', 'comment', 'createdAt'],
         include: [{
           model: model.user,
-          attributes: ['id', 'firstName', 'lastName', 'email']
+          attributes: ['id', 'firstName', 'lastName', 'email', 'profilePicture', 'socialImage']
         }],
         order: [['createdAt', 'DESC']]
       });
