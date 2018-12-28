@@ -83,7 +83,7 @@ function getPost (req, res, next) {
       order: [['createdAt', 'DESC']],
       include: [{
         model: req.db.user,
-        attributes: ['id', 'firstName', 'lastName', 'email', 'socialImage', 'profilePicture']
+        attributes: ['id', 'firstName', 'lastName', 'email', 'socialImage', 'profilePicture', 'institutionName']
       }, {
         model: req.db.like,
         as: 'replyLike',

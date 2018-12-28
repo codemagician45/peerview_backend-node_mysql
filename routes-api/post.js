@@ -121,6 +121,13 @@ function postApi (apiRouter) {
     handlers.post.removePost.validateParams,
     handlers.post.removePost.logic,
     handlers.post.removePost.response);
+
+  apiRouter.delete('/post/reply/:replyId',
+      lib.params,
+      lib.isTokenExist.user,
+      handlers.post.removePostReplyComment.validateParams,
+      handlers.post.removePostReplyComment.logic,
+      handlers.post.removePostReplyComment.response);
 }
 
 module.exports = postApi;
