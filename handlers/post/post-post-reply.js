@@ -6,6 +6,7 @@
  */
 
 const lib = require('../../lib');
+const crypto = require('../../lib/crypto');
 
 /**
  * Initialized the schema Object
@@ -20,6 +21,12 @@ const querySchema = {
     optional: true,
     isInt: {
       errorMessage: 'Invalid Resource: Recipient Id'
+    }
+  },
+  quoteReplyId: { in: ['body'],
+    optional: true,
+    isInt: {
+      errorMessage: 'Invalid Resource: Quote Reply Id'
     }
   },
   comment: { in: ['body'],
@@ -58,12 +65,14 @@ function postPostReply (req, res, next) {
   let postId = req.params.postId;
   let postPollOptionId = req.$params.postPollOptionId;
   let comment = req.$params.comment;
+  let quoteReplyId = req.$params.quoteReplyId;
 
   return req.db.postReply.create({
     postId: postId,
     userId: user.id,
     postPollOptionId: postPollOptionId,
-    comment: comment
+    comment: comment,
+    quoteReplyId: quoteReplyId
   })
   .then(postReply => {
     postReply.newId = postReply.id + '_postReply';
@@ -90,9 +99,16 @@ function postPostReply (req, res, next) {
  * @returns {any} body response object
  */
 const response = (req, res) => {
-  let body = lib.response.created();
+  let body = {
+    status: 'SUCCESS',
+    status_code: 0,
+    http_code: 200,
+    data:{
+      id: crypto.cipher(req.$scope.userCredits.id)
+    }
+  };
 
-  res.status(lib.httpCodes.CREATED).send(body);
+  res.status(200).send(body);
 };
 
 module.exports.querySchema = querySchema;
