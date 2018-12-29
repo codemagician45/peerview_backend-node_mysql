@@ -7,6 +7,7 @@
  */
 
 const lib = require('../../lib');
+const crypto = require('../../lib/crypto');
 const templates = require('../../templates');
 const config = require('../../config');
 
