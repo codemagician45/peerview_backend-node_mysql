@@ -36,9 +36,9 @@ module.exports = function (sequelize, dataTypes) {
     });
   };
 
-  PostReply.prototype.isUserPostLike = async function (postReplies, db, userId) {
+  PostReply.prototype.isUserPostReplyLike = async function (postReplies, db, userId) {
     postReplies = await Promise.all(postReplies.map(async (reply) => {
-      let isUserPostLike = false;
+      let isUserPostReplyLike = false;
       const contents = await db.postReplyLike.count({
         where: {
           userId: userId,
@@ -47,14 +47,33 @@ module.exports = function (sequelize, dataTypes) {
       });
 
       if (contents > 0) {
-        isUserPostLike = true;
+        isUserPostReplyLike = true;
       }
-      postReplies.dataValues.isUserPostLike = isUserPostLike;
-      return postReplies;
+      reply.dataValues.isUserPostReplyLike = isUserPostReplyLike;
+      return reply;
     }));
 
     return postReplies;
   };
 
+  PostReply.prototype.isUserPostReplyRating = async function (postReplies, db) {
+    postReplies = await Promise.all(postReplies.map(async (reply) => {
+      const colRating = sequelize.col('postReplyRating.rating');
+      const colAVG = sequelize.fn('AVG', colRating);
+      const contents = await db.postReplyRating.findOne({
+        attributes: [
+          [sequelize.fn('COUNT', sequelize.col('userId')), 'ratingCount'],
+          [sequelize.fn('ROUND', colAVG, 2), 'roundedRating']
+        ],
+        where: {
+          postReplyId: reply.id
+        }
+      });
+      reply.dataValues.postReplyRating = contents;
+      return reply;
+    }));
+
+    return postReplies;
+  };
   return PostReply;
 };

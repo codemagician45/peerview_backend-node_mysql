@@ -128,6 +128,29 @@ function postApi (apiRouter) {
       handlers.post.removePostReplyComment.validateParams,
       handlers.post.removePostReplyComment.logic,
       handlers.post.removePostReplyComment.response);
+
+  apiRouter.post('/post/reply/:postReplyId/like',
+      lib.params,
+      lib.isTokenExist.user,
+      handlers.post.postPostCommentLike.validateParams,
+      handlers.post.postPostCommentLike.logic,
+      handlers.post.postPostCommentLike.response);
+
+  apiRouter.delete('/post/reply/:postReplyId/like',
+      lib.params,
+      lib.isTokenExist.user,
+      handlers.post.removePostCommentLike.validateParams,
+      handlers.post.removePostCommentLike.logic,
+      handlers.post.removePostCommentLike.response);
+
+  apiRouter.post('/post/reply/:postReplyId/rating',
+      lib.params,
+      lib.isTokenExist.user,
+      handlers.post.postPostCommentRating.validateParams,
+      handlers.post.postPostCommentRating.logic,
+      handlers.post.postPostCommentRating.averageRating,
+      lib.userCredits.updateUserCreditsUponRating,
+      handlers.post.postPostCommentRating.response);
 }
 
 module.exports = postApi;
