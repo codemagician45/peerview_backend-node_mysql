@@ -156,6 +156,20 @@ function getPosts (req, res, next) {
     .then(() => req.db.post.prototype.getIfUserAlreadyVoted(posts, user.id))
     .then(() => req.db.post.prototype.getPOSTSHARE(posts, req))
     .then(() => req.db.post.prototype.getPOSTLIKES(posts, req));
+  }).then(async (posts) => {
+      posts = await Promise.all(posts.map(async (post) => {
+        const contents = await req.db.postReply.prototype.isUserPostReplyLike(post.dataValues.postReply, req.db, user.id);
+        post.dataValues.postReply = contents;
+        return post;
+      }));
+      return posts;
+  }).then(async (posts) => {
+      posts = await Promise.all(posts.map(async (post) => {
+        const contents = await req.db.postReply.prototype.isUserPostReplyRating(post.dataValues.postReply, req.db, user.id);
+        post.dataValues.postReply = contents;
+        return post;
+      }));
+      return posts;
   })
   .then((posts) => {
     req.$scope.posts = posts;
