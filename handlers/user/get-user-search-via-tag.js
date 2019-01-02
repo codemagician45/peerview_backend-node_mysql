@@ -27,7 +27,11 @@ const getUserSearchViaTag = (req, res, next) => {
   .findAll({
     attributes: [
       'id',
-      'name'
+      'name',
+      'firstName',
+      'lastName',
+      'profilePicture',
+      'socialImage'
     ],
     where: {
       [req.Op.or]: [{
