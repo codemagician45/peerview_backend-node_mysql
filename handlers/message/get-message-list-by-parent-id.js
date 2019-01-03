@@ -46,7 +46,7 @@ const getMessageListByParentId = (req, res, next) => {// eslint-disable-line id-
     }, {
       model: req.db.user,
       as: 'to',
-      attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage']
+      attributes: ['id', 'firstName', 'lastName', 'profilePicture', 'socialImage', 'city']
     }],
     where: {
       [req.Op.or]: [{

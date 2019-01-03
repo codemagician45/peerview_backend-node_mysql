@@ -45,7 +45,7 @@ function getUser (req, res, next) {
   let userId = req.$params.userId;
 
   return req.db.user.findOne({
-    attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName'],
+    attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture', 'socialImage'],
     where: {
       id: {
         [req.Op.eq]: userId
