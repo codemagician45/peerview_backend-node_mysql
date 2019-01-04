@@ -11,11 +11,16 @@ module.exports = function (sequelize, dataTypes) {
       type: dataTypes.BOOLEAN,
       default: false
     },
+    message: {
+      type: dataTypes.STRING,
+      default: false
+    },
     area: {
       type: new dataTypes.ENUM('home', 'campus', 'community')
     },
     type: {
-      type: new dataTypes.ENUM('post', 'replyLike', 'replyViaFollowPost', 'replyViaReply')
+      type: new dataTypes.ENUM('newFollower', 'postLike', 'postReply', 'postShare', 'communityQuestionFollow',
+        'replyLike', 'replyViaFollowPost','replyViaReply')
     }
   }, {
     tableName: 'notification',
@@ -34,6 +39,9 @@ module.exports = function (sequelize, dataTypes) {
       as: 'recipient'
     });
     this.belongsTo(models.postv1, {
+      as: 'postv1'
+    });
+    this.belongsTo(models.post, {
       as: 'post'
     });
     this.belongsTo(models.course, {
@@ -41,6 +49,9 @@ module.exports = function (sequelize, dataTypes) {
     });
     this.belongsTo(models.reply, {
       as: 'reply'
+    });
+    this.belongsTo(models.postReply, {
+      as: 'postReply'
     });
   };
 

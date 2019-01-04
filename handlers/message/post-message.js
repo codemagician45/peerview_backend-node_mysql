@@ -45,6 +45,7 @@ const querySchema = {
 
 const postMessage = (req, res, next) => {
   let body = req.$params;
+  body.isRead = false;
 
   return req.db
   .message

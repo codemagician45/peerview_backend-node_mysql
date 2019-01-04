@@ -123,8 +123,10 @@ function communityApi (apiRouter) {
     lib.params,
     lib.isTokenExist.user,
     handlers.community.postCommunityPostFollow.validateParams,
+    handlers.community.getCommunityPost.logic,
     handlers.community.postCommunityPostFollow.logic,
     handlers.community.postCommunityPostFollow.saveCommunityPostFollowCronQueue,
+    lib.notification.postCommunityPostFollow,
     handlers.community.postCommunityPostFollow.response);
 
   apiRouter.put('/community/post/:communityPostId', // public community student and professionals can post
