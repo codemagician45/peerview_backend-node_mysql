@@ -65,7 +65,6 @@ function postApi (apiRouter) {
     lib.params,
     lib.isTokenExist.user,
     handlers.post.postPostPageview.validateParams,
-    handlers.post.postPostPageview.validateParams,
     handlers.post.postPostPageview.logic,
     handlers.post.postPostPageview.response);
 

@@ -79,7 +79,6 @@ function postSharePost (req, res, next) {
   })
   .then(post => {
     post.dataValues.user = user.dataValues;
-    req.$scope.post = post;
     next();
     return post;
   })

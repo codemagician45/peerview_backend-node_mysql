@@ -46,11 +46,18 @@ const getNotificationList = (req, res, next) => {
     include: [{
       model: req.db.user,
       as: 'subject',
-    },{
-        model: req.db.post,
-        as: 'post',
-      }],
+    }, {
+      model: req.db.post,
+      as: 'post',
+    }, {
+      model: req.db.course,
+      as: 'course',
+    }, {
+      model: req.db.postv1,
+      as: 'postv1',
+    }],
     where: where,
+    order: [['createdAt', 'DESC']],
     offset: !offset ? 0 : parseInt(offset),
     limit: !limit ? 10 : parseInt(limit)
   })
