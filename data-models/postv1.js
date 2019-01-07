@@ -211,5 +211,25 @@ module.exports = function (sequelize, dataTypes) {
     return posts;
   };
 
+  PostV1.prototype.isUserFollowCommunityQuestion = async function (posts, db, userId) {
+    posts = await Promise.all(posts.map(async (post) => {
+      let isUserFollowCommunityQuestion = false;
+      const contents = await db.followPost.findOne({
+        where: {
+          postv1Id: post.id,
+          userId: userId
+        }
+      });
+
+      if (contents) {
+        isUserFollowCommunityQuestion = true;
+      }
+      post.dataValues.isUserFollowCommunityQuestion = isUserFollowCommunityQuestion;
+      return post;
+    }));
+
+    return posts;
+  };
+
   return PostV1;
 };

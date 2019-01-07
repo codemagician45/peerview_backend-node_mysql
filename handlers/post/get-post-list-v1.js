@@ -156,6 +156,9 @@ function getPosts (req, res, next) {
     // .then(() => req.db.postv1.prototype.isPostUser(posts, req.db, user.id));
   })
   .then((posts) => {
+    return req.db.postv1.prototype.isUserFollowCommunityQuestion(posts, req.db, user.id)
+  })
+  .then((posts) => {
     req.$scope.posts = posts;
     next();
     return posts;

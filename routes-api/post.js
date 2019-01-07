@@ -40,6 +40,7 @@ function postApi (apiRouter) {
     lib.schemaValidator.validationResult,
     handlers.post.postPostReply.logic,
     lib.userCredits.updateUserCredits,
+    lib.notification.createPostReplyNotification,
     handlers.post.postPostReply.response);
 
   apiRouter.post('/post/:postId/rating',
@@ -55,7 +56,9 @@ function postApi (apiRouter) {
     lib.params,
     lib.isTokenExist.user,
     handlers.post.postPostLike.validateParams,
+    handlers.post.getPost.logic,
     handlers.post.postPostLike.logic,
+    lib.notification.postLikeNotification,
     handlers.post.postPostLike.response);
 
   apiRouter.post('/post/:postId/pageview',
@@ -69,7 +72,9 @@ function postApi (apiRouter) {
     lib.params,
     lib.isTokenExist.user,
     handlers.post.postSharePost.validateParams,
+    handlers.post.getPost.logic,
     handlers.post.postSharePost.logic,
+    lib.notification.postShareNotification,
     handlers.post.postSharePost.response);
 
   apiRouter.post('/post/:postId/report',

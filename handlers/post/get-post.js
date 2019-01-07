@@ -54,7 +54,7 @@ function validateParams (req, res, next) {
  */
 function getPost (req, res, next) {
   let user = req.$scope.user;
-  let postId = req.$params.postId;
+  let postId = req.$params.postId | req.$params.sharePostId;
   const sequelize = req.db.postRating.sequelize;
   const colRating = sequelize.col(['postRating', 'rating'].join('.'));
   const colAVG = sequelize.fn('AVG', colRating);

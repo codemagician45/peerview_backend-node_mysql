@@ -9,5 +9,11 @@ module.exports = function (sequelize, dataTypes) {
     instanceMethods: {}
   });
 
+  FollowPost.associate = function (models) {
+    this.belongsTo(models.course, {
+      as: 'course'
+    });
+  };
+
   return FollowPost;
 };

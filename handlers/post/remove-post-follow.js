@@ -1,10 +1,5 @@
 'use strict';
 
-/**
- * @author Jo-Ries Canino
- * @description Post Share Post
- */
-
 const lib = require('../../lib');
 
 /**
@@ -18,30 +13,19 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let paramsSchema = {
-    sharePostId: {
+    courseId: {
       isInt: {
-        errorMessage: 'Invalid Resource: Share Post Id'
+        errorMessage: 'Invalid Resource: Course Id'
       }
-    }
-  };
-
-  let bodySchema = {
-    message: {
-      notEmpty: {
-        errorMessage: 'Missing Resource: Message'
-      },
-      isLength: {
-        options: [{
-          min: 1,
-          max: 280
-        }],
-        errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
+    },
+    postId: {
+      isInt: {
+        errorMessage: 'Invalid Resource: Post Id'
       }
     }
   };
 
   req.checkParams(paramsSchema);
-  req.checkBody(bodySchema);
   return req.getValidationResult()
   .then(validationErrors => {
     if (validationErrors.array().length !== 0) {
@@ -67,20 +51,29 @@ function validateParams (req, res, next) {
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function postSharePost (req, res, next) {
+function removePostFollow (req, res, next) {
   let user = req.$scope.user;
-  let sharePostId = req.$params.sharePostId;
-  let message = req.$params.message;
+  let courseId = req.$params.courseId;
+  let postId = req.$params.postId;
 
-  return req.db.post.create({
-    userId: user.id,
-    sharePostId: sharePostId,
-    message: message
+  return req.db.followPost.destroy({
+    where: {
+      [req.Op.and]: {
+        courseId: {
+          [req.Op.eq]: courseId
+        },
+        postV1Id: {
+          [req.Op.eq]: postId
+        },
+        userId: {
+          [req.Op.eq]: user.id
+        }
+      }
+    }
   })
-  .then(post => {
-    post.dataValues.user = user.dataValues;
+  .then(postLike => {
     next();
-    return post;
+    return postLike;
   })
   .catch(error => {
     res.status(500)
@@ -88,7 +81,7 @@ function postSharePost (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'post.create Error - post-post');
+    }, 'postFollow.destroy Error - remove-post-follow');
   });
 }
 
@@ -99,17 +92,15 @@ function postSharePost (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let post = req.$scope.post;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
-    http_code: 201,
-    data: post
+    http_code: 200
   };
 
-  res.status(201).send(body);
+  res.status(200).send(body);
 }
 
 module.exports.validateParams = validateParams;
-module.exports.logic = postSharePost;
+module.exports.logic = removePostFollow;
 module.exports.response = response;
