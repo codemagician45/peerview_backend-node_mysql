@@ -82,9 +82,6 @@ function getPosts (req, res, next) {
         [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postPageview.id'))), 'pageviewCount'],
         [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postShare.id'))), 'shareCount'],
         [sequelize.fn('COUNT',
-          sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postLike.userId'), user.id))), //check this if it is working or not
-        'isUserPostLike'],
-        [sequelize.fn('COUNT',
           sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postShare.userId'), user.id))), //check this if it is working or not
         'isUserPostShare'],
         [sequelize.where(sequelize.col('post.userId'), user.id), 'isPostUser']
@@ -170,6 +167,8 @@ function getPosts (req, res, next) {
         return post;
       }));
       return posts;
+  }).then((posts) => {
+      return req.db.post.prototype.isUserPostLike(posts, req.db, user.id)
   })
   .then((posts) => {
     req.$scope.posts = posts;
