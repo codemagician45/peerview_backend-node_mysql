@@ -72,9 +72,6 @@ function getPost (req, res, next) {
       [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postPageview.id'))), 'pageviewCount'],
       [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postShare.id'))), 'shareCount'],
       [sequelize.fn('COUNT',
-        sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postLike.id')))),
-      'isUserPostLike'],
-      [sequelize.fn('COUNT',
         sequelize.fn('DISTINCT', sequelize.where(sequelize.col('postShare.id')))),
       'isUserPostShare'],
       [sequelize.where(sequelize.col('post.userId'), user.id), 'isPostUser']
@@ -82,7 +79,14 @@ function getPost (req, res, next) {
     include: [{
       model: req.db.user,
       as: 'user',
-      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture', 'socialImage']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'schoolName', 'profilePicture', 'socialImage'],
+      include: [{
+        model: req.db.userCredits,
+        attributes: [
+          [sequelize.fn('SUM',
+            sequelize.col('credits')), 'totalCredits'],
+        ],
+      }]
     }, {
       model: req.db.postRating,
       as: 'postRating',
@@ -117,8 +121,25 @@ function getPost (req, res, next) {
   })
   .then((posts) => {
     return req.db.post.prototype.getPOSTREPLY(posts, req.db)
-    .then(() => req.db.post.prototype.getATTACHMENTS(posts));
-  })
+    .then(() => req.db.post.prototype.getATTACHMENTS(posts))
+    .then(() => req.db.post.prototype.getPOSTLIKES(posts, req));
+  }).then(async (posts) => {
+      posts = await Promise.all(posts.map(async (post) => {
+        const contents = await req.db.postReply.prototype.isUserPostReplyLike(post.dataValues.postReply, req.db, user.id);
+        post.dataValues.postReply = contents;
+        return post;
+      }));
+      return posts;
+    }).then(async (posts) => {
+      posts = await Promise.all(posts.map(async (post) => {
+        const contents = await req.db.postReply.prototype.isUserPostReplyRating(post.dataValues.postReply, req.db, user.id);
+        post.dataValues.postReply = contents;
+        return post;
+      }));
+      return posts;
+    }).then((posts) => {
+      return req.db.post.prototype.isUserPostLike(posts, req.db, user.id)
+    })
   .then((posts) => {
     req.$scope.post = posts[0];
     next();
