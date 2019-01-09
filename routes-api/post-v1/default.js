@@ -23,9 +23,11 @@ let defaultApi = (api) => {
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostV1.querySchema),
     lib.schemaValidator.validationResult,
+    handlers.user.getUsersSearchViaCourseId.getUsers,
     handlers.post.postPostV1.logic,
     handlers.post.postPostV1.saveAttachments,
     lib.userCredits.updateUserCredits,
+    lib.notification.communityPostNotification,
     handlers.post.postPostV1.response);
 
   api.post('/v2/community/:communityId', // private community
