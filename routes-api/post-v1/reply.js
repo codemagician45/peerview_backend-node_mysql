@@ -9,9 +9,10 @@ let replyApi = (api) => {
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostReplyV1.querySchema),
     lib.schemaValidator.validationResult,
+    handlers.post.getPostV1.logic,
     handlers.post.postPostReplyV1.logic,
     lib.userCredits.updateUserCredits,
-    lib.notification.createPostReplyNotification,
+    lib.notification.communityPostReplyNotification,
     handlers.post.postPostReplyV1.response);
 
   api.post('/v2/community/reply/:replyId/like',

@@ -47,7 +47,7 @@ function getPost (req, res, next) {
   let user = req.$scope.user;
   let postId = req.params.postId;
   let communityId = lib.utilities.assignNullIfUndefined(req.params.communityId);
-  let courseId = lib.utilities.assignNullIfUndefined(req.params.courseId);
+  let courseId = req.params.courseId? lib.utilities.assignNullIfUndefined(req.params.courseId): lib.utilities.assignNullIfUndefined(req.$params.courseId);
   const sequelize = req.db.postv1.sequelize;
   const colRating = sequelize.col('rating');
   const colAVG = sequelize.fn('AVG', colRating);

@@ -36,5 +36,25 @@ module.exports = function (sequelize, dataTypes) {
     });
   };
 
+  Reply.prototype.isUserPostReplyLike = async function (postReplies, db, userId) {
+    postReplies = await Promise.all(postReplies.map(async (reply) => {
+      let isUserPostReplyLike = false;
+      const contents = await db.like.count({
+        where: {
+          userId: userId,
+          replyId: reply.id
+        }
+      });
+
+      if (contents > 0) {
+        isUserPostReplyLike = true;
+      }
+      reply.dataValues.isUserPostReplyLike = isUserPostReplyLike;
+      return reply;
+    }));
+
+    return postReplies;
+  };
+
   return Reply;
 };
