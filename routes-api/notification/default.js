@@ -9,6 +9,13 @@ let defaultApi = (api) => {
     lib.isTokenExist.user,
     handlers.notification.getNotificationCount.logic,
     handlers.notification.getNotificationCount.response);
+
+  api.put('/:notificationId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.notification.updateOneNotificationStatus.validateParams,
+    handlers.notification.updateOneNotificationStatus.logic,
+    handlers.notification.updateOneNotificationStatus.response);
 };
 
 module.exports = defaultApi;
