@@ -20,7 +20,7 @@ module.exports = function (sequelize, dataTypes) {
     },
     type: {
       type: new dataTypes.ENUM('newFollower', 'postLike', 'postReply', 'postShare', 'communityQuestionPost',
-        'communityQuestionFollow', 'communityQuestionReply', 'replyLike', 'replyViaFollowPost','replyViaReply')
+        'communityQuestionFollow', 'communityQuestionReply', 'replyLike', 'replyViaFollowPost', 'replyViaReply')
     }
   }, {
     tableName: 'notification',

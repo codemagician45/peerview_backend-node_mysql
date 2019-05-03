@@ -28,7 +28,7 @@ module.exports = {
     // complexity
     'max-depth': [1, 3],
     'max-len': [2, {
-      code: 90,
+      code: 120,
       ignoreTrailingComments: true,
       ignoreUrls: true,
       ignoreTemplateLiterals: true

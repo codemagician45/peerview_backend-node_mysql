@@ -5,6 +5,7 @@ const numCPUs = require('os').cpus().length;
 const config = require(__dirname + '/config');
 const sprintf = require('util').format;
 const log = require('bunyan').createLogger(config.appLog);
+const dbcron = require('./tools/cron/backup-db');
 
 if (cluster.isMaster && !process.env.SINGLE_PROCESS) {
   log.info('Master Process is online');
@@ -12,14 +13,15 @@ if (cluster.isMaster && !process.env.SINGLE_PROCESS) {
     cluster.fork();
   }
   cluster.on('exit', function (worker) {
-    log.error({pid: worker.process.pid}, 'Worker died');
+    log.error({ pid: worker.process.pid }, 'Worker died');
     cluster.fork();
   });
 
   cluster.on('online', function (worker) {
-    log.info({pid: worker.process.pid}, 'New Worker online');
+    log.info({ pid: worker.process.pid }, 'New Worker online');
   });
 } else {
+  dbcron.initialize();
   let api = require(__dirname + '/api');
 
   api.use(function (error, req, res, next) {
@@ -42,6 +44,6 @@ if (cluster.isMaster && !process.env.SINGLE_PROCESS) {
 }
 
 process.on('uncaughtException', function psUncaughtException (error) {
-  log.fatal({err: error}, 'Uncaught Exception. Killing process now.');
+  log.fatal({ err: error }, 'Uncaught Exception. Killing process now.');
   process.kill(1);
 });
