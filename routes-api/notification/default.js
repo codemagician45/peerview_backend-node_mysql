@@ -16,6 +16,13 @@ let defaultApi = (api) => {
     handlers.notification.updateOneNotificationStatus.validateParams,
     handlers.notification.updateOneNotificationStatus.logic,
     handlers.notification.updateOneNotificationStatus.response);
+
+  api.put('/update/:subjectId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.notification.updateAllNotification.validateParams,
+    handlers.notification.updateAllNotification.logic,
+    handlers.notification.updateAllNotification.response);
 };
 
 module.exports = defaultApi;

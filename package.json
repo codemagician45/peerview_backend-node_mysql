@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "NODE_ENV=development nodemon index.js",
+    "dev-win": "set NODE_ENV=development&&nodemon index.js",
     "lint": "$(npm bin)/eslint .",
     "add-hooks": "cp tool/hooks/pre-commit .git/hooks && chmod +x .git/hooks/pre-commit",
     "db-sync": "node -pe \"require('./lib/db').sync({force: true}).then(process.exit)\";",

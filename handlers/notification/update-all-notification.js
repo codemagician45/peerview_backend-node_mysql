@@ -1,8 +1,8 @@
 'use strict';
 
 /**
- * @author Developer
- * @description Update notification isRead status
+ * @author Sid
+ * @description Update notification isRead status by userid
  */
 
 const lib = require('../../lib');
@@ -18,9 +18,9 @@ const lib = require('../../lib');
  */
 function validateParams (req, res, next) {
   let paramsSchema = {
-    notificationId: {
+    subjectId: {
       isInt: {
-        errorMessage: 'Invalid Resource: Notification Id'
+        errorMessage: 'Invalid Resource: Subject Id'
       }
     }
   };
@@ -60,14 +60,14 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function updateNotification (req, res, next) {
-  let notificationId = req.$params.notificationId;
+  let subjectId = req.$params.subjectId;
   let isRead = req.$params.isRead;
 
   return req.db.notification.update({
     isRead: isRead,
   }, {
     where: {
-      id: notificationId
+      subjectId: subjectId
     }
   })
   .then(notification => {
