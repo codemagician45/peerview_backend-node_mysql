@@ -13,18 +13,18 @@ function validateParams (req, res, next) {
 
   req.checkParams(paramsSchema);
   return req.getValidationResult()
-      .then(validationErrors => {
-        if (validationErrors.array().length !== 0) {
-          return res.status(400)
-              .send(new lib.rpc.ValidationError(validationErrors.array()));
-        }
+  .then(validationErrors => {
+    if (validationErrors.array().length !== 0) {
+      return res.status(400)
+      .send(new lib.rpc.ValidationError(validationErrors.array()));
+    }
 
-        return next();
-      })
-      .catch(error => {
-        res.status(500)
-            .send(new lib.rpc.InternalError(error));
-      });
+    return next();
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+  });
 }
 
 const postPostCommentLike = (req, res, next) => {

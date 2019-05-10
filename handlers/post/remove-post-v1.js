@@ -52,7 +52,6 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function removePost (req, res, next) {
-
   let user = req.$scope.user;
   let postId = req.$params.postId;
 

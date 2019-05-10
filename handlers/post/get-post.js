@@ -124,22 +124,24 @@ function getPost (req, res, next) {
     .then(() => req.db.post.prototype.getATTACHMENTS(posts))
     .then(() => req.db.post.prototype.getPOSTLIKES(posts, req));
   }).then(async (posts) => {
-      posts = await Promise.all(posts.map(async (post) => {
-        const contents = await req.db.postReply.prototype.isUserPostReplyLike(post.dataValues.postReply, req.db, user.id);
-        post.dataValues.postReply = contents;
-        return post;
-      }));
-      return posts;
-    }).then(async (posts) => {
-      posts = await Promise.all(posts.map(async (post) => {
-        const contents = await req.db.postReply.prototype.isUserPostReplyRating(post.dataValues.postReply, req.db, user.id);
-        post.dataValues.postReply = contents;
-        return post;
-      }));
-      return posts;
-    }).then((posts) => {
-      return req.db.post.prototype.isUserPostLike(posts, req.db, user.id)
-    })
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await req.db.postReply.prototype.isUserPostReplyLike(post.dataValues.postReply, req.db, user.id);
+      post.dataValues.postReply = contents;
+      return post;
+    }));
+    return posts;
+  })
+  .then(async (posts) => {
+    posts = await Promise.all(posts.map(async (post) => {
+      const contents = await req.db.postReply.prototype.isUserPostReplyRating(post.dataValues.postReply, req.db, user.id);
+      post.dataValues.postReply = contents;
+      return post;
+    }));
+    return posts;
+  })
+  .then((posts) => {
+    return req.db.post.prototype.isUserPostLike(posts, req.db, user.id);
+  })
   .then((posts) => {
     req.$scope.post = posts[0];
     next();
