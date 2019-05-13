@@ -156,6 +156,13 @@ function postApi (apiRouter) {
     handlers.post.postPostCommentRating.averageRating,
     lib.userCredits.updateUserCreditsUponRating,
     handlers.post.postPostCommentRating.response);
+
+  apiRouter.get('/post/link-preview/:url',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.post.getLinkPreview.validateParams,
+    handlers.post.getLinkPreview.logic,
+    handlers.post.getLinkPreview.response);
 }
 
 module.exports = postApi;

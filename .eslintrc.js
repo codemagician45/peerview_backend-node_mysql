@@ -19,7 +19,7 @@ module.exports = {
     'func-call-spacing': [2, 'never'],
     'id-blacklist': [2, 'data', 'info', 'obj'],
     'id-length': [1, {
-      min: 1, max: 20,
+      min: 1, max: 50,
       properties: 'never'
     }],
     indent: [2, 2, { 'MemberExpression': 0}],
