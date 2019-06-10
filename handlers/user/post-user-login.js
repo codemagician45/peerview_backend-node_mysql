@@ -68,7 +68,6 @@ function validateParams (req, res, next) {
 function postUserLogin (req, res, next) {
   let email = req.$params.email;
   let password = md5(req.$params.password);
-
   return req.db.user.findOne({
     where: {
       [req.Op.and]: {
