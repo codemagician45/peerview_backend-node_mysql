@@ -66,9 +66,9 @@ function validateParams (req, res, next) {
         isLength: {
           options: [{
             min: 1,
-            max: 600
+            max: 2000
           }],
-          errorMessage: `Invalid Resource: Minimum 1 and maximum 600 characters are allowed`
+          errorMessage: `Invalid Resource: Minimum 1 and maximum 2000 characters are allowed`
         }
       }
     };
