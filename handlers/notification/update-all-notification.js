@@ -60,14 +60,14 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function updateNotification (req, res, next) {
-  let subjectId = req.$params.subjectId;
+  let recipientId = req.$params.subjectId;
   let isRead = req.$params.isRead;
 
   return req.db.notification.update({
     isRead: isRead,
   }, {
     where: {
-      subjectId: subjectId
+      recipientId: recipientId
     }
   })
   .then(notification => {
