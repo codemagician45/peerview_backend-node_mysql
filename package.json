@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "start": "node index.js",
-    "db-restore": "./restore-db.sh $HOME/db-backup/",
+    "db-restore": "restore-db.sh $HOME/db-backup/peersview",
     "dev": "NODE_ENV=development nodemon index.js",
     "dev-win": "set NODE_ENV=development&&nodemon index.js",
     "lint": "$(npm bin)/eslint .",
