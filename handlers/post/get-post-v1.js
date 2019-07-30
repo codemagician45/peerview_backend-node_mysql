@@ -7,7 +7,7 @@
  */
 
 const lib = require('../../lib');
-const moment = require('moment');
+// const moment = require('moment');
 
 /**
  * Initialized the schema Object
@@ -90,7 +90,7 @@ function getPost (req, res, next) {
         attributes: [
           // [sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
         ],
-        raw:true
+        raw: true
       }]
     }, {
       model: req.db.reply,

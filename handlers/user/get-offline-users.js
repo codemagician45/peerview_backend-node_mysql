@@ -19,18 +19,17 @@ const moment = require('moment');
 
 
 function getOfflineUsers (req, res, next) {
-var currentDate = new Date();
-var pastDate = currentDate.setHours(currentDate.getHours() - 72); // get the 3 days back date
-const sequelize = req.db.postv1.sequelize;
+  // var currentDate = new Date();
+  // var pastDate = currentDate.setHours(currentDate.getHours() - 72); // get the 3 days back date
+  // const sequelize = req.db.postv1.sequelize;
 
 // const Op = req.db.postv1.sequelize.Op;
   return req.db.user.findAll({
-    attributes: ['id', 'firstName', 'lastName', 'email','last_logging_time'],
-    where : {
+    attributes: ['id', 'firstName', 'lastName', 'email', 'last_logging_time'],
+    where: {
       last_logging_time: {
         [req.Op.between]: ['2019-07-26', '2019-07-30'],
-      }, 
-  },
+      }},
     limit: 5,
     // offset: !offset ? 0 : parseInt(offset),
     // limit: !limit ? 10 : parseInt(limit)

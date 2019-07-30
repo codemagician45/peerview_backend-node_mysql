@@ -235,16 +235,16 @@ function userApi (apiRouter) {
     handlers.user.removeUserInterest.logic,
     handlers.user.removeUserInterest.response);
 
-    // code for get all users who are inactive more than 72 hr
-    apiRouter.get('/users/72hOfflineUsers',
+  //code for get all users who are inactive more than 72 hr
+  apiRouter.get('/users/72hOfflineUsers',
     handlers.user.getOfflineUsers.logic,
     handlers.user.getOfflineUsers.response);
 
-    apiRouter.get('/users/offlineTimelinedata',
+  apiRouter.get('/users/offlineTimelinedata',
     handlers.user.getOfflineUsersTimeline.logic,
     handlers.user.getOfflineUsersTimeline.response);
 
-    apiRouter.get('/users/offlinecommunityData',
+  apiRouter.get('/users/offlinecommunityData',
     handlers.user.getOfflineUsersCommunity.logic,
     handlers.user.getOfflineUsersCommunity.response);
 }
