@@ -92,13 +92,16 @@ function getPosts (req, res, next) {
       include: [{
         model: req.db.user,
         attributes: ['id', 'firstName', 'lastName', 'email', 'socialImage', 'profilePicture']
-      }, {
+      }, 
+      {
         model: req.db.like,
         as: 'replyLike',
         attributes: [
-          [sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
-        ]
-      }]
+          // [sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
+        ],
+        raw:true
+      }
+    ]
     }, {
       model: req.db.reply,
       as: 'countReplyVirtual',
@@ -164,6 +167,7 @@ function getPosts (req, res, next) {
     return posts;
   })
   .catch(error => {
+    console.log(error);
     req.log.error({
       error: error
     }, 'handlers.post get-post-list-v1 [postv1.findAll] Error');
