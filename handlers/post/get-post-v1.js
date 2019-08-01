@@ -88,7 +88,7 @@ function getPost (req, res, next) {
         model: req.db.like,
         as: 'replyLike',
         attributes: [
-          [sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
+          //[sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
         ]
       }]
     }, {
