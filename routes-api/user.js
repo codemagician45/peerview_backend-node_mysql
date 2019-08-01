@@ -237,7 +237,10 @@ function userApi (apiRouter) {
 
   //code for get all users who are inactive more than 72 hr
   apiRouter.get('/users/72hOfflineUsers',
-    handlers.user.getOfflineUsers.logic,
+    handlers.user.getOfflineUsers.getUser,
+    handlers.user.getOfflineUsers.getUserPosts,
+    handlers.user.getOfflineUsers.getUserTimelinePosts,
+    handlers.user.getOfflineUsers.sendMail,
     handlers.user.getOfflineUsers.response);
 
   apiRouter.get('/users/offlineTimelinedata',
