@@ -42,7 +42,10 @@ module.exports = function (sequelize, dataTypes) {
       as: 'directPost'
     });
     this.hasMany(models.attachment);
-    this.hasMany(models.postPollOption);
+    this.hasMany(models.postPollOption, {
+      foreignKey: 'postId',
+      as: 'postPollOption'
+    });
     this.hasMany(models.post, {
       foreignKey: 'sharePostId',
       as: 'postShare'
