@@ -129,6 +129,7 @@ function getPost (req, res, next) {
   })
   .then((post) => {
     req.$scope.post = post;
+    req.$scope.post.pp = 'kkkkk';
     next();
     return post;
   })
@@ -142,6 +143,31 @@ function getPost (req, res, next) {
   });
 }
 
+function getfollow (req, res, next) {
+  let user = req.$scope.user;
+  let postId = req.params.postId;
+  return req.db.followPost.findOne({
+    where: {
+      postv1Id: postId,
+      userId: user.id
+    }
+  })
+  .then((follow) => {
+    req.$scope.follow = follow;
+    next();
+    return follow;
+  })
+  .catch(error => {
+    req.log.error({
+      error: error
+    }, 'handlers.post get-post-v1 [postv1.findOne] Error');
+
+    return res.status(lib.httpCodes.SERVER_ERROR)
+    .send(new lib.rpc.InternalError(error));
+  });
+}
+
+
 /**
  * Response data to client
  * @param {any} req request object
@@ -150,11 +176,17 @@ function getPost (req, res, next) {
  */
 const response = (req, res) => {
   let post = req.$scope.post;
+  let follow = req.$scope.follow;
   let body = lib.response.createOk(post);
-
+  if(follow){
+    body.isUserFollowCommunityQuestion = true;
+  }else{
+    body.isUserFollowCommunityQuestion = false;
+  }
   res.status(lib.httpCodes.OK).send(body);
 };
 
 module.exports.querySchema = querySchema;
 module.exports.logic = getPost;
+module.exports.followlogic = getfollow;
 module.exports.response = response;
