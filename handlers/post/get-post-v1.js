@@ -90,6 +90,10 @@ function getPost (req, res, next) {
         attributes: [
           //[sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
         ]
+      },
+      {
+        model: req.db.attachment,
+        as: 'attachment',
       }]
     }, {
       model: req.db.reply,
@@ -129,7 +133,6 @@ function getPost (req, res, next) {
   })
   .then((post) => {
     req.$scope.post = post;
-    req.$scope.post.pp = 'kkkkk';
     next();
     return post;
   })
