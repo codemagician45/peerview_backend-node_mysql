@@ -72,6 +72,7 @@ function postPostReply (req, res, next) {
     reply.credits = 1;
     req.$scope.userCredits = reply;
     req.$scope.userId = user.id;
+    req.$scope.replyId = reply.id;
     next();
     return reply;
   })
@@ -79,6 +80,38 @@ function postPostReply (req, res, next) {
     req.log.error({
       error: error
     }, 'handlers.post post-post-v1-reply [reply.create] - Error');
+
+    return res.status(lib.httpCodes.SERVER_ERROR)
+    .send(new lib.rpc.InternalError(error));
+  });
+}
+function saveAttachments (req, res, next) {
+  let postv1 = req.$scope.replyId;
+  let cloudinary = req.$params.attachments
+    ? req.$params.attachments : [];
+  let attachments = [];
+
+  if (cloudinary.length === 0) {
+    return next();
+  }
+
+  cloudinary.forEach(item => {
+    attachments.push({
+      replyId: postv1,
+      cloudinaryPublicId: item.cloudinaryPublicId,
+      usage: item.usage
+    });
+  });
+
+  return req.db.attachment.bulkCreate(attachments)
+  .then(attachment => {
+    next();
+    return attachment;
+  })
+  .catch(error => {
+    req.log.error({
+      error: error
+    }, 'handlers.post post-post-v1 [attachment.bulkCreate] - Error');
 
     return res.status(lib.httpCodes.SERVER_ERROR)
     .send(new lib.rpc.InternalError(error));
@@ -99,4 +132,5 @@ const response = (req, res) => {
 
 module.exports.querySchema = querySchema;
 module.exports.logic = postPostReply;
+module.exports.saveAttachments = saveAttachments;
 module.exports.response = response;
