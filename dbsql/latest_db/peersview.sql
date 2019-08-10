@@ -5921,10 +5921,10 @@ ALTER TABLE `user_message`
   ADD CONSTRAINT `user_message_ibfk_1` FOREIGN KEY (`fromId`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   ADD CONSTRAINT `user_message_ibfk_2` FOREIGN KEY (`destinationId`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
---
--- Reply Id added to attachment table to fix timeline issue on home and community pages
---
-ALTER TABLE 'attachment' ADD 'replyId' INT(10) NULL DEFAULT NULL AFTER 'eventPostId';
+----
+---- Reply Id added to attachment table to fix timeline issue on home and community pages
+----
+--ALTER TABLE 'attachment' ADD 'replyId' INT(10) NULL DEFAULT NULL AFTER 'eventPostId';
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
