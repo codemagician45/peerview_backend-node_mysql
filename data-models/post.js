@@ -85,10 +85,12 @@ module.exports = function (sequelize, dataTypes) {
     posts = await Promise.all(posts.map(async (post) => {
       const contents = await req.db.post
       .findOne({
-        include: [{
-          model: req.db.attachment,
-          exclude: []
-        }, {
+        include: [
+        //     {
+        //   model: req.db.attachment,
+        //   exclude: []
+        // },
+          {
           model: req.db.user,
           as: 'user',
           attributes: [
