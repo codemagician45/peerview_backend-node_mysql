@@ -11,6 +11,7 @@ let replyApi = (api) => {
     lib.schemaValidator.validationResult,
     handlers.post.getPostV1.logic,
     handlers.post.postPostReplyV1.logic,
+    handlers.post.postPostReplyV1.saveAttachments,
     lib.userCredits.updateUserCredits,
     lib.notification.communityPostReplyNotification,
     handlers.post.postPostReplyV1.response);

@@ -10,6 +10,7 @@ let defaultApi = (api) => {
     lib.schemaValidator.validateParams(handlers.post.getPostV1.querySchema),
     lib.schemaValidator.validationResult,
     handlers.post.getPostV1.logic,
+    handlers.post.getPostV1.followlogic,
     handlers.post.getPostV1.response);
 
   api.get('/v2/community/:communityId/:postId', // private community
