@@ -96,10 +96,11 @@ function getPosts (req, res, next) {
         model: req.db.like,
         as: 'replyLike',
         attributes: [
-          //[sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
+          // [sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
         ]
-      }]
-    }, {
+      }
+      ]},
+    {
       model: req.db.reply,
       as: 'countReplyVirtual',
       attributes: []
