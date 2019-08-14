@@ -198,7 +198,7 @@ module.exports = {
     initialize: function () {
         log.info('offline cron in');
         return new CronJob({
-            cronTime: '00 */3 * * * *',
+            cronTime: '00 0 10 * * *',
             onTick: function () {
                 log.info('Cron is starting...');
                 user72HoursOfflineEmail();
