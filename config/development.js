@@ -51,7 +51,7 @@ module.exports = Object.assign({}, defaults, {
     database: 'peersview',
     host: 'localhost',
     user: 'root',
-    password: 'password',
+    password: '',
     timezone: '+00:00',
     logging: function (s) {
       let line = sprintf('[%s] %s\n', new Date().toJSON(), s);

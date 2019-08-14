@@ -88,9 +88,12 @@ module.exports = function (sequelize, dataTypes) {
     website: {
       type: dataTypes.STRING
     },
-    // email_send_date: {
-    //   type: dataTypes.DATE
-    // },
+    email_send_date: {
+      type: dataTypes.DATE
+    },
+    last_logging_time: {
+      type: dataTypes.DATE
+    },
     name: {
       type: dataTypes.VIRTUAL,
       get: function () {

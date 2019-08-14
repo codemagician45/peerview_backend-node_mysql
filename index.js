@@ -6,9 +6,13 @@ const config = require(__dirname + '/config');
 const sprintf = require('util').format;
 const log = require('bunyan').createLogger(config.appLog);
 const dbcron = require('./tools/cron/backup-db');
+const offlineusersendemailcron = require('./tools/cron/user-72hours-offline-email');
 
 if (cluster.isMaster && !process.env.SINGLE_PROCESS) {
   log.info('Master Process is online');
+
+  offlineusersendemailcron.initialize();
+  
   for (let w = 0; w < numCPUs; w++) {
     cluster.fork();
   }
