@@ -124,6 +124,7 @@ function getPosts (req, res, next) {
       attributes: ['id', 'cloudinaryPublicId']
     }, {
       model: req.db.postPollOption,
+      as: 'postPollOption',
       attributes: []
     }],
     where: {
