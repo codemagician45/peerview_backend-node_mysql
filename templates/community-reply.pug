@@ -122,10 +122,10 @@ html.sg-campaigns(data-editor-version='2', xmlns='http://www.w3.org/1999/xhtml')
                                   tr
                                     td(role='module-content')
                                       p
-                                table.wrapper(role='module', data-type='image', border='0', cellpadding='0', cellspacing='0', width='100%', style='table-layout: fixed;')
+                                table.wrapper(role="module" data-type="image" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;")
                                   tr
-                                    td(style='font-size:6px;line-height:10px;padding:0px 0px 0px 0px;', valign='top', align='center')
-                                      img.max-width(border='0', style='display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;', src='http://res.cloudinary.com/peersview-com/image/upload/c_scale,w_76/v1513266383/peersview.png', alt='', width='76', height='79')
+                                    td(style="font-size:6px;line-height:10px;padding:0px 0px 0px 0px;" valign="top" align="center")
+                                      img.max-width(border="0" style="display:block;color:#000000;text-decoration:none;font-family:Helvetica, arial, sans-serif;font-size:16px;max-width:40% !important;width:40%;height:auto !important;" src="https://marketing-image-production.s3.amazonaws.com/uploads/5ed047d62402c553ec2ccfa44037315b329b54e85308ace14253b09438e477bac4040296b3ade9d2aefc687e947b40f4d3f003fac76a922296d4f4d5342de3bb.jpg" alt="" width="240")
                                 table.module(role='module', data-type='spacer', border='0', cellpadding='0', cellspacing='0', width='100%', style='table-layout: fixed;')
                                   tr
                                     td(style='padding:0px 0px 30px 0px;', role='module-content', bgcolor='')
@@ -139,32 +139,60 @@ html.sg-campaigns(data-editor-version='2', xmlns='http://www.w3.org/1999/xhtml')
                                               span(style='color:#000000;')
                                                 | Dear
                                                 strong
-                                                  i  #{postOwner}
+                                                  i  #{postOwner},
                                         div  
                                         div
                                           span(style='font-size:16px;')
                                             span(style='font-family:verdana,geneva,sans-serif;')
                                               span(style='color:#000000;')
                                                 strong #{userWhoCommented}
-                                                |  commented on your awesome post/question. See what they have to say!
-                                        div  
+                                                |  commented on your post. See what they have to say!
+                                        div
+                                        div(style='background:#f9f9f9; border-left: 10px solid #cccccc; padding:2%; margin-left:12px; margin-top: 20px; margin-bottom: 20px;')
+                                          span(style='font-family:Arial, Helvetica, sans-serif; color:#000; margin-top:0;font-size:18px;line-height:27px;width:567px;height:330px;text-align:left;letter-spacing:0.01em;')
+                                            |  #{post.message}.
+                                            br
+                                            br
+                                            a(href=loginurl style="color:#000;font-size:18px;text-decoration:underline;" target="_blank" data-saferedirecturl="#")
+                                              |Read more
+                                          br  
                                         div
                                           span(style='font-size:16px;')
                                             span(style='font-family:verdana,geneva,sans-serif;')
                                               span(style='color:#000000;')
-                                                | Click to see their comment
+                                                a(href='#') Click to see their comment
                                                 br
-                                                strong
-                                                  i
-                                                    a(href='#') #{comment}
                                         div  
                                         div
                                           span(style='font-size:16px;')
                                             span(style='font-family:verdana,geneva,sans-serif;')
                                               span(style='color:#000000;') Happy Networking!
                                         div  
-                                        div
-                                          span(style='font-size:16px;')
-                                            span(style='font-family:verdana,geneva,sans-serif;')
-                                              span(style='color:#000000;') The Peersview Team
+                                        
+                                table.module(role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;")
+                                  tr
+                                    td(style="padding:0px 0px 18px 0px;line-height:22px;text-align:inherit;" height="100%" valign="top" bgcolor="")
+                                      div
+                                        span(style="font-size:20px;")
+                                          span(style="color: rgb(0, 0, 0); font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; text-align: center; background-color: rgb(255, 255, 255);") The Peersview Team
+                                table.module(role="module" data-type="spacer" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;")
+                                  tr
+                                    td(style="padding:0px 0px 30px 0px;" role="module-content" bgcolor="")
+                                table.module(role="module" data-type="code" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;")
+                                  tr
+                                    td(height="100%" valign="top")
+                                      div(style="padding: 5px;text-align:center;background-color: #631a90;color: #ffffff;")
+                                        p(style="text-align: center")
+                                          a(href="#" style="color: #ffffff !important") Unsubscribe
+                                        | Have any questions? Just shoot us an email:
+                                        a(href="#" style="color: #ffffff !important") info@peersview.com.
+                                        |  We are always here to help.
+                                table.module(role="module" data-type="spacer" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;")
+                                  tr
+                                    td(style="padding:0px 0px 30px 0px;" role="module-content" bgcolor="")
+                                      div
+                                        span(style="color: gray; font-size: 14px;") Disclaimer: This email and any files transmitted with it are confidential 
+                                          | and intended solely for the use of the individual or entity to whom they are 
+                                          | addressed. If you have received this email in error please notify the system 
+                                          | manager. If you are not the named addressee you should not disseminate, distribute or copy this e-mail. Please notify us immediately by e-mail if you have received this e-mail by mistake and delete this e-mail from your system. If you are not the intended recipient you are notified that disclosing, copying, distributing or taking any action in reliance on the contents of this information is strictly prohibited.
                           //if mso

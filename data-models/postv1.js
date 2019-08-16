@@ -92,7 +92,10 @@ module.exports = function (sequelize, dataTypes) {
       as: 'directPost'
     });
 
-    this.belongsToMany(models.user, {through: models.followPost});
+    this.belongsToMany(models.user, {
+      through: models.followPost,
+      as: 'followers'
+    });
   };
 
   PostV1.prototype.getReplyCount = async function (posts, db) {
