@@ -155,6 +155,16 @@ function userApi (apiRouter) {
     handlers.user.postUserInvitePeers.sendEmail,
     handlers.user.postUserInvitePeers.response);
 
+  apiRouter.post('/user/send-verify-code',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.sendVerifyEmailCode.logic);
+
+  apiRouter.post('/user/verify-changed-email',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.verifyChangedEmail.logic);
+
   apiRouter.put('/user/about-me',
     lib.params,
     lib.isTokenExist.user,
@@ -219,6 +229,11 @@ function userApi (apiRouter) {
     handlers.user.updateUserLanguage.validateParams,
     handlers.user.updateUserLanguage.logic,
     handlers.user.updateUserLanguage.response);
+
+  apiRouter.post('/user/general-setting',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.updateUserSetting.updateGeneralSetting);
 
   apiRouter.delete('/user/:userId/follow',
     lib.params,
