@@ -91,6 +91,9 @@ module.exports = function (sequelize, dataTypes) {
     email_send_date: {
       type: dataTypes.DATE
     },
+    email_verify_code: {
+      type: dataTypes.INTEGER
+    },
     last_logging_time: {
       type: dataTypes.DATE
     },
