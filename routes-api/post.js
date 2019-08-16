@@ -52,6 +52,16 @@ function postApi (apiRouter) {
     lib.userCredits.updateUserCreditsUponRating,
     handlers.post.postPostRating.response);
 
+  apiRouter.delete('/post/:postId/rating',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.post.removePostRating.validateParams,
+    handlers.post.removePostRating.logic,
+    handlers.post.postPostRating.averageRating,
+    lib.userCredits.updateUserCreditsUponRating,
+    handlers.post.removePostRating.response);
+
+
   apiRouter.post('/post/:postId/like',
     lib.params,
     lib.isTokenExist.user,
