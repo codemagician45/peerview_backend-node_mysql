@@ -133,6 +133,10 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'followerId',
       as: 'follower'
     });
+    this.hasMany(models.userSkill, {
+      foreignKey: 'userId',
+      as: 'skill'
+    });
     this.belongsToMany(models.postv1, {through: models.followPost});
   };
 
