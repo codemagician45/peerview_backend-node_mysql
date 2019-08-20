@@ -12,6 +12,12 @@ module.exports = function (sequelize, dataTypes) {
         },
         role: {
             type: dataTypes.STRING
+        },
+        from: {
+            type: dataTypes.DATE
+        },
+        to: {
+            type: dataTypes.DATE
         }
     }, {
             tableName: 'work_experience',

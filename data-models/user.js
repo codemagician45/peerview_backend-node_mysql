@@ -97,6 +97,18 @@ module.exports = function (sequelize, dataTypes) {
     last_logging_time: {
       type: dataTypes.DATE
     },
+    facebook_profile: {
+      type: dataTypes.STRING
+    },
+    twitter_profile: {
+      type: dataTypes.STRING
+    },
+    instagram_profile: {
+      type: dataTypes.STRING
+    },
+    snapchat_profile: {
+      type: dataTypes.STRING
+    },
     name: {
       type: dataTypes.VIRTUAL,
       get: function () {
@@ -133,10 +145,8 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'followerId',
       as: 'follower'
     });
-    this.hasMany(models.userSkill, {
-      foreignKey: 'userId',
-      as: 'skill'
-    });
+    this.hasMany(models.userSkill);
+    this.hasMany(models.workExperience);
     this.belongsToMany(models.postv1, {through: models.followPost});
   };
 

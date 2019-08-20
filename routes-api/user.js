@@ -22,6 +22,12 @@ function userApi (apiRouter) {
     handlers.user.getUserProfile.logic,
     handlers.user.getUserProfile.response);
 
+  apiRouter.get('/user/work-experience',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.getUserWorkExperience.validateParams,
+    handlers.user.getUserWorkExperience.logic);
+
   apiRouter.get('/user/posts',
     lib.isTokenExist.user,
     handlers.user.getUserProfile.logic,
@@ -230,11 +236,26 @@ function userApi (apiRouter) {
     handlers.user.updateUserLanguage.logic,
     handlers.user.updateUserLanguage.response);
 
+  apiRouter.post('/user/update-social-links',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.updateUserSetting.updateSocialLinks);
+
   apiRouter.post('/user/general-setting',
     lib.params,
     lib.isTokenExist.user,
     handlers.user.updateUserSetting.updateGeneralSetting);
 
+  apiRouter.post('/user/add-work-experience',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userWorkExperience.addWorkExperience);
+
+  apiRouter.post('/user/update-work-experience',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userWorkExperience.updateWorkExperience);
+    
   apiRouter.delete('/user/:userId/follow',
     lib.params,
     lib.isTokenExist.user,

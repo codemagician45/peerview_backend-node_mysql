@@ -41,6 +41,10 @@ function getUserProfile (req, res, next) {
         [sequelize.fn('SUM',
           sequelize.col('credits')), 'totalCredits'],
       ],
+    }, {
+      model: req.db.workExperience
+    }, {
+      model: req.db.userSkill
     }],
     where: {
       id: {

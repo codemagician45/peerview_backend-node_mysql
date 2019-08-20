@@ -128,7 +128,8 @@ function getPosts (req, res, next) {
       attributes: ['id', 'cloudinaryPublicId']
     }, {
       model: req.db.postPollOption,
-      attributes: []
+      attributes: [],
+      as: 'postPollOption'
     }],
     where: {
       [req.Op.or]: [{
