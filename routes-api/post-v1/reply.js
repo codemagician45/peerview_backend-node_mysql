@@ -23,6 +23,12 @@ let replyApi = (api) => {
     handlers.post.postPostReplyLike.logic,
     handlers.post.postPostReplyLike.response);
 
+  api.post('/v2/community/reply/:replyId/rating',
+    lib.isTokenExist.user,
+    lib.schemaValidator.validateParams(handlers.post.postPostReplyRatingV1.querySchema),
+    handlers.post.postPostReplyRatingV1.logic,
+    handlers.post.postPostReplyRatingV1.response);
+
   api.delete('/v2/community/reply/:replyId',
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.removePostReply.querySchema),

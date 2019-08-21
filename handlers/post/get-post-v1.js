@@ -13,19 +13,22 @@ const moment = require('moment');
  * Initialized the schema Object
  */
 const querySchema = {
-  postId: { in: ['params'],
+  postId: {
+    in: ['params'],
     optional: true,
     isInt: {
       errorMessage: 'Invalid Resource: Post Id'
     }
   },
-  communityId: { in: ['params'],
+  communityId: {
+    in: ['params'],
     optional: true,
     isInt: {
       errorMessage: 'Invalid Resource: Community Id'
     }
   },
-  courseId: { in: ['params'],
+  courseId: {
+    in: ['params'],
     optional: true,
     isInt: {
       errorMessage: 'Invalid Resource: Course Id'
@@ -69,54 +72,59 @@ function getPost (req, res, next) {
       [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('rating.id'))), 'likeCount'],
       [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('countReplyVirtual.id'))), 'replyCount'],
     ],
-    include: [{
-      model: req.db.user,
-      as: 'user'
-    }, {
-      model: req.db.rating,
-      as: 'rating',
-      attributes: []
-    }, {
-      model: req.db.reply,
-      as: 'reply',
-      limit: 5,
-      order: [['createdAt', 'DESC']],
-      include: [{
+    include: [
+      {
         model: req.db.user,
-        attributes: ['id', 'firstName', 'lastName', 'email', 'socialImage', 'profilePicture', 'institutionName', 'schoolName']
-      }, {
-        model: req.db.like,
-        as: 'replyLike',
-        attributes: [
-          //[sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
-        ]
+        as: 'user'
       },
       {
+        model: req.db.rating,
+        as: 'rating',
+        attributes: []
+      },
+      {
+        model: req.db.reply,
+        as: 'reply',
+        limit: 5,
+        order: [['createdAt', 'DESC']],
+        include: [
+          {
+            model: req.db.user,
+            attributes: ['id', 'firstName', 'lastName', 'email', 'socialImage', 'profilePicture', 'institutionName', 'schoolName']
+          },
+          // {
+          //   model: req.db.like,
+          //   as: 'replyLike',
+          //   attributes: [
+          //     // [sequelize.fn('COUNT', sequelize.col('replyLike.id')), 'replyCount']
+          //   ]
+          // },
+          {
+            model: req.db.attachment,
+            as: 'attachment',
+          }]
+      }, {
+        model: req.db.reply,
+        as: 'countReplyVirtual',
+        attributes: []
+      }, {
+        model: req.db.pageview,
+        as: 'pageview',
+        attributes: []
+      }, {
+        model: req.db.postv1,
+        as: 'share',
+        attributes: []
+      }, {
+        model: req.db.postv1,
+        as: 'originalPost'
+      }, {
         model: req.db.attachment,
-        as: 'attachment',
-      }]
-    }, {
-      model: req.db.reply,
-      as: 'countReplyVirtual',
-      attributes: []
-    }, {
-      model: req.db.pageview,
-      as: 'pageview',
-      attributes: []
-    }, {
-      model: req.db.postv1,
-      as: 'share',
-      attributes: []
-    }, {
-      model: req.db.postv1,
-      as: 'originalPost'
-    }, {
-      model: req.db.attachment,
-      attributes: ['id', 'cloudinaryPublicId']
-    }, {
-      model: req.db.pollOption,
-      attributes: []
-    }],
+        attributes: ['id', 'cloudinaryPublicId']
+      }, {
+        model: req.db.pollOption,
+        attributes: []
+      }],
     where: {
       id: {
         [req.Op.eq]: postId
@@ -131,7 +139,24 @@ function getPost (req, res, next) {
     group: ['id'],
     subQuery: false,
   })
-  .then((post) => {
+  .then(async (post) => {
+    // post.reply.forEach(r => {
+
+    for (let i = 0; i < post.reply.length; i++) {
+      let likes = await req.db.like.findAll({
+        attributes: [[sequelize.fn('COUNT', sequelize.col('id')), 'replyCount']],
+        where: {
+          replyId: {
+            [req.Op.eq]: post.reply[i].id
+          }
+        }
+      });
+      post.reply[i].cococ = ['1', '2', '3'];
+      // post.reply[i].replyLike = [].concat(likes);
+    }
+
+
+    // });
     req.$scope.post = post;
     next();
     return post;
@@ -144,6 +169,10 @@ function getPost (req, res, next) {
     return res.status(lib.httpCodes.SERVER_ERROR)
     .send(new lib.rpc.InternalError(error));
   });
+}
+
+function getPostReplyLikes () {
+
 }
 
 function getfollow (req, res, next) {
@@ -181,12 +210,13 @@ const response = (req, res) => {
   let post = req.$scope.post;
   let follow = req.$scope.follow;
   let body = lib.response.createOk(post);
-  if(follow){
+  if (follow) {
     body.isUserFollowCommunityQuestion = true;
-  }else{
+  } else {
     body.isUserFollowCommunityQuestion = false;
   }
-  res.status(lib.httpCodes.OK).send(body);
+  res.status(lib.httpCodes.OK)
+  .send(body);
 };
 
 module.exports.querySchema = querySchema;
