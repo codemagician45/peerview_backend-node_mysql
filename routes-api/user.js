@@ -28,6 +28,12 @@ function userApi (apiRouter) {
     handlers.user.getUserWorkExperience.validateParams,
     handlers.user.getUserWorkExperience.logic);
 
+  apiRouter.get('/user/skill',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.getUserSkill.validateParams,
+    handlers.user.getUserSkill.logic);
+
   apiRouter.get('/user/posts',
     lib.isTokenExist.user,
     handlers.user.getUserProfile.logic,
@@ -250,6 +256,11 @@ function userApi (apiRouter) {
     lib.params,
     lib.isTokenExist.user,
     handlers.user.userWorkExperience.addWorkExperience);
+
+  apiRouter.post('/user/add-skill',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userSkill.addSkill);
 
   apiRouter.post('/user/update-work-experience',
     lib.params,

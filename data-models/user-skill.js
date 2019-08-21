@@ -19,7 +19,7 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'userId',
       as: 'user'
     });
-    this.belongsTo(models.user, {
+    this.belongsTo(models.skill, {
       foreignKey: 'skillId',
       as: 'skill'
     });

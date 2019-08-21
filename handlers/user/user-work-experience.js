@@ -25,7 +25,7 @@ function addWorkExperience(req, res, next) {
                 errorMessage: 'Missing Resource: From'
             }
         },
-        till: {
+        to: {
             notEmpty: {
                 errorMessage: 'Missing Resource: Till'
             }
@@ -96,7 +96,7 @@ function updateWorkExperience(req, res, next) {
                 errorMessage: 'Missing Resource: From'
             }
         },
-        till: {
+        to: {
             notEmpty: {
                 errorMessage: 'Missing Resource: Till'
             }

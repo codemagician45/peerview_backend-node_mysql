@@ -17,5 +17,9 @@ module.exports = function (sequelize, dataTypes) {
         indexes: []
     });
 
+    Skill.associate = function (models) {
+        this.hasMany(models.userSkill);
+    };
+
     return Skill;
 };
