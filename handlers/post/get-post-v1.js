@@ -7,7 +7,7 @@
  */
 
 const lib = require('../../lib');
-const moment = require('moment');
+// const moment = require('moment');
 
 /**
  * Initialized the schema Object

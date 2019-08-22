@@ -88,6 +88,27 @@ module.exports = function (sequelize, dataTypes) {
     website: {
       type: dataTypes.STRING
     },
+    email_send_date: {
+      type: dataTypes.DATE
+    },
+    email_verify_code: {
+      type: dataTypes.INTEGER
+    },
+    last_logging_time: {
+      type: dataTypes.DATE
+    },
+    facebook_profile: {
+      type: dataTypes.STRING
+    },
+    twitter_profile: {
+      type: dataTypes.STRING
+    },
+    instagram_profile: {
+      type: dataTypes.STRING
+    },
+    snapchat_profile: {
+      type: dataTypes.STRING
+    },
     name: {
       type: dataTypes.VIRTUAL,
       get: function () {
@@ -124,6 +145,8 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'followerId',
       as: 'follower'
     });
+    this.hasMany(models.userSkill);
+    this.hasMany(models.workExperience);
     this.belongsToMany(models.postv1, {through: models.followPost});
   };
 
