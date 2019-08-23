@@ -44,3 +44,18 @@ CREATE TABLE IF NOT EXISTS `user_skill` (
   FOREIGN KEY (`skillId`)
     REFERENCES `skill` (`id`)
     ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `postv1_reply_rating` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `rating` FLOAT,
+  `userId` INT UNSIGNED,
+  `replyId` INT UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (`replyId`)
+    REFERENCES `reply` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
