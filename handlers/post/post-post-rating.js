@@ -68,22 +68,61 @@ function postPostRating (req, res, next) {
   let postId = req.$params.postId;
   let rating = req.$params.rating;
 
-  return req.db.postRating.create({
-    postId: postId,
-    userId: user.id,
-    rating: rating
+  req.db.postRating.findAll({
+    where: {
+      [req.Op.and]: {
+        userId: user.id,
+        postId: postId
+      }
+    }
+  }).then(rates => {
+    if(rates.length > 0) {
+      const query = req.db.postRating.update({
+        rating: rating
+      }, {
+        where: {
+          [req.Op.and]: {
+            userId: user.id,
+            postId: postId
+          }
+        }
+      });
+      return query.then(rating => {
+        next();
+        return rating;
+      })
+      .catch((error) => {
+        req.log.error({
+          error: error
+        }, 'handlers.post post-post-reply-rating-v1 [rating.create] - Error');
+        return res.status(lib.httpCodes.SERVER_ERROR)
+        .send(new lib.rpc.InternalError(error));
+      });
+    } else {
+      const query = req.db.postRating.create({
+        rating: rating,
+        userId: user.id,
+        postId: postId
+      });
+      return query.then(rating => {
+        next();
+        return rating;
+      })
+      .catch((error) => {
+        req.log.error({
+          error: error
+        }, 'handlers.post post-post-reply-rating-v1 [rating.create] - Error');
+        return res.status(lib.httpCodes.SERVER_ERROR)
+        .send(new lib.rpc.InternalError(error));
+      });
+    }
   })
-  .then(postRating => {
-    next();
-    return postRating;
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-
+  .catch((error) => {
     req.log.error({
-      err: error.message
-    }, 'postRating.create Error - post-post-rating');
+      error: error
+    }, 'handlers.post post-post-reply-rating-v1 [rating.create] - Error');
+    return res.status(lib.httpCodes.SERVER_ERROR)
+    .send(new lib.rpc.InternalError(error));
   });
 }
 

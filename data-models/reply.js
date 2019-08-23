@@ -39,6 +39,11 @@ module.exports = function (sequelize, dataTypes) {
       // primaryKey: 'id',
       as: 'attachment'
     });
+    this.hasMany(models.postv1ReplyRating, {
+      foreignKey: 'replyId',
+      // primaryKey: 'id',
+      as: 'ratings'
+    });
   };
 
   Reply.prototype.isUserPostReplyLike = async function (postReplies, db, userId) {

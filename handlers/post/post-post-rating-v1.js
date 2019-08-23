@@ -46,20 +46,59 @@ function postPostRating (req, res, next) {
   let postId = req.params.postId;
   let rating = req.$params.rating;
 
-  return req.db.rating.create({
-    postv1Id: postId,
-    userId: user.id,
-    rating: rating
-  })
-  .then(rating => {
-    next();
-    return rating;
+  req.db.rating.findAll({
+    where: {
+      [req.Op.and]: {
+        userId: user.id,
+        replyId: replyId
+      }
+    }
+  }).then(rates => {
+    if(rates.length > 0) {
+      const query = req.db.rating.update({
+        rating: rating
+      }, {
+        where: {
+          [req.Op.and]: {
+            userId: user.id,
+            replyId: replyId
+          }
+        }
+      });
+      return query.then(rating => {
+        next();
+        return rating;
+      })
+      .catch((error) => {
+        req.log.error({
+          error: error
+        }, 'handlers.post post-post-reply-rating-v1 [rating.create] - Error');
+        return res.status(lib.httpCodes.SERVER_ERROR)
+        .send(new lib.rpc.InternalError(error));
+      });
+    } else {
+      const query = req.db.rating.create({
+        rating: rating,
+        userId: user.id,
+        replyId: replyId
+      });
+      return query.then(rating => {
+        next();
+        return rating;
+      })
+      .catch((error) => {
+        req.log.error({
+          error: error
+        }, 'handlers.post post-post-reply-rating-v1 [rating.create] - Error');
+        return res.status(lib.httpCodes.SERVER_ERROR)
+        .send(new lib.rpc.InternalError(error));
+      });
+    }
   })
   .catch((error) => {
     req.log.error({
       error: error
-    }, 'handlers.post post-post-rating-v1 [rating.create] - Error');
-
+    }, 'handlers.post post-post-reply-rating-v1 [rating.create] - Error');
     return res.status(lib.httpCodes.SERVER_ERROR)
     .send(new lib.rpc.InternalError(error));
   });
