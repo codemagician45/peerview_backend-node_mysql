@@ -63,25 +63,25 @@ function validateParams (req, res, next) {
     schoolName: {
       isLength: {
         options: [{min: 1}],
-        errorMessage: 'Missing Resource: School Name'
+        errorMessage: 'Please enter School Name'
       }
     },
     city: {
       isLength: {
         options: [{min: 1}],
-        errorMessage: 'Missing Resource: Current City'
+        errorMessage: 'Please enter your city'
       }
     },
     gender: {
       isLength: {
         options: [{min: 1}],
-        errorMessage: 'Missing Resource: Gender'
+        errorMessage: 'Please enter Gender'
       }
     },
     birthDate: {
       isLength: {
         options: [{min: 1}],
-        errorMessage: 'Missing Resource: Birth Date'
+        errorMessage: 'Please enter Birth Date'
       }
     }
   };

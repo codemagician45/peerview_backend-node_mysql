@@ -75,8 +75,13 @@ function getPeerslist (req, res, next) {
       }
     }],
     where: {
-      id: {
-        [req.Op.ne]: user.id
+      [req.Op.and]: {
+        id: {
+          [req.Op.ne]: user.id
+        },
+        token: {
+          [req.Op.ne]: null // this is possible because token will be given a value in the post-user-verify-email route
+        }
       }
     }
   })
