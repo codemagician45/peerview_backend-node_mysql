@@ -95,7 +95,7 @@ async function sendEmail (req, res, next) {
       follower: follower,
       followerProfileLink: `${config.frontEnd.baseUrl}/profile/${userId}`,
       followee: followee,
-      peersLink: `${config.frontEnd.baseUrl}/peers/list}`
+      peersLink: `${config.frontEnd.baseUrl}/peers/list`
     };
 
     return lib.pug.convert(file, values);
