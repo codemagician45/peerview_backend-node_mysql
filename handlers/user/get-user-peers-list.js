@@ -81,6 +81,9 @@ function getPeerslist (req, res, next) {
         },
         token: {
           [req.Op.ne]: null // this is possible because token will be given a value in the post-user-verify-email route
+        },
+        userTypeId: {
+          [req.Op.ne]: null // this is possible because token will be given a value in the post-user-verify-email route
         }
       }
     }
