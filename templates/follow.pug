@@ -157,7 +157,6 @@ html.sg-campaigns(data-editor-version='2', xmlns='http://www.w3.org/1999/xhtml')
                                                                                 span(style='color:#000000;')
                                                                                     span(style='font-size:16px;')
                                                                                         span(style='font-family:verdana,geneva,sans-serif;')
-                                                                                            | Yay, &nbsp;
                                                                                             a(href=followerProfileLink target="_blank") #{follower} &nbsp;
                                                                                             | started following your page! Looks like it’s time to make some new friends.
 
@@ -172,15 +171,16 @@ html.sg-campaigns(data-editor-version='2', xmlns='http://www.w3.org/1999/xhtml')
                                                                                     span(style='font-size:16px;')
                                                                                         span(style='font-family:verdana,geneva,sans-serif;') Want to expand your network? Here are some peers you might want to follow:
                                                                             div(style='color:#000000;')
-                                                                                ul(style='list-style: none;padding: 0 0 0 10px;')
-                                                                                    each friend in friendList
-                                                                                        li
-                                                                                            a(href='#') #{friend.firstName} #{friend.lastName}
+                                                                                //- ul(style='list-style: none;padding: 0 0 0 10px;')
+                                                                                each friend in friendList
+                                                                                    div(style='background-color: whitesmoke; padding: 10px; margin: 5px; border-left: 10px solid #e0e0e0;')
+                                                                                        a(href=profileBaseUrl+'/'+crypto.cipher(friend.id) style='text-transform: capitalize;') #{friend.firstName} #{friend.lastName}
+                                                                                        p(style='color: gray; font-size: 12px') #{friend.schoolName}
                                                                             div
                                                                             div
                                                                                 span(style='color:#000000;')
                                                                                     span(style='font-size:16px;')
-                                                                                        a(href=peersLink style='font-family:verdana,geneva,sans-serif;') Link of Peers you may know
+                                                                                        a(href=peersLink style='font-family:verdana,geneva,sans-serif;') Peers you may know
                                                                             div
                                                                                 span(style='color:#000000;')
                                                                                     span(style='font-size:16px;')

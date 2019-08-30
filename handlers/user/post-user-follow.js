@@ -95,7 +95,9 @@ async function sendEmail (req, res, next) {
       follower: follower,
       followerProfileLink: `${config.frontEnd.baseUrl}/profile/${userId}`,
       followee: followee,
-      peersLink: `${config.frontEnd.baseUrl}/peers/list`
+      peersLink: `${config.frontEnd.baseUrl}/peers/list`,
+      profileBaseUrl: `${config.frontEnd.baseUrl}/profile`,
+      crypto: crypto
     };
 
     return lib.pug.convert(file, values);
@@ -179,20 +181,36 @@ function getPeerslist (req) {
       }
     }],
     where: {
+    
       [req.Op.and]: {
         id: {
           [req.Op.ne]: user.id
         },
-        city: user.city,
-        gender: gender
+        token: {
+          [req.Op.ne]: null // this is possible because token will be given a value in the post-user-verify-email route
+        },
+        userTypeId: {
+          [req.Op.ne]: null // this is possible because token will be given a value in the post-user-verify-email route
+        }
+        // city: user.city,
+        // gender: gender
       }
     },
     order: [[req.sequelize.fn('RAND')]],
-    limit: 5
+    // limit: 5
   })
   .then(peersList => {
-    req.$scope.peersList = peersList;
-    return peersList;
+    return req.db.user.prototype.isUserAlreadyFollowed(peersList, req.db, user.id);
+  })
+  .then(peersList => {
+    let peersLimitedList = [];
+    peersList.forEach(peer => {
+      if(!peer.dataValues.isUserAlreadyFollowed && peersLimitedList.length < 5) {
+        peersLimitedList.push(peer);
+      }
+    });
+    req.$scope.peersList = peersLimitedList;
+    return peersLimitedList;
   });
 }
 
