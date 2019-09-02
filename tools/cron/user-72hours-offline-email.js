@@ -40,7 +40,7 @@ async function user72HoursOfflineEmail() {// eslint-disable-line id-length
                     }]
                 }
             },
-            limit: 5,
+            // limit: 5,
             // offset: !offset ? 0 : parseInt(offset),
             // limit: !limit ? 10 : parseInt(limit)
         });
@@ -50,14 +50,16 @@ async function user72HoursOfflineEmail() {// eslint-disable-line id-length
             let posts = await getPosts(offlineUsersFor72Hours[key]);
             let timelinePosts = await getTimelinePosts(offlineUsersFor72Hours[key]);
     
-            offlineUsersFor72Hours[key].setDataValue('posts', posts);
-            offlineUsersFor72Hours[key].setDataValue('timelinePosts', timelinePosts);
-    
-            sendEmail(offlineUsersFor72Hours[key]);
-            offlineUsersFor72Hours[key].email_send_date = currentDate;
-            //eslint-disable-next-line no-console
-            console.log(':::here');
-            await offlineUsersFor72Hours[key].save();
+            if (posts && posts.length > 0 || timelinePosts && timelinePosts.length > 0) {
+                offlineUsersFor72Hours[key].setDataValue('posts', posts);
+                offlineUsersFor72Hours[key].setDataValue('timelinePosts', timelinePosts);
+        
+                sendEmail(offlineUsersFor72Hours[key]);
+                offlineUsersFor72Hours[key].email_send_date = endDate;
+                //eslint-disable-next-line no-console
+                console.log(':::here');
+                await offlineUsersFor72Hours[key].save();
+            }
         }
     }
 }
@@ -198,7 +200,8 @@ module.exports = {
     initialize: function () {
         log.info('offline cron in');
         return new CronJob({
-            cronTime: '00 0 10 * * *',
+            // cronTime: '00 0 10 * * *',
+            cronTime: '*/2 * * * *',
             onTick: function () {
                 log.info('Cron is starting...');
                 user72HoursOfflineEmail();
