@@ -11,6 +11,7 @@ const config = require('../../config');
 const log = require('bunyan').createLogger(config.appLog);
 const templates = require('../../templates');
 const moment = require('moment');
+const crypto = require('../../lib/crypto');
 
 async function user72HoursOfflineEmail() {// eslint-disable-line id-length
     let currentDate = moment();
@@ -188,7 +189,9 @@ function sendEmail(user) {
         loginurl: `${config.frontEnd.baseUrl}/community`,
         posts: posts,
         timelinePosts: timelineData,
-        moment: require('moment')
+        moment: require('moment'),
+        crypto: crypto,
+        postBaseUrl: `${config.frontEnd.baseUrl}/home?isShowPostReply=1&postId=`
     };
     lib.pug.convert(file, values).then((content) => {
         return lib.email.send(`Highlights on Peersview`, user.email, content);

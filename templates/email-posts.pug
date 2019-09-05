@@ -134,7 +134,7 @@ html
                                                 |  #{post.message}.
                                                 br
                                                 br
-                                                a(href=loginurl style="color:#000;font-size:18px;text-decoration:underline;" target="_blank" data-saferedirecturl="#")
+                                                a(href=postBaseUrl + crypto.cipher(post.id) style="color:#000;font-size:18px;text-decoration:underline;" target="_blank" data-saferedirecturl="#")
                                                   |Read more
                                             br
                                           else
@@ -150,7 +150,7 @@ html
                                             p(style='margin-top:0;font-family:Arial, Helvetica, sans-serif; color:#000; font-size:18px;line-height:27px;width:567px;height:10px;text-align:left;letter-spacing:0.01em;')
                                             ol(style='color:#333333; font-size:18px;')
                                                 li Tendency to jumb around in conversation.
-                                                a(href=loginurl, style='color:#418be2;font-size:18px;text-decoration:none; margin-left:20px; ', target='_blank', data-saferedirecturl='#')
+                                                a(href=postBaseUrl + crypto.cipher(post.id), style='color:#418be2;font-size:18px;text-decoration:none; margin-left:20px; ', target='_blank', data-saferedirecturl='#')
                                                   | Read more
                                                 span(style='font-size: 10px;margin-left: 2px;')
                                             br
