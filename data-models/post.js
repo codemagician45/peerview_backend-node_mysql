@@ -65,15 +65,33 @@ module.exports = function (sequelize, dataTypes) {
   };
 
   Post.prototype.getPOSTREPLY = async function (posts, model) {
+    const sequelize = model.postReply.sequelize;
     posts = await Promise.all(posts.map(async (post) => {
       const contents = await post
       .getPostReply({
         limit: 5,
-        attributes: ['id', 'comment', 'createdAt', 'quoteReplyId'],
+        attributes: [
+          'id', 
+          'comment', 
+          'createdAt', 
+          'quoteReplyId', 
+          'userId'
+          // [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postReply.id'))), 'postReplyCommentCount'],
+          // [sequelize.fn('COUNT', sequelize.fn('DISTINCT', sequelize.col('postReplyLike.id'))), 'postReplyLikeCount'],
+        ],
         include: [{
           model: model.user,
           attributes: ['id', 'firstName', 'lastName', 'email', 'profilePicture', 'socialImage']
+        },{
+          model: model.postReply,
+          as: 'postReplyComments',
+          attributes: ['id'],
+        },{
+          model: model.postReplyLike,
+          as: 'postReplyLike',
+          attributes: ['id']
         }],
+        // group: ['id'],
         order: [['createdAt', 'DESC']]
       });
 

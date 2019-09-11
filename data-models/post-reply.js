@@ -28,6 +28,10 @@ module.exports = function (sequelize, dataTypes) {
       foreignKey: 'quoteReplyId',
       as: 'quoteReply'
     });
+    this.hasMany(models.postReply, {
+      foreignKey: 'quoteReplyId',
+      as: 'postReplyComments'
+    });
     this.hasMany(models.postReplyLike, {
       as: 'postReplyLike'
     });
