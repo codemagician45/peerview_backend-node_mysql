@@ -9,3 +9,6 @@ ADD CONSTRAINT `attachment_ibfk_7`
   FOREIGN KEY (`replyId`)
   REFERENCES `reply` (`id`)
   ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE `user` 
+CHANGE COLUMN `aboutMe` `aboutMe` TEXT CHARACTER SET 'utf8' NULL DEFAULT NULL ;
