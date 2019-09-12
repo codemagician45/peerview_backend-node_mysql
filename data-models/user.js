@@ -109,6 +109,9 @@ module.exports = function (sequelize, dataTypes) {
     snapchat_profile: {
       type: dataTypes.STRING
     },
+    gpa: {
+      type: dataTypes.STRING
+    },
     name: {
       type: dataTypes.VIRTUAL,
       get: function () {

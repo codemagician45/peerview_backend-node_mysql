@@ -267,6 +267,11 @@ function userApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.user.userWorkExperience.updateWorkExperience);
     
+  apiRouter.post('/user/save-gpa',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userGpa.saveGPA);
+
   apiRouter.delete('/user/:userId/follow',
     lib.params,
     lib.isTokenExist.user,

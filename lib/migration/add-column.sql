@@ -12,3 +12,6 @@ ADD COLUMN `facebook_profile` VARCHAR(255) NULL AFTER `email_verify_code`,
 ADD COLUMN `twitter_profile` VARCHAR(255) NULL AFTER `facebook_profile`,
 ADD COLUMN `snapchat_profile` VARCHAR(255) NULL AFTER `twitter_profile`,
 ADD COLUMN `instagram_profile` VARCHAR(255) NULL AFTER `snapchat_profile`;
+
+ALTER TABLE `user` 
+ADD COLUMN `gpa` VARCHAR(255) NULL AFTER `instagram_profile`;
