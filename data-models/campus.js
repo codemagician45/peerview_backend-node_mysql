@@ -16,6 +16,12 @@ module.exports = function (sequelize, dataTypes) {
     },
     password: {
       type: dataTypes.STRING
+    },
+    enrollment_year: {
+      type: dataTypes.DATE
+    },
+    logo: {
+      type: dataTypes.STRING
     }
   }, {
     tableName: 'campus',

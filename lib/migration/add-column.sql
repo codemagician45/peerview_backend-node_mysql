@@ -15,3 +15,8 @@ ADD COLUMN `instagram_profile` VARCHAR(255) NULL AFTER `snapchat_profile`;
 
 ALTER TABLE `user` 
 ADD COLUMN `gpa` VARCHAR(255) NULL AFTER `instagram_profile`;
+
+ALTER TABLE `campus` 
+ADD COLUMN `enrollment_year` DATETIME NULL AFTER `updatedAt`,
+ADD COLUMN `logo` VARCHAR(255) NULL AFTER `enrollment_year`;
+

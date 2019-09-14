@@ -11,6 +11,13 @@ function campusApi (apiRouter) {
     handlers.campus.getCampuses.logic,
     handlers.campus.getCampuses.response);
 
+  apiRouter.post('/campus/create',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.createCampus.validateParams,
+    handlers.campus.createCampus.logic,
+    handlers.campus.createCampus.response);
+
   apiRouter.get('/campus/:campusId/course-list',
     lib.params,
     lib.isTokenExist.user,
