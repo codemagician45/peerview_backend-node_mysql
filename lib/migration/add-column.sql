@@ -20,3 +20,8 @@ ALTER TABLE `campus`
 ADD COLUMN `enrollment_year` DATETIME NULL AFTER `updatedAt`,
 ADD COLUMN `logo` VARCHAR(255) NULL AFTER `enrollment_year`;
 
+ALTER TABLE `campus` 
+ADD COLUMN `status` TINYINT NULL DEFAULT 0 AFTER `logo`;
+
+ALTER TABLE `campus_user` 
+ADD COLUMN `enrollment_year` DATETIME NULL AFTER `updatedAt`;

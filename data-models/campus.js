@@ -22,6 +22,9 @@ module.exports = function (sequelize, dataTypes) {
     },
     logo: {
       type: dataTypes.STRING
+    },
+    status: {
+      type: dataTypes.BOOLEAN
     }
   }, {
     tableName: 'campus',

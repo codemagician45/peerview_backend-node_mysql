@@ -19,18 +19,26 @@ const lib = require('../../lib');
  * @returns {next} returns the next handler - success response
  * @returns {rpc} returns the validation error - failed response
  */
-function getCampuses (req, res, next) {
-  return req.db.campus.findAll({
+function getUserCampus (req, res, next) {
+  let user = req.$scope.user;
+
+  return req.db.campusUser.findOne({
     where: {
-      status: {
-        [req.Op.eq]: 1
-      }
+        userId: {
+            [req.Op.eq]: user.id
+        },
+        emailVerified: {
+            [req.Op.eq]: 1
+        }
+    },
+    include: {
+        model: req.db.campus
     }
   })
-  .then(campuses => {
-    req.$scope.campuses = campuses;
+  .then(userCampus => {
+    req.$scope.userCampus = userCampus;
     next();
-    return campuses;
+    return userCampus;
   })
   .catch(error => {
     res.status(500)
@@ -38,7 +46,7 @@ function getCampuses (req, res, next) {
 
     req.log.error({
       err: error.message
-    }, 'campus.findAll Error - get-campuses');
+    }, 'user campus Error - get-user campus');
   });
 }
 
@@ -49,17 +57,17 @@ function getCampuses (req, res, next) {
  * @returns {any} body response object
  */
 function response (req, res) {
-  let campuses = req.$scope.campuses;
+  let userCampus = req.$scope.userCampus;
   let body = {
     status: 'SUCCESS',
     status_code: 0,
     http_code: 200,
-    data: campuses
+    data: userCampus
   };
 
   res.status(200)
   .send(body);
 }
 
-module.exports.logic = getCampuses;
+module.exports.logic = getUserCampus;
 module.exports.response = response;

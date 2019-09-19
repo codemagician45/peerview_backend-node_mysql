@@ -59,3 +59,20 @@ CREATE TABLE IF NOT EXISTS `postv1_reply_rating` (
   FOREIGN KEY (`replyId`)
     REFERENCES `reply` (`id`)
     ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `campus_user` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `userId` INT(10) UNSIGNED,
+  `campusId` INT(10) UNSIGNED,
+  `campusEmail` VARCHAR(45) NULL,
+  `token` VARCHAR(45) NULL,
+  `emailVerified` TINYINT NULL,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (`campusId`)
+    REFERENCES `campus` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;

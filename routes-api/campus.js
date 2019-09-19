@@ -11,12 +11,41 @@ function campusApi (apiRouter) {
     handlers.campus.getCampuses.logic,
     handlers.campus.getCampuses.response);
 
+  apiRouter.get('/campus/user-campus',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.getUserCampus.logic,
+    handlers.campus.getUserCampus.response);
+
   apiRouter.post('/campus/create',
     lib.params,
     lib.isTokenExist.user,
     handlers.campus.createCampus.validateParams,
+    handlers.campus.createCampus.deleteAllCampusUser,
+    handlers.campus.createCampus.checkifEmailIsExisted,
     handlers.campus.createCampus.logic,
+    handlers.campus.createCampus.createCampusUser,
+    handlers.campus.createCampus.sendEmail,
     handlers.campus.createCampus.response);
+
+  apiRouter.post('/campus/join',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.joinCampus.validateParams,
+    handlers.campus.joinCampus.deleteAllCampusUser,
+    handlers.campus.joinCampus.checkifEmailIsExisted,
+    handlers.campus.joinCampus.logic,
+    handlers.campus.joinCampus.createCampusUser,
+    handlers.campus.joinCampus.sendEmail,
+    handlers.campus.joinCampus.response);
+
+  apiRouter.post('/campus/verify-email/:jotToken',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.campus.verifyCampus.validateParams,
+    handlers.campus.verifyCampus.logic,
+    handlers.campus.verifyCampus.postCampusActivate,
+    handlers.campus.verifyCampus.response);
 
   apiRouter.get('/campus/:campusId/course-list',
     lib.params,

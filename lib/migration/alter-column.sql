@@ -12,3 +12,6 @@ ADD CONSTRAINT `attachment_ibfk_7`
 
 ALTER TABLE `user` 
 CHANGE COLUMN `aboutMe` `aboutMe` TEXT CHARACTER SET 'utf8' NULL DEFAULT NULL ;
+
+ALTER TABLE `campus_user` 
+ADD UNIQUE INDEX `campusEmail_UNIQUE` (`campusEmail` ASC)
