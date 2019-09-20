@@ -50,6 +50,7 @@ function postApi (apiRouter) {
     handlers.post.postPostRating.logic,
     handlers.post.postPostRating.averageRating,
     lib.userCredits.updateUserCreditsUponRating,
+    handlers.post.postPostRating.getPost,
     handlers.post.postPostRating.response);
 
   apiRouter.delete('/post/:postId/rating',
@@ -59,6 +60,7 @@ function postApi (apiRouter) {
     handlers.post.removePostRating.logic,
     handlers.post.postPostRating.averageRating,
     lib.userCredits.updateUserCreditsUponRating,
+    handlers.post.removePostRating.getPost,
     handlers.post.removePostRating.response);
 
 
@@ -68,6 +70,7 @@ function postApi (apiRouter) {
     handlers.post.postPostLike.validateParams,
     handlers.post.getPost.logic,
     handlers.post.postPostLike.logic,
+    handlers.post.postPostLike.getPost,
     lib.notification.postLikeNotification,
     handlers.post.postPostLike.response);
 
@@ -128,6 +131,7 @@ function postApi (apiRouter) {
     lib.isTokenExist.user,
     handlers.post.removePostLike.validateParams,
     handlers.post.removePostLike.logic,
+    handlers.post.removePostLike.getPost,
     handlers.post.removePostLike.response);
 
   apiRouter.delete('/post/:postId',

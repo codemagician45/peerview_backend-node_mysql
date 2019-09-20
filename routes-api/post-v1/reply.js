@@ -27,6 +27,7 @@ let replyApi = (api) => {
     lib.isTokenExist.user,
     lib.schemaValidator.validateParams(handlers.post.postPostReplyRatingV1.querySchema),
     handlers.post.postPostReplyRatingV1.logic,
+    handlers.post.postPostReplyRatingV1.getReply,
     handlers.post.postPostReplyRatingV1.response);
 
   api.delete('/v2/community/reply/:replyId',
