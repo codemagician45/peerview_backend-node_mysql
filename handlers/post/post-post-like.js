@@ -55,22 +55,44 @@ function postPostLike (req, res, next) {
   let user = req.$scope.user;
   let postId = req.$params.postId;
 
-  return req.db.postLike.create({
-    postId: postId,
-    userId: user.id
+  req.db.postLike.findAll({
+    where: {
+      [req.Op.and]: {
+        userId: user.id,
+        postId: postId
+      }
+    }
+  }).then(rates => {
+    if(rates.length <= 0) {
+      return req.db.postLike.create({
+        postId: postId,
+        userId: user.id
+      })
+      .then(postLike => {
+        next();
+        return postLike;
+      })
+      .catch(error => {
+        res.status(500)
+        .send(new lib.rpc.InternalError(error));
+    
+        req.log.error({
+          err: error.message
+        }, 'postLike.create Error - post-post-like');
+      });
+    } else {
+      next();
+      return rates[0];
+    }
   })
-  .then(postLike => {
-    next();
-    return postLike;
-  })
-  .catch(error => {
-    res.status(500)
-    .send(new lib.rpc.InternalError(error));
-
+  .catch((error) => {
     req.log.error({
-      err: error.message
-    }, 'postLike.create Error - post-post-like');
+      error: error
+    }, 'handlers.post post-post-like [like.create] - Error');
+    return res.status(lib.httpCodes.SERVER_ERROR)
+    .send(new lib.rpc.InternalError(error));
   });
+  
 }
 
 /**
