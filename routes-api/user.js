@@ -266,6 +266,16 @@ function userApi (apiRouter) {
     lib.params,
     lib.isTokenExist.user,
     handlers.user.userWorkExperience.updateWorkExperience);
+
+  apiRouter.post('/user/add-education',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userEducation.addEducation);
+    
+  apiRouter.post('/user/update-education',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userEducation.updateEducation);
     
   apiRouter.post('/user/save-gpa',
     lib.params,

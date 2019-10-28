@@ -76,3 +76,23 @@ CREATE TABLE IF NOT EXISTS `campus_user` (
   FOREIGN KEY (`campusId`)
     REFERENCES `campus` (`id`)
     ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `education` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `level` VARCHAR(255) NULL,
+  `from` DATETIME NULL,
+  `to` DATETIME NULL,
+  `major` VARCHAR(255) NULL,
+  `minor` VARCHAR(255) NULL,
+  `department_gpa` VARCHAR(255) NULL,
+  `cumulative_gpa` VARCHAR(255) NULL,
+  `is_hide_department_gpa` TINYINT NULL DEFAULT 0,
+  `is_hide_cumulative_gpa` TINYINT NULL DEFAULT 0,
+  `userId`  INTEGER UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
