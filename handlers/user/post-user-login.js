@@ -68,7 +68,39 @@ function validateParams (req, res, next) {
 function postUserLogin (req, res, next) {
   let email = req.$params.email;
   let password = md5(req.$params.password);
+
+  const sequelize = req.db.userCredits.sequelize;
+  
   return req.db.user.findOne({
+    include: [
+      {
+        model: req.db.userInterest,
+        include: [{
+          model: req.db.interest
+        }]
+      }, {
+        model: req.db.userType
+      }, {
+        model: req.db.userCourse,
+        include: {
+          model: req.db.course
+        }
+      }, {
+        model: req.db.userFollower,
+        as: 'followee',
+        attributes: []
+      }, {
+        model: req.db.userCredits,
+        attributes: [
+          [sequelize.fn('SUM',
+            sequelize.col('credits')), 'totalCredits'],
+        ],
+      }, {
+        model: req.db.workExperience
+      }, {
+        model: req.db.userSkill
+      }
+    ],
     where: {
       [req.Op.and]: {
         email: email,
