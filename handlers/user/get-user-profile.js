@@ -44,6 +44,10 @@ function getUserProfile (req, res, next) {
     }, {
       model: req.db.workExperience
     }, {
+      model: req.db.award
+    }, {
+      model: req.db.education
+    }, {
       model: req.db.userSkill
     }],
     where: {

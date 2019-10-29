@@ -7,37 +7,22 @@
 
 const lib = require('../../lib');
 
-function addEducation(req, res, next) {
+function addAward(req, res, next) {
 
     let bodySchema = {
-        name: {
+        position: {
             notEmpty: {
-                errorMessage: 'Missing Resource: Name'
+                errorMessage: 'Missing Resource: Position'
             },
         },
-        level: {
+        organization: {
             notEmpty: {
-                errorMessage: 'Missing Resource: Level'
+                errorMessage: 'Missing Resource: Organization'
             }
         },
         from: {
             notEmpty: {
                 errorMessage: 'Missing Resource: From'
-            }
-        },
-        to: {
-            notEmpty: {
-                errorMessage: 'Missing Resource: Till'
-            }
-        },
-        major: {
-            notEmpty: {
-                errorMessage: 'Missing Resource: Major'
-            }
-        },
-        minor: {
-            notEmpty: {
-                errorMessage: 'Missing Resource: Minor'
             }
         }
     };
@@ -51,36 +36,30 @@ function addEducation(req, res, next) {
             }
 
             let user = req.$scope.user;
-            let name = req.$params.name;
-            let level = req.$params.level;
+            let position = req.$params.position;
+            let organization = req.$params.organization;
             let from = req.$params.from;
             let to = req.$params.to;
-            let major = req.$params.major;
-            let minor = req.$params.minor;
-            let department_gpa = req.$params.department_gpa;
-            let cumulative_gpa = req.$params.cumulative_gpa;
-            let is_hide_department_gpa = req.$params.is_hide_department_gpa;
-            let is_hide_cumulative_gpa = req.$params.is_hide_cumulative_gpa;
+            let current_position = req.$params.current_position;
+            let location = req.$params.location;
+            let description = req.$params.description;
 
-            req.db.education.create({
-                name: name,
-                level: level,
+            req.db.award.create({
+                position: position,
+                organization: organization,
                 from: from,
                 to: to,
-                major: major,
-                minor: minor,
-                department_gpa: department_gpa,
-                cumulative_gpa: cumulative_gpa,
-                is_hide_cumulative_gpa: is_hide_cumulative_gpa,
-                is_hide_department_gpa: is_hide_department_gpa,
+                current_position: current_position,
+                location: location,
+                description: description,
                 userId: user.id
             })
-                .then(education => {
+                .then(award => {
                     let body = {
                         status: 'SUCCESS',
                         status_code: 0,
                         http_code: 200,
-                        data: education
+                        data: award
                     };
 
                     res.status(200).send(body);
@@ -100,37 +79,22 @@ function addEducation(req, res, next) {
         });
 }
 
-function updateEducation(req, res, next) {
+function updateAward(req, res, next) {
 
     let bodySchema = {
-        name: {
+        position: {
             notEmpty: {
-                errorMessage: 'Missing Resource: Name'
+                errorMessage: 'Missing Resource: Position'
             },
         },
-        level: {
+        organization: {
             notEmpty: {
-                errorMessage: 'Missing Resource: Level'
+                errorMessage: 'Missing Resource: Organization'
             }
         },
         from: {
             notEmpty: {
                 errorMessage: 'Missing Resource: From'
-            }
-        },
-        to: {
-            notEmpty: {
-                errorMessage: 'Missing Resource: Till'
-            }
-        },
-        major: {
-            notEmpty: {
-                errorMessage: 'Missing Resource: Major'
-            }
-        },
-        minor: {
-            notEmpty: {
-                errorMessage: 'Missing Resource: Minor'
             }
         }
     };
@@ -144,29 +108,22 @@ function updateEducation(req, res, next) {
             }
 
             let user = req.$scope.user;
-            let name = req.$params.name;
-            let level = req.$params.level;
+            let position = req.$params.position;
+            let organization = req.$params.organization;
             let from = req.$params.from;
             let to = req.$params.to;
-            let major = req.$params.major;
-            let minor = req.$params.minor;
-            let department_gpa = req.$params.department_gpa;
-            let cumulative_gpa = req.$params.cumulative_gpa;
-            let is_hide_department_gpa = req.$params.is_hide_department_gpa;
-            let is_hide_cumulative_gpa = req.$params.is_hide_cumulative_gpa;
+            let location = req.$params.location;
+            let description = req.$params.description;
             let id = req.$params.id;
 
-            req.db.education.update({
-                name: name,
-                level: level,
+            req.db.award.update({
+                position: position,
+                organization: organization,
                 from: from,
                 to: to,
-                major: major,
-                minor: minor,
-                department_gpa: department_gpa,
-                cumulative_gpa: cumulative_gpa,
-                is_hide_cumulative_gpa: is_hide_cumulative_gpa,
-                is_hide_department_gpa: is_hide_department_gpa,
+                current_position: current_position,
+                location: location,
+                description: description,
                 userId: user.id
             }, {
                 where: {
@@ -175,12 +132,12 @@ function updateEducation(req, res, next) {
                     }
                 } 
             })
-            .then(education => {
+            .then(award => {
                 let body = {
                     status: 'SUCCESS',
                     status_code: 0,
                     http_code: 200,
-                    data: education
+                    data: award
                 };
 
                 res.status(200).send(body);
@@ -200,5 +157,5 @@ function updateEducation(req, res, next) {
         });
 }
 
-module.exports.addEducation = addEducation;
-module.exports.updateEducation = updateEducation;
+module.exports.addAward = addAward;
+module.exports.updateAward = updateAward;

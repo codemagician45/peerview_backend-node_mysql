@@ -150,6 +150,8 @@ module.exports = function (sequelize, dataTypes) {
     });
     this.hasMany(models.userSkill);
     this.hasMany(models.workExperience);
+    this.hasMany(models.award);
+    this.hasMany(models.education);
     this.belongsToMany(models.postv1, {through: models.followPost});
     this.hasMany(models.campusUser);
     this.belongsToMany(models.campus, {through: models.campusUser});

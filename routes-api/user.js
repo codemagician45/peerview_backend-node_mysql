@@ -28,6 +28,18 @@ function userApi (apiRouter) {
     handlers.user.getUserWorkExperience.validateParams,
     handlers.user.getUserWorkExperience.logic);
 
+  apiRouter.get('/user/award',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.getUserAward.validateParams,
+    handlers.user.getUserAward.logic);
+
+  apiRouter.get('/user/education',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.getUserEducation.validateParams,
+    handlers.user.getUserEducation.logic);
+    
   apiRouter.get('/user/skill',
     lib.params,
     lib.isTokenExist.user,
@@ -276,6 +288,16 @@ function userApi (apiRouter) {
     lib.params,
     lib.isTokenExist.user,
     handlers.user.userEducation.updateEducation);
+
+  apiRouter.post('/user/add-awards',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userAward.addAward);
+    
+  apiRouter.post('/user/update-awards',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.user.userAward.updateAward);
     
   apiRouter.post('/user/save-gpa',
     lib.params,

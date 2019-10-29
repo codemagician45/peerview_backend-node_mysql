@@ -96,3 +96,20 @@ CREATE TABLE IF NOT EXISTS `education` (
     FOREIGN KEY (`userId`)
     REFERENCES `user` (`id`)
     ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `award` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `position` VARCHAR(255) NOT NULL,
+  `organization` VARCHAR(255) NULL,
+  `from` DATETIME NULL,
+  `to` DATETIME NULL,
+  `current_position` TINYINT NULL DEFAULT 0,
+  `location` VARCHAR(255) NULL,
+  `description` TEXT NULL,
+  `userId`  INTEGER UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
