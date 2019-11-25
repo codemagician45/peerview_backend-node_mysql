@@ -113,3 +113,23 @@ CREATE TABLE IF NOT EXISTS `award` (
     FOREIGN KEY (`userId`)
     REFERENCES `user` (`id`)
     ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `job` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) NOT NULL,
+  `company` VARCHAR(255) NULL,
+  `company_bio` TEXT NULL,
+  `country` VARCHAR(255) NULL,
+  `city` VARCHAR(255) NULL,
+  `contact` VARCHAR(255) NULL,
+  `type` TINYINT NULL DEFAULT 0,
+  `experience` TEXT NULL,
+  `jobfunction` TEXT NULL,
+  `deadline` DATETIME NULL,
+  `userId`  INTEGER UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;

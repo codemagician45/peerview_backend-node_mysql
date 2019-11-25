@@ -75,6 +75,8 @@ routesApi.notification(apiRouter);
 
 routesApi.skill(apiRouter);
 
+routesApi.job(apiRouter);
+
 apiRouter.get('/search', // combination of advance-search/user and advance-search/post
   lib.params,
   lib.isTokenExist.user,
