@@ -4,12 +4,12 @@ const handlers = require('../handlers');
 const lib = require('../lib');
 
 function jobApi (apiRouter) {
-//   apiRouter.get('/jobs',
-//     lib.params,
-//     lib.isTokenExist.user,
-//     handlers.job.getJobs.validateParams,
-//     handlers.job.getJobs.logic,
-//     handlers.job.getJobs.response);
+  apiRouter.get('/jobs',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.job.getJobs.validateParams,
+    handlers.job.getJobs.logic,
+    handlers.job.getJobs.response);
 
   apiRouter.get('/job/:jobId',
     lib.params,
