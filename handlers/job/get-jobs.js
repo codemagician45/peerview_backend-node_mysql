@@ -27,6 +27,12 @@ function validateParams (req, res, next) {
     },
     region: {
         optional: true
+    },
+    limit: {
+      optional: true
+    },
+    offset: {
+        optional: true
     }
   };
 
@@ -57,10 +63,13 @@ function validateParams (req, res, next) {
  * @returns {rpc} returns the validation error - failed response
  */
 function getJobs (req, res, next) {
-  let user = req.$scope.user;
-  let jobId = req.$params.jobId;
+  let offset = req.$params.offset;
+  let limit = req.$params.limit;
 
-  return req.db.job.findAll({})
+  return req.db.job.findAll({
+    offset: !offset ? 0 : parseInt(offset),
+    limit: !limit ? 10 : parseInt(limit)
+  })
   .then((jobs) => {
     req.$scope.jobs = jobs;
     next();

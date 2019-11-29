@@ -135,12 +135,12 @@ function validateParams (req, res, next) {
           errorMessage: 'Missing Resource: Current City'
         }
       },
-      yearOfIncorporation: {
-        isLength: {
-          options: [{min: 1}],
-          errorMessage: 'Missing Resource: Year Of Incorporation'
-        }
-      },
+      // yearOfIncorporation: {
+      //   isLength: {
+      //     options: [{min: 1}],
+      //     errorMessage: 'Missing Resource: Year Of Incorporation'
+      //   }
+      // },
       website: {
         isLength: {
           options: [{min: 1}],
