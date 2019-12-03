@@ -37,6 +37,9 @@ module.exports = function (sequelize, dataTypes) {
         },
         deadline: {
             type: dataTypes.DATE
+        },
+        source_link: {
+            type: dataTypes.TEXT
         }
     }, {
         tableName: 'job',

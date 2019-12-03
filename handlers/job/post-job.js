@@ -96,6 +96,11 @@ function validateParams(req, res, next) {
         },
         deadline: {
             optional: true
+        },
+        source_link: {
+            notEmpty: {
+                errorMessage: 'Missing Resource: Source Link'
+            }
         }
     };
 
@@ -137,6 +142,7 @@ function postJob(req, res, next) {
     let experience = req.$params.experience;
     let jobfunction = req.$params.jobfunction;
     let deadline = req.$params.deadline;
+    let source_link = req.$params.source_link;
 
     return req.db.job.create({
         userId: user.id,
@@ -149,7 +155,8 @@ function postJob(req, res, next) {
         type: type,
         experience: experience,
         jobfunction: jobfunction,
-        deadline: deadline
+        deadline: deadline,
+        source_link: source_link
     })
         .then(job => {
             req.$scope.job = job;

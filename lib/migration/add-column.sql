@@ -25,3 +25,6 @@ ADD COLUMN `status` TINYINT NULL DEFAULT 0 AFTER `logo`;
 
 ALTER TABLE `campus_user` 
 ADD COLUMN `enrollment_year` DATETIME NULL AFTER `updatedAt`;
+
+ALTER TABLE `job` 
+ADD COLUMN `source_link` TEXT NULL AFTER `deadline`;
