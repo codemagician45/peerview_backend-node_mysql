@@ -143,6 +143,7 @@ function postJob(req, res, next) {
     let jobfunction = req.$params.jobfunction;
     let deadline = req.$params.deadline;
     let source_link = req.$params.source_link;
+    let price = req.$params.price;
 
     return req.db.job.create({
         userId: user.id,
@@ -156,7 +157,8 @@ function postJob(req, res, next) {
         experience: experience,
         jobfunction: jobfunction,
         deadline: deadline,
-        source_link: source_link
+        source_link: source_link,
+        price: price
     })
         .then(job => {
             req.$scope.job = job;

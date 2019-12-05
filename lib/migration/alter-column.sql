@@ -15,3 +15,6 @@ CHANGE COLUMN `aboutMe` `aboutMe` TEXT CHARACTER SET 'utf8' NULL DEFAULT NULL ;
 
 ALTER TABLE `campus_user` 
 ADD UNIQUE INDEX `campusEmail_UNIQUE` (`campusEmail` ASC)
+
+ALTER TABLE `job` 
+CHANGE COLUMN `price` `price` DOUBLE NULL DEFAULT NULL ;

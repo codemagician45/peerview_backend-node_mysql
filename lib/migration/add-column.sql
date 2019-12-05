@@ -28,3 +28,6 @@ ADD COLUMN `enrollment_year` DATETIME NULL AFTER `updatedAt`;
 
 ALTER TABLE `job` 
 ADD COLUMN `source_link` TEXT NULL AFTER `deadline`;
+
+ALTER TABLE `job` 
+ADD COLUMN `price` TEXT NULL AFTER `source_link`;
