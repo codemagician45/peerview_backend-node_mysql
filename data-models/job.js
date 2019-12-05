@@ -40,6 +40,9 @@ module.exports = function (sequelize, dataTypes) {
         },
         source_link: {
             type: dataTypes.TEXT
+        },
+        price: {
+            type: dataTypes.DECIMAL
         }
     }, {
         tableName: 'job',
