@@ -24,9 +24,9 @@ const querySchema = {
     isLength: {
       options: [{
         min: 1,
-        max: 280
+        max: 500
       }],
-      errorMessage: `Invalid Resource: Minimum 1 and maximum 280 characters are allowed`
+      errorMessage: `Invalid Resource: Minimum 1 and maximum 500 characters are allowed`
     }
   },
   tagUserId: { in: ['body'],
