@@ -85,7 +85,8 @@ function getUserJobs(req, res, next) {
             }
         },
         offset: !offset ? 0 : parseInt(offset),
-        limit: !limit ? 10 : parseInt(limit)
+        limit: !limit ? 10 : parseInt(limit),
+        order: [['createdAt', 'DESC']]
     })
         .then((jobs) => {
             req.$scope.jobs = jobs;
