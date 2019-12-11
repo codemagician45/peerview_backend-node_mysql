@@ -43,6 +43,9 @@ module.exports = function (sequelize, dataTypes) {
         },
         price: {
             type: dataTypes.DECIMAL
+        },
+        currency: {
+            type: dataTypes.STRING
         }
     }, {
         tableName: 'job',

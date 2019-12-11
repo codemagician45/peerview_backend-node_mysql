@@ -101,6 +101,16 @@ function validateParams(req, res, next) {
             notEmpty: {
                 errorMessage: 'Missing Resource: Source Link'
             }
+        },
+        price: {
+            notEmpty: {
+                errorMessage: 'Missing Resource: Price'
+            }
+        },
+        currency: {
+            notEmpty: {
+                errorMessage: 'Missing Resource: Currency'
+            }
         }
     };
 
@@ -144,6 +154,7 @@ function postJob(req, res, next) {
     let deadline = req.$params.deadline;
     let source_link = req.$params.source_link;
     let price = req.$params.price;
+    let currency = req.$params.currency;
 
     return req.db.job.create({
         userId: user.id,
@@ -158,7 +169,8 @@ function postJob(req, res, next) {
         jobfunction: jobfunction,
         deadline: deadline,
         source_link: source_link,
-        price: price
+        price: price,
+        currency: currency
     })
         .then(job => {
             req.$scope.job = job;

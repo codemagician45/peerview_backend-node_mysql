@@ -31,3 +31,6 @@ ADD COLUMN `source_link` TEXT NULL AFTER `deadline`;
 
 ALTER TABLE `job` 
 ADD COLUMN `price` TEXT NULL AFTER `source_link`;
+
+ALTER TABLE `job` 
+ADD COLUMN `currency` VARCHAR(10) NULL DEFAULT '$' AFTER `price`;
