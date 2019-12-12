@@ -66,6 +66,12 @@ function validateParams (req, res, next) {
         errorMessage: 'Please enter School Name'
       }
     },
+    graduate_at: {
+      isLength: {
+        options: [{min: 1}],
+        errorMessage: 'Please enter Graduate Date'
+      }
+    },
     city: {
       isLength: {
         options: [{min: 1}],
@@ -182,6 +188,7 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
   let courseIds = req.$params.courseIds;
   let userTypeId = req.$params.userTypeId;
   let schoolName = req.$params.schoolName;
+  let graduate_at = req.$params.graduate_at;
   let city = req.$params.city;
   let gender = req.$params.gender;
   let birthDate = req.$params.birthDate;
@@ -193,6 +200,7 @@ function postUserOnboardingDetails (req, res, next) {// eslint-disable-line id-l
   return req.db.user.update({
     userTypeId: userTypeId,
     schoolName: schoolName,
+    graduate_at: graduate_at,
     city: city,
     gender: gender,
     birthDate: birthDate,
