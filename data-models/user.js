@@ -64,6 +64,9 @@ module.exports = function (sequelize, dataTypes) {
     schoolName: {
       type: dataTypes.STRING
     },
+    graduate_at: {
+      type: dataTypes.DATE
+    },
     birthDate: {
       type: dataTypes.DATE
     },
