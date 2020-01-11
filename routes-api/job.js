@@ -24,6 +24,13 @@ function jobApi (apiRouter) {
     handlers.job.getJob.validateParams,
     handlers.job.getJob.logic,
     handlers.job.getJob.response);
+  
+  apiRouter.delete('/job/:jobId',
+    lib.params,
+    lib.isTokenExist.user,
+    handlers.job.deleteJob.validateParams,
+    handlers.job.deleteJob.logic,
+    handlers.job.deleteJob.response);
 
   apiRouter.post('/job',
     lib.params,
