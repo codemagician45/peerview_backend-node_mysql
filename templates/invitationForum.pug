@@ -1,0 +1,49 @@
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      color:#000000;
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Dear #{username}!
+        p This is an invitation from the #{name} to join their Online Forum on Peersview.
+        p If you would like to accept this invitation, then click.
+        p
+          | Please take a moment to check our Forum  
+          a(href='#') #{forumname}
+        p
+          | Peersview is very easy to use, you can also check the Help Center
+          a(href='#') [peersview.com/support]
+          | , the most common problems and questions of first time users are addressed and answered.
+        p If you do not wish to join this community then you can ignore this email.
+        p
+          | If you think you have been sent this invitation in error or wish to discuss this in detail, please contact
+          a(href='#') admin@peersview.com.
+        p The Peersview Team
+        p
+          | Unsubscribe from this email
+      footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#') info@peersview.com
+        |  We are always here to help.

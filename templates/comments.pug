@@ -1,0 +1,36 @@
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: #631a90;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      color:#000000;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1
+        p Dear #{name}!
+        p #{comment} comment from on your post.
+        p Click to see their comment.
+        a(href='#', style='cursor:pointer') See the Comment >>
+      footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#', style='cursor:pointer;color:black') info@peersview.com
+        |  we’re always here to help.

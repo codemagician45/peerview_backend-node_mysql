@@ -1,0 +1,265 @@
+'use strict';
+
+/**
+ * @author Jo-Ries Canino
+ * @description Community Post
+ * It is also tied in our private community
+ * So reused the communityPost table
+ * and just add the communityId
+ * which include the ffg:
+ * communityId
+ * message
+ */
+
+const lib = require('../../lib');
+
+/**
+ * Validation of req.body, req, param,
+ * and req.query
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function validateParams (req, res, next) {
+  let isCareerUrl = req.route.path.indexOf('community/post/career');
+  let isPostPollUrl = req.route.path.indexOf('community/:communityId/post/poll');
+  let paramsCommunity = req.route.path.indexOf(':communityId');
+  let bodySchema = {};
+  let paramsSchema = {};
+
+  if (paramsCommunity !== -1) {
+    paramsSchema = {
+      communityId: {
+        isInt: {
+          errorMessage: 'Invalid Resource: Community Id'
+        }
+      },
+    };
+  }
+
+  if (isCareerUrl !== -1) {
+    bodySchema = {
+      title: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Title'
+        }
+      },
+      description: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Description'
+        }
+      }
+    };
+  } else if (isPostPollUrl !== -1) {
+    bodySchema = {
+      question: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Question'
+        }
+      },
+      options: {
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Options'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Options'
+        }
+      },
+      duration: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Duration'
+        },
+        isInt: {
+          errorMessage: 'Invalid Resource: Duration'
+        }
+      }
+    };
+  } else {
+    bodySchema = {
+      courseId: {// optional because the professionals can post/and courses related post
+        optional: true,
+        isInt: {
+          errorMessage: 'Invalid Resource: Course Id'
+        }
+      },
+      message: {
+        notEmpty: {
+          errorMessage: 'Missing Resource: Message'
+        }
+      },
+      attachments: {
+        optional: true,
+        isArrayNotEmpty: {
+          errorMessage: 'Missing Resource: Attachments'
+        },
+        isArray: {
+          errorMessage: 'Invalid Resource: Attachments'
+        }
+      }
+    };
+  }
+
+  req.checkParams(paramsSchema);
+  req.checkBody(bodySchema);
+  return req.getValidationResult()
+  .then(validationErrors => {
+    if (validationErrors.array().length !== 0) {
+      return res.status(400)
+      .send(new lib.rpc.ValidationError(validationErrors.array()));
+    }
+
+    return next();
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+  });
+}
+
+/**
+ * This would be the fallback if the user existed
+ * In which if the user is still unverified
+ * @see {@link lib/isUserTokenExist}
+ * @see isUserTokenExist
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function postCommunityPost (req, res, next) {
+  let user = req.$scope.user;
+  let courseId = req.$params.courseId;
+  let communityId = req.$params.communityId;
+  let message = req.$params.message;
+  let title = req.$params.title;
+  let description = req.$params.description;
+  let question  = req.$params.question;
+  let duration = req.$params.duration;
+
+  return req.db.communityPost.create({
+    userId: user.id,
+    userTypeId: user.userTypeId,
+    courseId: courseId,
+    communityId: communityId,
+    message: message,
+    title: title,
+    description: description,
+    question: question,
+    duration: duration
+  })
+  .then(communityPost => {
+    req.$scope.communityPost = communityPost;
+    // below are use for user credits
+    communityPost.newId = communityPost.id + '_communityPost';
+    communityPost.credits = 1;
+    req.$scope.userCredits = communityPost;
+    req.$scope.userId = user.id;
+    next();
+    return communityPost;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'communityPost.create Error - post-community-post');
+  });
+}
+
+function saveAttachments (req, res, next) {
+  let communityPost = req.$scope.communityPost;
+  let cloudinary = req.$params.attachments
+    ? req.$params.attachments : [];
+  let attachments = [];
+
+  if (cloudinary.length === 0) {
+    return next();
+  }
+
+  cloudinary.forEach(item => {
+    attachments.push({
+      communityPostId: communityPost.id,
+      cloudinaryPublicId: item.cloudinaryPublicId,
+      usage: item.usage
+    });
+  });
+
+  return req.db.attachment.bulkCreate(attachments)
+  .then(attachment => {
+    next();
+    return attachment;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'attachment.bulkCreate Error - post-community-post');
+  });
+}
+
+/**
+ * Save the options in the pollOption table
+ * @param {any} req request object
+ * @param {any} res response object
+ * @param {any} next next object
+ * @returns {next} returns the next handler - success response
+ * @returns {rpc} returns the validation error - failed response
+ */
+function saveCommunityPostPollOption (req, res, next) {// eslint-disable-line id-length
+  let communityPost = req.$scope.communityPost;
+  let options = req.$params.options;
+  let question = req.$params.question;
+  let communityPostPollOption = [];// eslint-disable-line id-length
+
+  // check if we have params for question
+  if (!question) {return next();}
+
+  options.forEach(option => {
+    communityPostPollOption.push({
+      name: option,
+      communityPostId: communityPost.id
+    });
+  });
+
+  return req.db.communityPostPollOption.bulkCreate(communityPostPollOption)
+  .then(communityPostPollOption => {// eslint-disable-line id-length
+    next();
+    return communityPostPollOption;
+  })
+  .catch(error => {
+    res.status(500)
+    .send(new lib.rpc.InternalError(error));
+
+    req.log.error({
+      err: error.message
+    }, 'communityPostPollOption.create Error - post-community-post');
+  });
+}
+
+/**
+ * Response data to client
+ * @param {any} req request object
+ * @param {any} res response object
+ * @returns {any} body response object
+ */
+function response (req, res) {
+  let body = {
+    status: 'SUCCESS',
+    status_code: 0,
+    http_code: 201
+  };
+
+  res.status(201).send(body);
+}
+
+module.exports.validateParams = validateParams;
+module.exports.logic = postCommunityPost;
+module.exports.saveAttachments = saveAttachments;
+module.exports.saveCommunityPostPollOption = saveCommunityPostPollOption;
+module.exports.response = response;

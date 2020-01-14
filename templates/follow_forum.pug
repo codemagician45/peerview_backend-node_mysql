@@ -1,0 +1,43 @@
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      color:#000000;
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Dear #{name}!
+        p You might want to check out this update this post you are following.
+        p
+          | See 
+          a(href='#') “Quotation of post”
+        p
+          | See 
+          a(href='#') “comment to post”
+        p The Peersview Team
+        p
+          | Unsubscribe from this email
+      footer
+        | Have any questions? Just shoot us an email! 
+        a(href='#') info@peersview.com
+        |  We are always here to help.

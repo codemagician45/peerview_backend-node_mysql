@@ -1,0 +1,10 @@
+node_modules
+log
+config
+.idea
+*-lock.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

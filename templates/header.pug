@@ -1,0 +1,43 @@
+
+doctype html
+html
+  head
+    style.
+      div.container {
+      width: 100%;
+      border: 1px solid gray;
+      }
+      header, footer {
+      padding: 1em;
+      color: white;
+      background-color: rgb(99, 26, 144);
+      color:#000000;
+      clear: left;
+      text-align: left;
+      }
+      article {
+      color:#000000;
+      border-left: 1px solid gray;
+      padding: 1em;
+      overflow: hidden;
+      }
+  body
+    .container
+      header
+        h3
+          img(src='http://localhost:3000/images/logo.png', ,='', alt='thecut_logo', width='54', height='40', border='0')
+      article
+        h1 Dear #{name}!
+        p Title 1: Top Stories:- #{story}.
+        a(href='#') View More Stories >>
+
+        if((visiter_name !== undefined) && (visiter_name !== null))
+          p Title 2: #{visiter_name}Liked Your post
+          p #{visiter_name} liked your post or question #{name}
+          a(href="#")
+          | Click to See Who Else Liked IT>>
+
+        else
+          p Title 2: No Visiters Found
+
+

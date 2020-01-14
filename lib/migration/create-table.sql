@@ -1,0 +1,135 @@
+CREATE TABLE IF NOT EXISTS `notification` (`id` INTEGER UNSIGNED auto_increment , `notification` VARCHAR(255),
+`isRead` TINYINT(1), `type` VARCHAR(255), `detail` VARCHAR(255), `createdAt` DATETIME NOT NULL,
+`updatedAt` DATETIME NOT NULL, `subject` INTEGER UNSIGNED, PRIMARY KEY (`id`),
+FOREIGN KEY (`subject`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `message` (`id` INTEGER UNSIGNED auto_increment , `title` VARCHAR(255), `detail` VARCHAR(255),
+`isRead` TINYINT(1), `createdAt` DATETIME NOT NULL, `updatedAt` DATETIME NOT NULL, `fromId` INTEGER UNSIGNED,
+`toId` INTEGER UNSIGNED, `parentId` INTEGER UNSIGNED, PRIMARY KEY (`id`),
+FOREIGN KEY (`fromId`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY (`toId`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+FOREIGN KEY (`parentId`) REFERENCES `message` (`id`) ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `work_experience` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `role` VARCHAR(255) NULL,
+  `from` DATETIME NULL,
+  `to` DATETIME NULL,
+  `userId`  INTEGER UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `skill` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`)) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `user_skill` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `userId` INT UNSIGNED,
+  `skillId` INT UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (`skillId`)
+    REFERENCES `skill` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `postv1_reply_rating` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `rating` FLOAT,
+  `userId` INT UNSIGNED,
+  `replyId` INT UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (`replyId`)
+    REFERENCES `reply` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `campus_user` (
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `userId` INT(10) UNSIGNED,
+  `campusId` INT(10) UNSIGNED,
+  `campusEmail` VARCHAR(45) NULL,
+  `token` VARCHAR(45) NULL,
+  `emailVerified` TINYINT NULL,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (`campusId`)
+    REFERENCES `campus` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `education` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `level` VARCHAR(255) NULL,
+  `from` DATETIME NULL,
+  `to` DATETIME NULL,
+  `major` VARCHAR(255) NULL,
+  `minor` VARCHAR(255) NULL,
+  `department_gpa` VARCHAR(255) NULL,
+  `cumulative_gpa` VARCHAR(255) NULL,
+  `is_hide_department_gpa` TINYINT NULL DEFAULT 0,
+  `is_hide_cumulative_gpa` TINYINT NULL DEFAULT 0,
+  `userId`  INTEGER UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `award` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `position` VARCHAR(255) NOT NULL,
+  `organization` VARCHAR(255) NULL,
+  `from` DATETIME NULL,
+  `to` DATETIME NULL,
+  `current_position` TINYINT NULL DEFAULT 0,
+  `location` VARCHAR(255) NULL,
+  `description` TEXT NULL,
+  `userId`  INTEGER UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `job` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(255) NOT NULL,
+  `company` VARCHAR(255) NULL,
+  `company_bio` TEXT NULL,
+  `country` VARCHAR(255) NULL,
+  `city` VARCHAR(255) NULL,
+  `contact` VARCHAR(255) NULL,
+  `type` TINYINT NULL DEFAULT 0,
+  `experience` TEXT NULL,
+  `jobfunction` TEXT NULL,
+  `deadline` DATETIME NULL,
+  `userId`  INTEGER UNSIGNED,
+  `createdAt` DATETIME NOT NULL,
+  `updatedAt` DATETIME NOT NULL,
+  PRIMARY KEY (`id`),
+    FOREIGN KEY (`userId`)
+    REFERENCES `user` (`id`)
+    ON DELETE SET NULL ON UPDATE CASCADE) ENGINE=InnoDB COLLATE utf8_unicode_ci;

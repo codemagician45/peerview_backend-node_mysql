@@ -1,0 +1,12 @@
+#ignored unnecessary folders and files
+DB/*
+common/*
+models/*
+templates/*
+config/passport.js
+config/index.js
+config/auth.js
+.eslintrc.js
+REST.js
+RESTFRONT.js
+server-v2.js
