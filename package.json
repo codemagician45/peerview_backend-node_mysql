@@ -28,7 +28,7 @@
     "csvtojson": "2.0.6",
     "ejs": "2.6.1",
     "excel": "1.0.0",
-    "express": "4.16.3",
+    "express": "4.17.3",
     "express-route-validator": "0.2.5",
     "express-session": "1.15.6",
     "express-validator": "5.3.0",
